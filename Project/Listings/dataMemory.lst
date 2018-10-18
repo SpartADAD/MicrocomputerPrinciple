@@ -1,0 +1,34 @@
+C51 COMPILER V9.59.0.0   DATAMEMORY                                                        10/16/2018 22:59:28 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DATAMEMORY
+OBJECT MODULE PLACED IN .\Objects\dataMemory.obj
+COMPILER INVOKED BY: E:\Keil5\C51\BIN\C51.EXE dataMemory.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
+                    -tings\dataMemory.lst) TABS(2) OBJECT(.\Objects\dataMemory.obj)
+
+line level    source
+
+   1          #include "dataMemory.h"
+   2          
+   3          #ifdef DATA_MEMORY_TEST
+              unsigned char data directAccess[DIRECT_ACCESS_SIZE] = {0};
+              unsigned char bdata bitAccess[BIT_ACCESS_SIZE] = {0};
+              unsigned char idata indirectAccess[INDIRECT_ACCESS_SIZE] = {0};
+              unsigned char pdata pageAccess[PAGE_ACCESS_SIZE] = {0};
+              unsigned char xdata outerMemInMCU[OUTER_MEM_IN_MCU_SIZE] _at_ 0x100;
+              unsigned char xdata outerExtendMem[OUTER_EXTEND_MEM_SIZE] _at_ 0x500;
+              #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

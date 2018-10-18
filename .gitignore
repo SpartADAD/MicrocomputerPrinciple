@@ -1,0 +1,73 @@
+
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+¼üÅÌÓëLED/Listings/
+¼üÅÌÓëLED/Objects/
+
+*.m51
+*.Dreamer
+*.uvopt
+*.m51
+é”®ç›˜ä¸ŽLED/Listings/
+*.uvopt
+é”®ç›˜ä¸ŽLED/key&LED.uvgui.Dreamer
+*.m51
+é”®ç›˜ä¸ŽLED/Objects/
+
+*.htm
+*.m51
+*.htm
+*.m51
+*.Dreamer
+é”®ç›˜ä¸ŽLED/key&LED.uvopt

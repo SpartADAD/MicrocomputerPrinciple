@@ -1,0 +1,64 @@
+C51 COMPILER V9.59.0.0   BRUSHDCMOTOR                                                      10/16/2018 22:59:29 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE BRUSHDCMOTOR
+OBJECT MODULE PLACED IN .\Objects\brushDcMotor.obj
+COMPILER INVOKED BY: E:\Keil5\C51\BIN\C51.EXE brushDcMotor.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\L
+                    -istings\brushDcMotor.lst) TABS(2) OBJECT(.\Objects\brushDcMotor.obj)
+
+line level    source
+
+   1          /***********************brushDcMotor.c*****************************/
+   2          
+   3          #include "brushDcMotor.h"
+   4          #include "pwm.h"
+   5          //电机位置变量
+   6          unsigned int xdata relativePos = 0;
+   7          //电机实际速度变量
+   8          float xdata actSpeed = 0.0f;
+   9          
+  10          //电机速度控制函数
+  11          void MotorVelCrl(float expVel,float actVel)
+  12          {
+  13   1        #define VEL_CRL_P (0.003f)
+  14   1        float xdata dutyCycle = 0.0f;
+  15   1        float xdata error = 0.0f;
+  16   1        //对输入速度进行限制
+  17   1        if(expVel>=120.0f)
+  18   1        {
+  19   2          expVel = 120.0f;
+  20   2        }
+  21   1        
+  22   1        //计算速度对应占空比
+  23   1        dutyCycle = (135.1f - expVel)/161.6f;
+  24   1        
+  25   1        //对速度进行P调节
+  26   1        error = expVel - actVel;
+  27   1        
+  28   1        dutyCycle-=(error*VEL_CRL_P);
+  29   1        
+  30   1        //对输出进行限幅
+  31   1        if(dutyCycle<=0.05)
+  32   1        {
+  33   2          dutyCycle = 0.05;
+  34   2        }
+  35   1        
+  36   1        //输出占空比
+  37   1        PWM0SetCompare(dutyCycle);
+  38   1        
+  39   1      }
+  40          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    267    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      6      16
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
