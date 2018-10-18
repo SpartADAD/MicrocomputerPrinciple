@@ -115,26 +115,36 @@ void KeyControl(void)
 void ShowKeyValue(void)
 {
 	unsigned char HighFour= ((P1 & 0xf0)>>4);	
+	unsigned char codeMy=0;
+	int i=0;
+	for(i=0;i<4;i++)
+	{
+		codeMy+=((HighFour&((int)pow(2,i)))>>i)*i;
+	}
 	GPIOx_SetBits(1,2);
 	GPIOx_SetBits(1,3);
-//	unsigned char codeMy=(HighFour&0x08)+(HighFour&0x04)*2+(HighFour&0x02)*1+(HighFour&0x01)*3
-	if(HighFour==0x08)
-	{
-		GPIOx_ResetBits(1,0);
-		GPIOx_ResetBits(1,1);
-	}
-	else if(HighFour==0x04)
-	{
-		GPIOx_SetBits(1,0);
-		GPIOx_ResetBits(1,1);
-	}else if(HighFour==0x02)
-	{
-		GPIOx_ResetBits(1,0);
-		GPIOx_SetBits(1,1);
-	}else if (HighFour==0x01)
-	{
-		GPIOx_SetBits(1,0);
-		GPIOx_SetBits(1,1);
-	}
+//	if(HighFour==0x08)
+//	{
+//		GPIOx_ResetBits(1,0);
+//		GPIOx_ResetBits(1,1);
+//	}
+//	else if(HighFour==0x04)
+//	{
+//		GPIOx_SetBits(1,0);
+//		GPIOx_ResetBits(1,1);
+//	}else if(HighFour==0x02)
+//	{
+//		GPIOx_ResetBits(1,0);
+//		GPIOx_SetBits(1,1);
+//	}else if (HighFour==0x01)
+//	{
+//		GPIOx_SetBits(1,0);
+//		GPIOx_SetBits(1,1);
+//	}else
+//	{
+//		GPIOx_SetBits(1,0);
+//		GPIOx_SetBits(1,1);
+//	}
+	P1=~codeMy;
 
 }
