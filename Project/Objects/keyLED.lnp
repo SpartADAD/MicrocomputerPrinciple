@@ -1,5 +1,6 @@
 ".\Objects\STARTUP.obj",
-".\Objects\main.obj",
-".\Objects\gpio.obj" 
+".\Objects\gpio.obj",
+".\Objects\timer.obj",
+".\Objects\main.obj" 
 TO ".\Objects\keyLED" 
 PRINT(".\Listings\keyLED.m51") RAMSIZE(256) 
