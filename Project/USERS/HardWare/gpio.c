@@ -6,34 +6,34 @@
 
 const enum
 {
-	GPIOPort0 = 0,
-	GPIOPort1,
-	GPIOPort2,
-	GPIOPort3,
-	GPIOPort4
+	GPIOP0 = 0,
+	GPIOP1,
+	GPIOP2,
+	GPIOP3,
+	GPIOP4
 }GPIOTypeDef_t;
 
 void GPIOx_SetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
 {
 	switch(GPIOx)
 	{
-		case GPIOPort0:
+		case GPIOP0:
 			P0 |=(int)pow(2,GPIO_Pin_x);
 		break;
 		
-		case GPIOPort1:
+		case GPIOP1:
 			P1 |=(int)pow(2,GPIO_Pin_x);
 		break;
 		
-		case GPIOPort2:
+		case GPIOP2:
 			P2 |=(int)pow(2,GPIO_Pin_x);
 		break;
 		
-		case GPIOPort3:
+		case GPIOP3:
 			P3 |=(int)pow(2,GPIO_Pin_x);
 		break;
 		
-		case GPIOPort4:
+		case GPIOP4:
 			P4 |=(int)pow(2,GPIO_Pin_x);
 		break;
 		
@@ -48,23 +48,23 @@ void GPIOx_ResetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
 {
 	switch(GPIOx)
 	{
-		case GPIOPort0:
+		case GPIOP0:
 			P0 &=(~(int)pow(2,GPIO_Pin_x));
 		break;
 		
-		case GPIOPort1:
+		case GPIOP1:
 			P1 &=(~(int)pow(2,GPIO_Pin_x));
 		break;
 		
-		case GPIOPort2:
+		case GPIOP2:
 			P2 &=(~(int)pow(2,GPIO_Pin_x));
 		break;
 		
-		case GPIOPort3:
+		case GPIOP3:
 			P3 &=(~(int)pow(2,GPIO_Pin_x));
 		break;
 		
-		case GPIOPort4:
+		case GPIOP4:
 			P4 &=(~(int)pow(2,GPIO_Pin_x));
 		break;
 		
@@ -82,19 +82,19 @@ unsigned char GPIOx_ReadBits(unsigned char GPIOx, unsigned char GPIO_Pin_x)
 	
 	switch(GPIOx)
 	{
-		case GPIOPort0:
+		case GPIOP0:
 			returnStatus = P0 & GPIO_Pin_x_BIN;
 		break;
 		
-		case GPIOPort1:
+		case GPIOP1:
 			returnStatus = P1 & GPIO_Pin_x_BIN;
 		break;
 		
-		case GPIOPort2:
+		case GPIOP2:
 			returnStatus = P2 & GPIO_Pin_x_BIN;
 		break;
 		
-		case GPIOPort3:
+		case GPIOP3:
 			returnStatus = P3 & GPIO_Pin_x_BIN;
 		break;
 		
@@ -116,7 +116,7 @@ void ShowKeyValue(void)
 {
 	unsigned char HighFour= ((P1 & 0xf0)>>4);	
 	unsigned char codeMy=0;
-	int i=0;
+	unsigned char i=0;
 	for(i=0;i<4;i++)
 	{
 		codeMy+=((HighFour&((int)pow(2,i)))>>i)*i;

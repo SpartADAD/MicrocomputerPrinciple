@@ -5,7 +5,7 @@
 
 
 void GPIOx_ResetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x);
-void GPIOx_SetBits(unsigned short GPIOx,unsigned char GPIO_Pin_x);
+void GPIOx_SetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x);
 unsigned char GPIOx_ReadBits(unsigned char GPIOx, unsigned char GPIO_Pin_x);
 
 void KeyControl(void);

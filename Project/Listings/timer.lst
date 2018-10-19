@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   TIMER                                                             10/18/2018 21:36:14 PAGE 1   
+C51 COMPILER V9.59.0.0   TIMER                                                             10/19/2018 14:24:02 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE TIMER
@@ -15,39 +15,10 @@ line level    source
    5          #include "math.h"
    6          
    7          
-   8          #include "delay.h"
-*** WARNING C318 IN LINE 8 OF USERS\HardWare\timer.c: can't open file 'delay.h'
-   9          
-  10          void DelayMs(unsigned int timeMs)
-  11          {
-  12   1        unsigned int xdata nMsCounter = 0;
-  13   1        unsigned short xdata msCounter = 0;
-  14   1        unsigned char xdata i = 0;
-  15   1        for(nMsCounter = 0 ; nMsCounter < timeMs ; nMsCounter++)
-  16   1        {
-  17   2          for(msCounter = 0 ; msCounter < TIME_1_MS ; msCounter++)
-  18   2          {
-  19   3            i = 1;
-  20   3          }
-  21   2        }
-  22   1      }
-  23          
-  24          void Delay10Us(unsigned int timeUs)
-  25          {
-  26   1        unsigned int xdata nUsCounter = 0;
-  27   1        unsigned char xdata usCounter = 0;
-  28   1        for(nUsCounter = 0 ; nUsCounter < timeUs ; nUsCounter++)
-  29   1        {
-  30   2          for(usCounter = 0 ; usCounter < TIME_10_US ; usCounter++)
-  31   2          {
-  32   3          
-  33   3          }
-  34   2        }
-  35   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     67    ----
+   CODE SIZE        =   ----    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
@@ -57,4 +28,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
