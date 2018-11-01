@@ -3,15 +3,14 @@
 #include "gpio.h"
 #include "STC15F2K60S2.h"
 #include "math.h"
-#include "stdint.h"
-const enum
-{
-	GPIOP0 = 0,
-	GPIOP1,
-	GPIOP2,
-	GPIOP3,
-	GPIOP4
-}GPIOTypeDef_t;
+//const enum
+//{
+//	GPIOP0 = 0,
+//	GPIOP1,
+//	GPIOP2,
+//	GPIOP3,
+//	GPIOP4
+//}GPIOTypeDef_t;
 
 void GPIOx_SetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
 {
@@ -95,6 +94,7 @@ unsigned char GPIOx_ReadBits(unsigned char GPIOx, unsigned char GPIO_Pin_x)
 		break;
 		
 		case GPIOP3:
+			P3|=GPIO_Pin_x_BIN;
 			returnStatus = P3 & GPIO_Pin_x_BIN;
 		break;
 		

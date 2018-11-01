@@ -1,0 +1,35 @@
+
+/************************delay.c******************************/
+#include "delay.h"
+
+#define TIME_1_MS (355)
+#define TIME_10_US (4)
+//毫秒延时函数
+void DelayMs(unsigned int timeMs)
+{
+	unsigned int xdata nMsCounter = 0;
+	unsigned short xdata msCounter = 0;
+	unsigned char xdata i = 0;
+	for(nMsCounter = 0 ; nMsCounter < timeMs ; nMsCounter++)
+	{
+		for(msCounter = 0 ; msCounter < TIME_1_MS ; msCounter++)
+		{
+			i = 1;
+		}
+	}
+}
+
+//10微秒延时函数
+void Delay10Us(unsigned int timeUs)
+{
+	unsigned int xdata nUsCounter = 0;
+	unsigned char xdata usCounter = 0;
+	for(nUsCounter = 0 ; nUsCounter < timeUs ; nUsCounter++)
+	{
+		for(usCounter = 0 ; usCounter < TIME_10_US ; usCounter++)
+		{
+		
+		}
+	}
+}
+

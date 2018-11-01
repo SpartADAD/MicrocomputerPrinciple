@@ -51,4 +51,9 @@ typedef enum {disable = 0, enable}FunctionalState_t;
 
 //引用 7279输出数码
 extern unsigned char xdata realCode[];
+
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
+typedef unsigned int uint32_t;
+
 #endif

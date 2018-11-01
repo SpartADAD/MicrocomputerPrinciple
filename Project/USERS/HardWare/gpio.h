@@ -21,4 +21,12 @@ void ShowKeyValue(void);
 #define GPIO_PIN_6    6
 #define GPIO_PIN_7    7
 
+
+
+#define	GPIOP0  0
+#define	GPIOP1  1
+#define	GPIOP2  2
+#define	GPIOP3  3 
+#define	GPIOP4  4
+
 #endif

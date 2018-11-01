@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   GPIO                                                              10/19/2018 14:56:46 PAGE 1   
+C51 COMPILER V9.59.0.0   GPIO                                                              11/01/2018 23:33:03 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE GPIO
@@ -13,101 +13,100 @@ line level    source
    3          #include "gpio.h"
    4          #include "STC15F2K60S2.h"
    5          #include "math.h"
-   6          #include "stdint.h"
-*** WARNING C318 IN LINE 6 OF USERS\HardWare\gpio.c: can't open file 'stdint.h'
-   7          const enum
-   8          {
-   9            GPIOP0 = 0,
-  10            GPIOP1,
-  11            GPIOP2,
-  12            GPIOP3,
-  13            GPIOP4
-  14          }GPIOTypeDef_t;
-  15          
-  16          void GPIOx_SetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
-  17          {
-  18   1        switch(GPIOx)
-  19   1        {
-  20   2          case GPIOP0:
-  21   2            P0 |=(int)pow(2,GPIO_Pin_x);
-  22   2          break;
-  23   2          
-  24   2          case GPIOP1:
-  25   2            P1 |=(int)pow(2,GPIO_Pin_x);
-  26   2          break;
-  27   2          
-  28   2          case GPIOP2:
-  29   2            P2 |=(int)pow(2,GPIO_Pin_x);
-  30   2          break;
-  31   2          
-  32   2          case GPIOP3:
-  33   2            P3 |=(int)pow(2,GPIO_Pin_x);
-  34   2          break;
-  35   2          
-  36   2          case GPIOP4:
-  37   2            P4 |=(int)pow(2,GPIO_Pin_x);
-  38   2          break;
-  39   2          
-  40   2          default:
-  41   2            
-  42   2          break;
-  43   2        }
-  44   1          
-  45   1      }
-  46          
-  47          void GPIOx_ResetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
-  48          {
-  49   1        switch(GPIOx)
-  50   1        {
-  51   2          case GPIOP0:
-  52   2            P0 &=(~(int)pow(2,GPIO_Pin_x));
-  53   2          break;
-C51 COMPILER V9.59.0.0   GPIO                                                              10/19/2018 14:56:46 PAGE 2   
+   6          //const enum
+   7          //{
+   8          //  GPIOP0 = 0,
+   9          //  GPIOP1,
+  10          //  GPIOP2,
+  11          //  GPIOP3,
+  12          //  GPIOP4
+  13          //}GPIOTypeDef_t;
+  14          
+  15          void GPIOx_SetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
+  16          {
+  17   1        switch(GPIOx)
+  18   1        {
+  19   2          case GPIOP0:
+  20   2            P0 |=(int)pow(2,GPIO_Pin_x);
+  21   2          break;
+  22   2          
+  23   2          case GPIOP1:
+  24   2            P1 |=(int)pow(2,GPIO_Pin_x);
+  25   2          break;
+  26   2          
+  27   2          case GPIOP2:
+  28   2            P2 |=(int)pow(2,GPIO_Pin_x);
+  29   2          break;
+  30   2          
+  31   2          case GPIOP3:
+  32   2            P3 |=(int)pow(2,GPIO_Pin_x);
+  33   2          break;
+  34   2          
+  35   2          case GPIOP4:
+  36   2            P4 |=(int)pow(2,GPIO_Pin_x);
+  37   2          break;
+  38   2          
+  39   2          default:
+  40   2            
+  41   2          break;
+  42   2        }
+  43   1          
+  44   1      }
+  45          
+  46          void GPIOx_ResetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
+  47          {
+  48   1        switch(GPIOx)
+  49   1        {
+  50   2          case GPIOP0:
+  51   2            P0 &=(~(int)pow(2,GPIO_Pin_x));
+  52   2          break;
+  53   2          
+  54   2          case GPIOP1:
+C51 COMPILER V9.59.0.0   GPIO                                                              11/01/2018 23:33:03 PAGE 2   
 
-  54   2          
-  55   2          case GPIOP1:
-  56   2            P1 &=(~(int)pow(2,GPIO_Pin_x));
-  57   2          break;
-  58   2          
-  59   2          case GPIOP2:
-  60   2            P2 &=(~(int)pow(2,GPIO_Pin_x));
-  61   2          break;
-  62   2          
-  63   2          case GPIOP3:
-  64   2            P3 &=(~(int)pow(2,GPIO_Pin_x));
-  65   2          break;
-  66   2          
-  67   2          case GPIOP4:
-  68   2            P4 &=(~(int)pow(2,GPIO_Pin_x));
-  69   2          break;
-  70   2          
-  71   2          default:
-  72   2            
-  73   2          break;
-  74   2        }
-  75   1      
-  76   1      }
-  77          
-  78          unsigned char GPIOx_ReadBits(unsigned char GPIOx, unsigned char GPIO_Pin_x)
-  79          {
-  80   1        unsigned char returnStatus=0;
-  81   1        unsigned char GPIO_Pin_x_BIN=(int)pow(2,GPIO_Pin_x);
-  82   1        
-  83   1        switch(GPIOx)
-  84   1        {
-  85   2          case GPIOP0:
-  86   2            returnStatus = P0 & GPIO_Pin_x_BIN;
-  87   2          break;
-  88   2          
-  89   2          case GPIOP1:
-  90   2            returnStatus = P1 & GPIO_Pin_x_BIN;
-  91   2          break;
-  92   2          
-  93   2          case GPIOP2:
-  94   2            returnStatus = P2 & GPIO_Pin_x_BIN;
-  95   2          break;
-  96   2          
-  97   2          case GPIOP3:
+  55   2            P1 &=(~(int)pow(2,GPIO_Pin_x));
+  56   2          break;
+  57   2          
+  58   2          case GPIOP2:
+  59   2            P2 &=(~(int)pow(2,GPIO_Pin_x));
+  60   2          break;
+  61   2          
+  62   2          case GPIOP3:
+  63   2            P3 &=(~(int)pow(2,GPIO_Pin_x));
+  64   2          break;
+  65   2          
+  66   2          case GPIOP4:
+  67   2            P4 &=(~(int)pow(2,GPIO_Pin_x));
+  68   2          break;
+  69   2          
+  70   2          default:
+  71   2            
+  72   2          break;
+  73   2        }
+  74   1      
+  75   1      }
+  76          
+  77          unsigned char GPIOx_ReadBits(unsigned char GPIOx, unsigned char GPIO_Pin_x)
+  78          {
+  79   1        unsigned char returnStatus=0;
+  80   1        unsigned char GPIO_Pin_x_BIN=(int)pow(2,GPIO_Pin_x);
+  81   1        
+  82   1        switch(GPIOx)
+  83   1        {
+  84   2          case GPIOP0:
+  85   2            returnStatus = P0 & GPIO_Pin_x_BIN;
+  86   2          break;
+  87   2          
+  88   2          case GPIOP1:
+  89   2            returnStatus = P1 & GPIO_Pin_x_BIN;
+  90   2          break;
+  91   2          
+  92   2          case GPIOP2:
+  93   2            returnStatus = P2 & GPIO_Pin_x_BIN;
+  94   2          break;
+  95   2          
+  96   2          case GPIOP3:
+  97   2            P3|=GPIO_Pin_x_BIN;
   98   2            returnStatus = P3 & GPIO_Pin_x_BIN;
   99   2          break;
  100   2          
@@ -126,9 +125,9 @@ line level    source
  113   1        /*输入端置位操作*/
  114   1        P1|=0xf0;
  115   1        
-C51 COMPILER V9.59.0.0   GPIO                                                              10/19/2018 14:56:46 PAGE 3   
-
  116   1        HighFour=(P1 & 0xf0); 
+C51 COMPILER V9.59.0.0   GPIO                                                              11/01/2018 23:33:03 PAGE 3   
+
  117   1        P1= (~(HighFour>>4));
  118   1      
  119   1      }
@@ -175,9 +174,9 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    626    ----
+   CODE SIZE        =    629    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      1       8
+   XDATA SIZE       =   ----       8
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
@@ -185,4 +184,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
