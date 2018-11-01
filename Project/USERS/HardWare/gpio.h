@@ -10,4 +10,15 @@ unsigned char GPIOx_ReadBits(unsigned char GPIOx, unsigned char GPIO_Pin_x);
 
 void KeyControl(void);
 void ShowKeyValue(void);
+
+
+#define GPIO_PIN_0    0
+#define GPIO_PIN_1    1
+#define GPIO_PIN_2    2
+#define GPIO_PIN_3    3
+#define GPIO_PIN_4    4
+#define GPIO_PIN_5    5
+#define GPIO_PIN_6    6
+#define GPIO_PIN_7    7
+
 #endif

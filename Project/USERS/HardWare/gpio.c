@@ -3,7 +3,7 @@
 #include "gpio.h"
 #include "STC15F2K60S2.h"
 #include "math.h"
-
+#include "stdint.h"
 const enum
 {
 	GPIOP0 = 0,
@@ -108,20 +108,29 @@ unsigned char GPIOx_ReadBits(unsigned char GPIOx, unsigned char GPIO_Pin_x)
 #define GET_BIT_NUMBER    4
 void KeyControl(void)
 {
-	unsigned char HighFour= (P1 & 0xf0);	
+	unsigned char HighFour=0;
+	
+	/*输入端置位操作*/
+	P1|=0xf0;
+	
+	HighFour=(P1 & 0xf0);	
 	P1= (~(HighFour>>4));
 
 }
 void ShowKeyValue(void)
 {
-	unsigned char HighFour= ((P1 & 0xf0)>>4);	
+	unsigned char HighFour=0;	
 	unsigned char codeMy=0;
 	unsigned char i=0;
+	
+  P1|=0xf0;
+	HighFour= ((P1 & 0xf0)>>4);	
+	/*输入端置位操作*/
+	
 	for(i=0;i<4;i++)
 	{
-		codeMy+=((HighFour&((int)pow(2,i)))>>i)*i;
+		codeMy+=((HighFour&((int)pow(2,i)))>>i)*(i+1);
 	}
-	GPIOx_SetBits(1,2);
 	GPIOx_SetBits(1,3);
 //	if(HighFour==0x08)
 //	{

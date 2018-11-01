@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   GPIO                                                              10/19/2018 14:24:02 PAGE 1   
+C51 COMPILER V9.59.0.0   GPIO                                                              10/19/2018 14:56:46 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE GPIO
@@ -13,7 +13,8 @@ line level    source
    3          #include "gpio.h"
    4          #include "STC15F2K60S2.h"
    5          #include "math.h"
-   6          
+   6          #include "stdint.h"
+*** WARNING C318 IN LINE 6 OF USERS\HardWare\gpio.c: can't open file 'stdint.h'
    7          const enum
    8          {
    9            GPIOP0 = 0,
@@ -61,9 +62,9 @@ line level    source
   51   2          case GPIOP0:
   52   2            P0 &=(~(int)pow(2,GPIO_Pin_x));
   53   2          break;
-  54   2          
-C51 COMPILER V9.59.0.0   GPIO                                                              10/19/2018 14:24:02 PAGE 2   
+C51 COMPILER V9.59.0.0   GPIO                                                              10/19/2018 14:56:46 PAGE 2   
 
+  54   2          
   55   2          case GPIOP1:
   56   2            P1 &=(~(int)pow(2,GPIO_Pin_x));
   57   2          break;
@@ -120,52 +121,61 @@ line level    source
  108          #define GET_BIT_NUMBER    4
  109          void KeyControl(void)
  110          {
- 111   1        unsigned char HighFour= (P1 & 0xf0);  
- 112   1        P1= (~(HighFour>>4));
- 113   1      
- 114   1      }
- 115          void ShowKeyValue(void)
- 116          {
-C51 COMPILER V9.59.0.0   GPIO                                                              10/19/2018 14:24:02 PAGE 3   
+ 111   1        unsigned char HighFour=0;
+ 112   1        
+ 113   1        /*输入端置位操作*/
+ 114   1        P1|=0xf0;
+ 115   1        
+C51 COMPILER V9.59.0.0   GPIO                                                              10/19/2018 14:56:46 PAGE 3   
 
- 117   1        unsigned char HighFour= ((P1 & 0xf0)>>4); 
- 118   1        unsigned char codeMy=0;
- 119   1        unsigned char i=0;
- 120   1        for(i=0;i<4;i++)
- 121   1        {
- 122   2          codeMy+=((HighFour&((int)pow(2,i)))>>i)*i;
- 123   2        }
- 124   1        GPIOx_SetBits(1,2);
- 125   1        GPIOx_SetBits(1,3);
- 126   1      //  if(HighFour==0x08)
- 127   1      //  {
- 128   1      //    GPIOx_ResetBits(1,0);
- 129   1      //    GPIOx_ResetBits(1,1);
- 130   1      //  }
- 131   1      //  else if(HighFour==0x04)
- 132   1      //  {
- 133   1      //    GPIOx_SetBits(1,0);
- 134   1      //    GPIOx_ResetBits(1,1);
- 135   1      //  }else if(HighFour==0x02)
+ 116   1        HighFour=(P1 & 0xf0); 
+ 117   1        P1= (~(HighFour>>4));
+ 118   1      
+ 119   1      }
+ 120          void ShowKeyValue(void)
+ 121          {
+ 122   1        unsigned char HighFour=0; 
+ 123   1        unsigned char codeMy=0;
+ 124   1        unsigned char i=0;
+ 125   1        
+ 126   1        P1|=0xf0;
+ 127   1        HighFour= ((P1 & 0xf0)>>4); 
+ 128   1        /*输入端置位操作*/
+ 129   1        
+ 130   1        for(i=0;i<4;i++)
+ 131   1        {
+ 132   2          codeMy+=((HighFour&((int)pow(2,i)))>>i)*(i+1);
+ 133   2        }
+ 134   1        GPIOx_SetBits(1,3);
+ 135   1      //  if(HighFour==0x08)
  136   1      //  {
  137   1      //    GPIOx_ResetBits(1,0);
- 138   1      //    GPIOx_SetBits(1,1);
- 139   1      //  }else if (HighFour==0x01)
- 140   1      //  {
- 141   1      //    GPIOx_SetBits(1,0);
- 142   1      //    GPIOx_SetBits(1,1);
- 143   1      //  }else
- 144   1      //  {
- 145   1      //    GPIOx_SetBits(1,0);
- 146   1      //    GPIOx_SetBits(1,1);
- 147   1      //  }
- 148   1        P1=~codeMy;
- 149   1      
- 150   1      }
+ 138   1      //    GPIOx_ResetBits(1,1);
+ 139   1      //  }
+ 140   1      //  else if(HighFour==0x04)
+ 141   1      //  {
+ 142   1      //    GPIOx_SetBits(1,0);
+ 143   1      //    GPIOx_ResetBits(1,1);
+ 144   1      //  }else if(HighFour==0x02)
+ 145   1      //  {
+ 146   1      //    GPIOx_ResetBits(1,0);
+ 147   1      //    GPIOx_SetBits(1,1);
+ 148   1      //  }else if (HighFour==0x01)
+ 149   1      //  {
+ 150   1      //    GPIOx_SetBits(1,0);
+ 151   1      //    GPIOx_SetBits(1,1);
+ 152   1      //  }else
+ 153   1      //  {
+ 154   1      //    GPIOx_SetBits(1,0);
+ 155   1      //    GPIOx_SetBits(1,1);
+ 156   1      //  }
+ 157   1        P1=~codeMy;
+ 158   1      
+ 159   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    616    ----
+   CODE SIZE        =    626    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      1       8
    PDATA SIZE       =   ----    ----
@@ -175,4 +185,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
