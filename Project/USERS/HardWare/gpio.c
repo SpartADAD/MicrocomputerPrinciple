@@ -82,14 +82,17 @@ unsigned char GPIOx_ReadBits(unsigned char GPIOx, unsigned char GPIO_Pin_x)
 	switch(GPIOx)
 	{
 		case GPIOP0:
+			P0|=GPIO_Pin_x_BIN;
 			returnStatus = P0 & GPIO_Pin_x_BIN;
 		break;
 		
 		case GPIOP1:
+			P1|=GPIO_Pin_x_BIN;
 			returnStatus = P1 & GPIO_Pin_x_BIN;
 		break;
 		
 		case GPIOP2:
+			P2|=GPIO_Pin_x_BIN;
 			returnStatus = P2 & GPIO_Pin_x_BIN;
 		break;
 		
