@@ -41,7 +41,7 @@ void MotorControl(void)
   * @brief  电机旋转函数 通过计算由于通电顺序是A AB这样的，由真值表可知
 可视为4次循环，不过在最后一次循环的时候情况特殊
 需要判断，特殊处理赋值,用 
-  * @param  rotateDirection：电机旋转方向
+  * @param  rotateDirection：电机旋转方向,1为顺时针，0为逆时针
   * @param  rotateVel: 通过延时时间，传入DelayMs()控制电机的速度
 	* @param  myCode变量是个人解算的电机输出控制直接赋予P1口数值
   * @retval void

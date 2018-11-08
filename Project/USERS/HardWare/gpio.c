@@ -3,15 +3,12 @@
 #include "gpio.h"
 #include "STC15F2K60S2.h"
 #include "math.h"
-//const enum
-//{
-//	GPIOP0 = 0,
-//	GPIOP1,
-//	GPIOP2,
-//	GPIOP3,
-//	GPIOP4
-//}GPIOTypeDef_t;
-
+/**
+  * @brief  GPIO口某位置位函数
+  * @param  GPIOx 某一GPIO口  
+	* @param  GPIO_Pin_x	某一GPIO口的某一位
+  * @retval void
+  */
 void GPIOx_SetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
 {
 	switch(GPIOx)
@@ -42,7 +39,12 @@ void GPIOx_SetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
 	}
 		
 }
-
+/**
+	* @brief  GPIO口某位复位函数
+  * @param  GPIOx 某一GPIO口  
+	* @param  GPIO_Pin_x	某一GPIO口的某一位
+  * @retval void
+  */
 void GPIOx_ResetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
 {
 	switch(GPIOx)
@@ -73,7 +75,12 @@ void GPIOx_ResetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
 	}
 
 }
-
+/**
+	* @brief  GPIO口某位读取当前状态函数
+  * @param  GPIOx 某一GPIO口  
+	* @param  GPIO_Pin_x	某一GPIO口的某一位
+  * @retval 某一GPIO口当前GPIO的状态
+  */
 unsigned char GPIOx_ReadBits(unsigned char GPIOx, unsigned char GPIO_Pin_x)
 {
 	unsigned char returnStatus=0;
