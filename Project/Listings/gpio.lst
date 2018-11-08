@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   GPIO                                                              11/02/2018 14:17:46 PAGE 1   
+C51 COMPILER V9.59.0.0   GPIO                                                              11/08/2018 22:07:33 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE GPIO
@@ -62,7 +62,7 @@ line level    source
   52   2          break;
   53   2          
   54   2          case GPIOP1:
-C51 COMPILER V9.59.0.0   GPIO                                                              11/02/2018 14:17:46 PAGE 2   
+C51 COMPILER V9.59.0.0   GPIO                                                              11/08/2018 22:07:33 PAGE 2   
 
   55   2            P1 &=(~(int)pow(2,GPIO_Pin_x));
   56   2          break;
@@ -126,7 +126,7 @@ line level    source
  114   1        unsigned char HighFour=0;
  115   1        
  116   1        /*输入端置位操作*/
-C51 COMPILER V9.59.0.0   GPIO                                                              11/02/2018 14:17:46 PAGE 3   
+C51 COMPILER V9.59.0.0   GPIO                                                              11/08/2018 22:07:33 PAGE 3   
 
  117   1        P1|=0xf0;
  118   1        
