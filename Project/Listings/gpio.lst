@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   GPIO                                                              11/08/2018 13:56:18 PAGE 1   
+C51 COMPILER V9.59.0.0   GPIO                                                              11/08/2018 22:41:07 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE GPIO
@@ -14,191 +14,198 @@ line level    source
    4          #include "STC15F2K60S2.h"
    5          #include "math.h"
    6          #include "main.h"
-   7          //const enum
-   8          //{
-   9          //  GPIOP0 = 0,
-  10          //  GPIOP1,
-  11          //  GPIOP2,
-  12          //  GPIOP3,
-  13          //  GPIOP4
-  14          //}GPIOTypeDef_t;
-  15          
-  16          void GPIOx_SetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
-  17          {
-  18   1        switch(GPIOx)
-  19   1        {
-  20   2          case GPIOP0:
-  21   2            P0 |=(int)pow(2,GPIO_Pin_x);
-  22   2          break;
-  23   2          
-  24   2          case GPIOP1:
-  25   2            P1 |=(int)pow(2,GPIO_Pin_x);
-  26   2          break;
-  27   2          
-  28   2          case GPIOP2:
-  29   2            P2 |=(int)pow(2,GPIO_Pin_x);
-  30   2          break;
-  31   2          
-  32   2          case GPIOP3:
-  33   2            P3 |=(int)pow(2,GPIO_Pin_x);
-  34   2          break;
-  35   2          
-  36   2          case GPIOP4:
-  37   2            P4 |=(int)pow(2,GPIO_Pin_x);
-  38   2          break;
-  39   2          
-  40   2          default:
-  41   2            
-  42   2          break;
-  43   2        }
-  44   1          
-  45   1      }
-  46          
-  47          void GPIOx_ResetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
-  48          {
-  49   1        switch(GPIOx)
-  50   1        {
-  51   2          case GPIOP0:
-  52   2            P0 &=(~(int)pow(2,GPIO_Pin_x));
-  53   2          break;
-  54   2          
-C51 COMPILER V9.59.0.0   GPIO                                                              11/08/2018 13:56:18 PAGE 2   
+   7          /**
+   8            * @brief  GPIO口某位置位函数
+   9            * @param  GPIOx 某一GPIO口  
+  10            * @param  GPIO_Pin_x  某一GPIO口的某一位
+  11            * @retval void
+  12            */
+  13          void GPIOx_SetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
+  14          {
+  15   1        switch(GPIOx)
+  16   1        {
+  17   2          case GPIOP0:
+  18   2            P0 |=(int)pow(2,GPIO_Pin_x);
+  19   2          break;
+  20   2          
+  21   2          case GPIOP1:
+  22   2            P1 |=(int)pow(2,GPIO_Pin_x);
+  23   2          break;
+  24   2          
+  25   2          case GPIOP2:
+  26   2            P2 |=(int)pow(2,GPIO_Pin_x);
+  27   2          break;
+  28   2          
+  29   2          case GPIOP3:
+  30   2            P3 |=(int)pow(2,GPIO_Pin_x);
+  31   2          break;
+  32   2          
+  33   2          case GPIOP4:
+  34   2            P4 |=(int)pow(2,GPIO_Pin_x);
+  35   2          break;
+  36   2          
+  37   2          default:
+  38   2            
+  39   2          break;
+  40   2        }
+  41   1          
+  42   1      }
+  43          /**
+  44            * @brief  GPIO口某位复位函数
+  45            * @param  GPIOx 某一GPIO口  
+  46            * @param  GPIO_Pin_x  某一GPIO口的某一位
+  47            * @retval void
+  48            */
+  49          void GPIOx_ResetBits(unsigned char GPIOx,unsigned char GPIO_Pin_x)
+  50          {
+  51   1        switch(GPIOx)
+  52   1        {
+  53   2          case GPIOP0:
+  54   2            P0 &=(~(int)pow(2,GPIO_Pin_x));
+C51 COMPILER V9.59.0.0   GPIO                                                              11/08/2018 22:41:07 PAGE 2   
 
-  55   2          case GPIOP1:
-  56   2            P1 &=(~(int)pow(2,GPIO_Pin_x));
-  57   2          break;
-  58   2          
-  59   2          case GPIOP2:
-  60   2            P2 &=(~(int)pow(2,GPIO_Pin_x));
-  61   2          break;
-  62   2          
-  63   2          case GPIOP3:
-  64   2            P3 &=(~(int)pow(2,GPIO_Pin_x));
-  65   2          break;
-  66   2          
-  67   2          case GPIOP4:
-  68   2            P4 &=(~(int)pow(2,GPIO_Pin_x));
-  69   2          break;
-  70   2          
-  71   2          default:
-  72   2            
-  73   2          break;
-  74   2        }
-  75   1      
-  76   1      }
-  77          
-  78          unsigned char GPIOx_ReadBits(unsigned char GPIOx, unsigned char GPIO_Pin_x)
-  79          {
-  80   1        unsigned char returnStatus=0;
-  81   1        unsigned char GPIO_Pin_x_BIN=(int)pow(2,GPIO_Pin_x);
-  82   1        
-  83   1        switch(GPIOx)
-  84   1        {
-  85   2          case GPIOP0:
-  86   2            P0|=GPIO_Pin_x_BIN;
-  87   2            returnStatus = P0 & GPIO_Pin_x_BIN;
-  88   2          break;
-  89   2          
-  90   2          case GPIOP1:
-  91   2            P1|=GPIO_Pin_x_BIN;
-  92   2            returnStatus = P1 & GPIO_Pin_x_BIN;
-  93   2          break;
-  94   2          
-  95   2          case GPIOP2:
-  96   2            P2|=GPIO_Pin_x_BIN;
-  97   2            returnStatus = P2 & GPIO_Pin_x_BIN;
-  98   2          break;
-  99   2          
- 100   2          case GPIOP3:
- 101   2            P3|=GPIO_Pin_x_BIN;
- 102   2            returnStatus = P3 & GPIO_Pin_x_BIN;
- 103   2          break;
- 104   2          
- 105   2          default:
- 106   2          break;
- 107   2        }
- 108   1        
- 109   1        return (returnStatus>>GPIO_Pin_x);
- 110   1      }
- 111          
- 112          #define GET_BIT_NUMBER    4
- 113          void KeyControl(void)
- 114          {
- 115   1        unsigned char HighFour=0;
- 116   1        
-C51 COMPILER V9.59.0.0   GPIO                                                              11/08/2018 13:56:18 PAGE 3   
+  55   2          break;
+  56   2          
+  57   2          case GPIOP1:
+  58   2            P1 &=(~(int)pow(2,GPIO_Pin_x));
+  59   2          break;
+  60   2          
+  61   2          case GPIOP2:
+  62   2            P2 &=(~(int)pow(2,GPIO_Pin_x));
+  63   2          break;
+  64   2          
+  65   2          case GPIOP3:
+  66   2            P3 &=(~(int)pow(2,GPIO_Pin_x));
+  67   2          break;
+  68   2          
+  69   2          case GPIOP4:
+  70   2            P4 &=(~(int)pow(2,GPIO_Pin_x));
+  71   2          break;
+  72   2          
+  73   2          default:
+  74   2            
+  75   2          break;
+  76   2        }
+  77   1      
+  78   1      }
+  79          /**
+  80            * @brief  GPIO口某位读取当前状态函数
+  81            * @param  GPIOx 某一GPIO口  
+  82            * @param  GPIO_Pin_x  某一GPIO口的某一位
+  83            * @retval 某一GPIO口当前GPIO的状态
+  84            */
+  85          unsigned char GPIOx_ReadBits(unsigned char GPIOx, unsigned char GPIO_Pin_x)
+  86          {
+  87   1        unsigned char returnStatus=0;
+  88   1        unsigned char GPIO_Pin_x_BIN=(int)pow(2,GPIO_Pin_x);
+  89   1        
+  90   1        switch(GPIOx)
+  91   1        {
+  92   2          case GPIOP0:
+  93   2            P0|=GPIO_Pin_x_BIN;
+  94   2            returnStatus = P0 & GPIO_Pin_x_BIN;
+  95   2          break;
+  96   2          
+  97   2          case GPIOP1:
+  98   2            P1|=GPIO_Pin_x_BIN;
+  99   2            returnStatus = P1 & GPIO_Pin_x_BIN;
+ 100   2          break;
+ 101   2          
+ 102   2          case GPIOP2:
+ 103   2            P2|=GPIO_Pin_x_BIN;
+ 104   2            returnStatus = P2 & GPIO_Pin_x_BIN;
+ 105   2          break;
+ 106   2          
+ 107   2          case GPIOP3:
+ 108   2            P3|=GPIO_Pin_x_BIN;
+ 109   2            returnStatus = P3 & GPIO_Pin_x_BIN;
+ 110   2          break;
+ 111   2          
+ 112   2          default:
+ 113   2          break;
+ 114   2        }
+ 115   1        
+ 116   1        return (returnStatus>>GPIO_Pin_x);
+C51 COMPILER V9.59.0.0   GPIO                                                              11/08/2018 22:41:07 PAGE 3   
 
- 117   1        /*输入端置位操作*/
- 118   1        P1|=0xf0;
- 119   1        
- 120   1        HighFour=(P1 & 0xf0); 
- 121   1        P1= (~(HighFour>>4));
- 122   1      
- 123   1      }
- 124          void ShowKeyValue(void)
- 125          {
- 126   1        unsigned char HighFour=0; 
- 127   1        unsigned char codeMy=0;
- 128   1        unsigned char i=0;
- 129   1        
- 130   1        P1|=0xf0;
- 131   1        HighFour= ((P1 & 0xf0)>>4); 
- 132   1        /*输入端置位操作*/
- 133   1        
- 134   1        for(i=0;i<4;i++)
- 135   1        {
- 136   2          codeMy+=((HighFour&((int)pow(2,i)))>>i)*(i+1);
- 137   2        }
- 138   1        GPIOx_SetBits(1,3);
- 139   1      //  if(HighFour==0x08)
- 140   1      //  {
- 141   1      //    GPIOx_ResetBits(1,0);
- 142   1      //    GPIOx_ResetBits(1,1);
- 143   1      //  }
- 144   1      //  else if(HighFour==0x04)
- 145   1      //  {
- 146   1      //    GPIOx_SetBits(1,0);
- 147   1      //    GPIOx_ResetBits(1,1);
- 148   1      //  }else if(HighFour==0x02)
- 149   1      //  {
- 150   1      //    GPIOx_ResetBits(1,0);
- 151   1      //    GPIOx_SetBits(1,1);
- 152   1      //  }else if (HighFour==0x01)
- 153   1      //  {
- 154   1      //    GPIOx_SetBits(1,0);
- 155   1      //    GPIOx_SetBits(1,1);
- 156   1      //  }else
- 157   1      //  {
- 158   1      //    GPIOx_SetBits(1,0);
- 159   1      //    GPIOx_SetBits(1,1);
- 160   1      //  }
- 161   1        P1=~codeMy;
- 162   1      
- 163   1      }
- 164          #define LED_NUMBER     5
- 165          void WaterLight(void)
- 166          {
- 167   1        static uint32_t xdata runTime=0;
- 168   1        static uint8_t xdata ledIndex=0;
- 169   1        runTime++;
- 170   1        
- 171   1        if(runTime<=200+gParam.flag*50)
- 172   1        {
- 173   2          GPIOx_ResetBits(GPIOP1,ledIndex);
- 174   2        }
- 175   1        else if(runTime>200+gParam.flag*50&&runTime<400)
- 176   1        {
- 177   2          GPIOx_SetBits(GPIOP1,ledIndex);
- 178   2        }
-C51 COMPILER V9.59.0.0   GPIO                                                              11/08/2018 13:56:18 PAGE 4   
+ 117   1      }
+ 118          
+ 119          #define GET_BIT_NUMBER    4
+ 120          void KeyControl(void)
+ 121          {
+ 122   1        unsigned char HighFour=0;
+ 123   1        
+ 124   1        /*输入端置位操作*/
+ 125   1        P1|=0xf0;
+ 126   1        
+ 127   1        HighFour=(P1 & 0xf0); 
+ 128   1        P1= (~(HighFour>>4));
+ 129   1      
+ 130   1      }
+ 131          void ShowKeyValue(void)
+ 132          {
+ 133   1        unsigned char HighFour=0; 
+ 134   1        unsigned char codeMy=0;
+ 135   1        unsigned char i=0;
+ 136   1        
+ 137   1        P1|=0xf0;
+ 138   1        HighFour= ((P1 & 0xf0)>>4); 
+ 139   1        /*输入端置位操作*/
+ 140   1        
+ 141   1        for(i=0;i<4;i++)
+ 142   1        {
+ 143   2          codeMy+=((HighFour&((int)pow(2,i)))>>i)*(i+1);
+ 144   2        }
+ 145   1        GPIOx_SetBits(1,3);
+ 146   1      //  if(HighFour==0x08)
+ 147   1      //  {
+ 148   1      //    GPIOx_ResetBits(1,0);
+ 149   1      //    GPIOx_ResetBits(1,1);
+ 150   1      //  }
+ 151   1      //  else if(HighFour==0x04)
+ 152   1      //  {
+ 153   1      //    GPIOx_SetBits(1,0);
+ 154   1      //    GPIOx_ResetBits(1,1);
+ 155   1      //  }else if(HighFour==0x02)
+ 156   1      //  {
+ 157   1      //    GPIOx_ResetBits(1,0);
+ 158   1      //    GPIOx_SetBits(1,1);
+ 159   1      //  }else if (HighFour==0x01)
+ 160   1      //  {
+ 161   1      //    GPIOx_SetBits(1,0);
+ 162   1      //    GPIOx_SetBits(1,1);
+ 163   1      //  }else
+ 164   1      //  {
+ 165   1      //    GPIOx_SetBits(1,0);
+ 166   1      //    GPIOx_SetBits(1,1);
+ 167   1      //  }
+ 168   1        P1=~codeMy;
+ 169   1      
+ 170   1      }
+ 171          #define LED_NUMBER     5
+ 172          void WaterLight(void)
+ 173          {
+ 174   1        static uint32_t xdata runTime=0;
+ 175   1        static uint8_t xdata ledIndex=0;
+ 176   1        runTime++;
+ 177   1        
+ 178   1        if(runTime<=200+gParam.flag*50)
+C51 COMPILER V9.59.0.0   GPIO                                                              11/08/2018 22:41:07 PAGE 4   
 
- 179   1        else if(runTime>=400)
- 180   1        {
- 181   2          runTime=0;
- 182   2          ledIndex++;
- 183   2          ledIndex%=LED_NUMBER;
- 184   2        }
- 185   1      }
+ 179   1        {
+ 180   2          GPIOx_ResetBits(GPIOP1,ledIndex);
+ 181   2        }
+ 182   1        else if(runTime>200+gParam.flag*50&&runTime<400)
+ 183   1        {
+ 184   2          GPIOx_SetBits(GPIOP1,ledIndex);
+ 185   2        }
+ 186   1        else if(runTime>=400)
+ 187   1        {
+ 188   2          runTime=0;
+ 189   2          ledIndex++;
+ 190   2          ledIndex%=LED_NUMBER;
+ 191   2        }
+ 192   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
