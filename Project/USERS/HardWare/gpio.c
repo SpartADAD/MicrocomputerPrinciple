@@ -168,22 +168,23 @@ void ShowKeyValue(void)
 	P1=~codeMy;
 
 }
-#define LED_NUMBER     5
+#define LED_NUMBER     8
 void WaterLight(void)
 {
 	static uint32_t xdata runTime=0;
 	static uint8_t xdata ledIndex=0;
-	runTime++;
+	uint16_t xdata timeControl=200-gParam.flag*150;
 	
-	if(runTime<=200+gParam.flag*50)
+	runTime++;
+	if(runTime<=timeControl)
 	{
 		GPIOx_ResetBits(GPIOP1,ledIndex);
 	}
-	else if(runTime>200+gParam.flag*50&&runTime<400)
+	else if(runTime>timeControl&&runTime<timeControl*2)
 	{
 		GPIOx_SetBits(GPIOP1,ledIndex);
 	}
-	else if(runTime>=400)
+	else if(runTime>=timeControl*2)
 	{
 		runTime=0;
 		ledIndex++;

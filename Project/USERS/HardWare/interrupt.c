@@ -71,7 +71,7 @@ void EXHandlerInit(uint8_t EXNumber,uint8_t workMode)
 void EX0Handler(void) interrupt 0
 {
 	gParam.flag++;
-	gParam.flag%=5;
+	gParam.flag%=2;
 	
 }
 
