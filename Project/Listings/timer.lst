@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   TIMER                                                             11/02/2018 14:17:46 PAGE 1   
+C51 COMPILER V9.59.0.0   TIMER                                                             11/08/2018 13:56:18 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE TIMER
@@ -8,19 +8,132 @@ COMPILER INVOKED BY: E:\Keil5\C51\BIN\C51.EXE USERS\HardWare\timer.c LARGE OPTIM
 
 line level    source
 
-   1          /****************************gpio.c********************************/
+   1          /****************************timer.c********************************/
    2          
    3          #include "timer.h"
    4          #include "STC15F2K60S2.h"
-   5          #include "math.h"
+   5          #include "main.h"
    6          
    7          
+   8          void TIM0_Init(uint16_t workMode,uint16_t timerStartValue)
+   9          {
+  10   1          uint8_t lowValue =  0;
+  11   1          uint8_t highValue = 0;
+  12   1          switch(workMode)
+  13   1          {
+  14   2            case THIRTEEN_BIT_COUNT:  
+  15   2              ET0=1;
+  16   2              TMOD |= workMode;
+  17   2              /*最大计数值0x1FFF*/
+  18   2              timerStartValue&=0x1FFF;
+  19   2              
+  20   2              lowValue=timerStartValue&0x1F;
+  21   2              highValue=(timerStartValue>>5);
+  22   2              TH0  = highValue;
+  23   2              TL0  = lowValue;
+  24   2              TR0=1;
+  25   2            break;
+  26   2            
+  27   2            case SIXTEEN_BIT_COUNT:  
+  28   2              ET0=1;
+  29   2              TMOD |= workMode;
+  30   2              lowValue=timerStartValue&0xFF;
+  31   2              highValue=(timerStartValue>>8);
+  32   2              TH0  = highValue;
+  33   2              TL0  = lowValue;
+  34   2              TR0=1;
+  35   2            break;
+  36   2            
+  37   2            case EIGHT_BIT_AUTO_RELOUD_COUNT:  
+  38   2              ET0=1;
+  39   2              TMOD |= workMode;
+  40   2              /*计数最大值*/
+  41   2              timerStartValue&=0xFF;
+  42   2            
+  43   2              lowValue=timerStartValue;
+  44   2              highValue=timerStartValue;
+  45   2              TH0  = highValue;
+  46   2              TL0  = lowValue;
+  47   2              TR0=1;
+  48   2            break;
+  49   2            
+  50   2            case TWO_EIGHT_BIT_COUNT:  
+  51   2              ET0=1;
+  52   2              TMOD |= workMode;
+  53   2              TH0  = highValue;
+  54   2              TL0  = lowValue;
+C51 COMPILER V9.59.0.0   TIMER                                                             11/08/2018 13:56:18 PAGE 2   
+
+  55   2              TR0=1;
+  56   2            break;
+  57   2            
+  58   2            default:
+  59   2            
+  60   2            break;
+  61   2          }
+  62   1          /*总开关中断*/
+  63   1          EA=1;
+  64   1      }
+  65          
+  66          void TIM1_Init(uint16_t workMode,uint16_t timerStartValue)
+  67          {
+  68   1          uint8_t lowValue =  0;
+  69   1          uint8_t highValue = 0;
+  70   1          switch(workMode)
+  71   1          {
+  72   2            case THIRTEEN_BIT_COUNT:  
+  73   2              ET1=1;
+  74   2              TMOD |= (workMode<<4);
+  75   2              /*最大计数值0x1FFF*/
+  76   2              timerStartValue&=0x1FFF;
+  77   2              
+  78   2              lowValue=timerStartValue&0x1F;
+  79   2              highValue=(timerStartValue>>5);
+  80   2              TH1  = highValue;
+  81   2              TL1  = lowValue;
+  82   2              TR1=1;
+  83   2            break;
+  84   2            
+  85   2            case SIXTEEN_BIT_COUNT:  
+  86   2              ET1=1;
+  87   2              TMOD |= (workMode<<4);
+  88   2              lowValue=timerStartValue&0xFF;
+  89   2              highValue=(timerStartValue>>8);
+  90   2              TH1  = highValue;
+  91   2              TL1  = lowValue;
+  92   2              TR1=1;
+  93   2            break;
+  94   2            
+  95   2            case EIGHT_BIT_AUTO_RELOUD_COUNT:  
+  96   2              ET1=1;
+  97   2              TMOD |= (workMode<<4);
+  98   2              /*计数最大值*/
+  99   2              timerStartValue&=0xFF;
+ 100   2            
+ 101   2              lowValue=timerStartValue;
+ 102   2              highValue=timerStartValue;
+ 103   2              TH1  = highValue;
+ 104   2              TL1  = lowValue;
+ 105   2              TR1=1;
+ 106   2            break;
+ 107   2            
+ 108   2            default:
+ 109   2            break;
+ 110   2            
+ 111   2          }
+ 112   1          /*总开关中断*/
+ 113   1          EA=1;
+ 114   1      }
+ 115          
+ 116          
+C51 COMPILER V9.59.0.0   TIMER                                                             11/08/2018 13:56:18 PAGE 3   
+
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   ----    ----
+   CODE SIZE        =    243    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----    ----
+   XDATA SIZE       =   ----       4
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

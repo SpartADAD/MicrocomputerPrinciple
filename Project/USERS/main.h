@@ -7,6 +7,18 @@
 #include <ABSACC.h>
 #include <math.h>
 #include <stdio.h>
+#define RUN_PERIOD_BY_TIM   FIVE_MS_RUN_BY_TIM1
+/*定义5ms运行周期通过定时器0*/
+#define FIVE_MS_RUN_BY_TIM0         0
+/*定义5ms运行周期通过定时器1*/
+#define FIVE_MS_RUN_BY_TIM1         1
+
+/*TIM0周期为200微秒进一次中断   25次为5ms*/
+#define PERIOD_RUN      25
+
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
+typedef unsigned int uint32_t;
 
 //系统时钟定于
 #define SYSCLK (4068000L)
@@ -14,46 +26,30 @@
 //一微妙时间定义
 #define TIMERUS (int)(12.0f/(float)(SYSCLK/1000000))
 
-//返回错误宏定义
-#define RETURN_ERROR (0xff)
 
 //圆周率宏定义
 #define PI (3.1415926f)
 
-//#define DATA_MEMORY_TEST
+typedef struct{
+		uint8_t flag;
 
-//#define KEY_LED_EXP
 
-//#define BASIC_IO_EXP
 
-//#define DECODE_EXP
 
-#define P1_IO_EXP
+}gParam_t;
+	
+	
+extern gParam_t gParam;
 
-//#define TIMER_EXP
 
-//#define INTERRUPT_EXP
-
-//#define UART_EXP
-
-//#define IO8255_EXP
-
-//#define TIMER_8254_EXP
-
-//#define STEPMOTOR_EXP
-
-//#define FINAL_EXAM
 
 //状态位枚举类型定义
 typedef enum {RESET = 0, SET = 1} FlagStatus, ITStatus;
 //使能失能状态枚举类型定义
 typedef enum {disable = 0, enable}FunctionalState_t;
 
-//引用 7279输出数码
-extern unsigned char xdata realCode[];
 
-typedef unsigned char uint8_t;
-typedef unsigned short uint16_t;
-typedef unsigned int uint32_t;
+
+
 
 #endif

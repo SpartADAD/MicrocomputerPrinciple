@@ -1,0 +1,110 @@
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         11/08/2018 13:56:19 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE INTERRUPT
+OBJECT MODULE PLACED IN .\Objects\interrupt.obj
+COMPILER INVOKED BY: E:\Keil5\C51\BIN\C51.EXE USERS\HardWare\interrupt.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\USERS\H
+                    -ardWare;.\USERS) DEBUG OBJECTEXTEND PRINT(.\Listings\interrupt.lst) TABS(2) OBJECT(.\Objects\interrupt.obj)
+
+line level    source
+
+   1          /****************************gpio.c********************************/
+   2          
+   3          #include "timer.h"
+   4          #include "STC15F2K60S2.h"
+   5          #include "main.h"
+   6          #include "gpio.h"
+   7          #include "interrupt.h"
+   8          
+   9          
+  10          static uint8_t runFlag=0;
+  11          void SetRunFlag(void)
+  12          {
+  13   1        runFlag=1;
+  14   1      }
+  15          
+  16          uint8_t GetRunFlag(void)
+  17          {
+  18   1        if(runFlag)
+  19   1        {
+  20   2          runFlag =0;
+  21   2          return 1; 
+  22   2        }
+  23   1        return 0;
+  24   1      }
+  25          static  uint32_t xdata timeCnt=0;
+  26          void TIM0_Handler() interrupt 1 
+  27          {
+  28   1        
+  29   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
+                  timeCnt++;
+                  if(timeCnt>PERIOD_RUN)
+                  {
+                    timeCnt=0;
+                    SetRunFlag();
+                  }
+                #else
+  37   1          
+  38   1        #endif
+  39   1      }
+  40          
+  41          
+  42          void TIM1_Handler() interrupt 3
+  43          {
+  44   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
+  45   1          timeCnt++;
+  46   1          if(timeCnt>PERIOD_RUN)
+  47   1          {
+  48   2            timeCnt=0;
+  49   2            SetRunFlag();
+  50   2          }
+  51   1        #else
+              
+                #endif
+  54   1      }
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         11/08/2018 13:56:19 PAGE 2   
+
+  55          
+  56          void EXHandlerInit(uint8_t EXNumber,uint8_t workMode)
+  57          {
+  58   1        if(EXNumber==EX_INTERRUPT0)
+  59   1        {
+  60   2          EX0=1;
+  61   2          IT0=workMode; 
+  62   2        }
+  63   1        else if(EXNumber==EX_INTERRUPT1)
+  64   1        {
+  65   2          EX1=1;
+  66   2          IT1=workMode; 
+  67   2        }
+  68   1        EA = 1;
+  69   1      }
+  70          
+  71          void EX0Handler(void) interrupt 0
+  72          {
+  73   1        gParam.flag++;
+  74   1        gParam.flag%=5;
+  75   1        
+  76   1      }
+  77          
+  78          void EX1Handler(void) interrupt 2
+  79          {
+  80   1      
+  81   1      
+  82   1      
+  83   1      
+  84   1      } 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    138    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      3    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

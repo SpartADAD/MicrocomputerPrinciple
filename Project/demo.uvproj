@@ -406,6 +406,11 @@
               <FileType>1</FileType>
               <FilePath>.\USERS\HardWare\delay.c</FilePath>
             </File>
+            <File>
+              <FileName>interrupt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USERS\HardWare\interrupt.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

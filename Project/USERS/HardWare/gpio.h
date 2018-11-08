@@ -10,6 +10,7 @@ unsigned char GPIOx_ReadBits(unsigned char GPIOx, unsigned char GPIO_Pin_x);
 
 void KeyControl(void);
 void ShowKeyValue(void);
+void WaterLight(void);
 
 
 #define GPIO_PIN_0    0
@@ -28,5 +29,6 @@ void ShowKeyValue(void);
 #define	GPIOP2  2
 #define	GPIOP3  3 
 #define	GPIOP4  4
+
 
 #endif

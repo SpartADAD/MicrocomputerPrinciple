@@ -3,6 +3,7 @@
 #include "gpio.h"
 #include "STC15F2K60S2.h"
 #include "math.h"
+#include "main.h"
 //const enum
 //{
 //	GPIOP0 = 0,
@@ -159,4 +160,26 @@ void ShowKeyValue(void)
 //	}
 	P1=~codeMy;
 
+}
+#define LED_NUMBER     5
+void WaterLight(void)
+{
+	static uint32_t xdata runTime=0;
+	static uint8_t xdata ledIndex=0;
+	runTime++;
+	
+	if(runTime<=200+gParam.flag*50)
+	{
+		GPIOx_ResetBits(GPIOP1,ledIndex);
+	}
+	else if(runTime>200+gParam.flag*50&&runTime<400)
+	{
+		GPIOx_SetBits(GPIOP1,ledIndex);
+	}
+	else if(runTime>=400)
+	{
+		runTime=0;
+		ledIndex++;
+		ledIndex%=LED_NUMBER;
+	}
 }
