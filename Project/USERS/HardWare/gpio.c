@@ -172,8 +172,8 @@ void ShowKeyValue(void)
 void WaterLight(void)
 {
 	static uint32_t xdata runTime=0;
-	static uint8_t xdata ledIndex=0;
-	uint16_t xdata timeControl=200-gParam.flag*150;
+	static char xdata ledIndex=0;
+	uint16_t xdata timeControl=200;
 	
 	runTime++;
 	if(runTime<=timeControl)
@@ -187,7 +187,17 @@ void WaterLight(void)
 	else if(runTime>timeControl*2)
 	{
 		runTime=0;
-		ledIndex++;
-		ledIndex%=LED_NUMBER;
+		if(gParam.flag)
+		{
+			ledIndex++;
+			if(ledIndex>=LED_NUMBER)
+				ledIndex=0;
+		}
+		else
+		{
+			ledIndex--;
+			if(ledIndex<0)
+				ledIndex=LED_NUMBER-1;
+		}
 	}
 }
