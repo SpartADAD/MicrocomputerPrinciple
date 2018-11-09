@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         11/08/2018 22:55:23 PAGE 1   
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         11/09/2018 14:27:04 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE INTERRUPT
@@ -15,7 +15,7 @@ line level    source
    5          #include "main.h"
    6          #include "gpio.h"
    7          #include "interrupt.h"
-   8          
+   8          #include "delay.h"
    9          
   10          static uint8_t runFlag=0;
   11          void SetRunFlag(void)
@@ -38,7 +38,7 @@ line level    source
   28   1        
   29   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
                   timeCnt++;
-                  if(timeCnt>PERIOD_RUN)
+                  if(timeCnt>=PERIOD_RUN)
                   {
                     timeCnt=0;
                     SetRunFlag();
@@ -53,7 +53,7 @@ line level    source
   43          {
   44   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
   45   1          timeCnt++;
-  46   1          if(timeCnt>PERIOD_RUN)
+  46   1          if(timeCnt>=PERIOD_RUN)
   47   1          {
   48   2            timeCnt=0;
   49   2            SetRunFlag();
@@ -62,7 +62,7 @@ line level    source
               
                 #endif
   54   1      }
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         11/08/2018 22:55:23 PAGE 2   
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         11/09/2018 14:27:04 PAGE 2   
 
   55          
   56          void EXHandlerInit(uint8_t EXNumber,uint8_t workMode)
@@ -84,7 +84,7 @@ line level    source
   72          {
   73   1        gParam.flag++;
   74   1        gParam.flag%=2;
-  75   1        
+  75   1        P1=0xff;
   76   1      }
   77          
   78          void EX1Handler(void) interrupt 2
@@ -97,7 +97,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    126    ----
+   CODE SIZE        =    129    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      3    ----
    PDATA SIZE       =   ----    ----

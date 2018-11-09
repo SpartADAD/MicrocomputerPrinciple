@@ -23,11 +23,6 @@ void main(void)
 {
 //	P1=0xF0;
 	HardWareInit();
-//	TMOD = 0x10;
-//	TL1=0x9c;
-//	TH1=0x9c;
-//	IE=0x88;
-//	TR1=1;
 	while(1)
 	{
 		#ifdef RUN_PERIOD_BY_TIM

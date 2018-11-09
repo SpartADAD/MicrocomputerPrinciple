@@ -180,11 +180,11 @@ void WaterLight(void)
 	{
 		GPIOx_ResetBits(GPIOP1,ledIndex);
 	}
-	else if(runTime>timeControl&&runTime<timeControl*2)
+	else if(runTime>timeControl&&runTime<=timeControl*2)
 	{
 		GPIOx_SetBits(GPIOP1,ledIndex);
 	}
-	else if(runTime>=timeControl*2)
+	else if(runTime>timeControl*2)
 	{
 		runTime=0;
 		ledIndex++;

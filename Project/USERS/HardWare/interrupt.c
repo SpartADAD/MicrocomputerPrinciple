@@ -5,7 +5,7 @@
 #include "main.h"
 #include "gpio.h"
 #include "interrupt.h"
-
+#include "delay.h"
 
 static uint8_t runFlag=0;
 void SetRunFlag(void)
@@ -28,7 +28,7 @@ void TIM0_Handler() interrupt 1
 	
 	#if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
 		timeCnt++;
-		if(timeCnt>PERIOD_RUN)
+		if(timeCnt>=PERIOD_RUN)
 		{
 			timeCnt=0;
 			SetRunFlag();
@@ -43,7 +43,7 @@ void TIM1_Handler() interrupt 3
 {
 	#if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
     timeCnt++;
-		if(timeCnt>PERIOD_RUN)
+		if(timeCnt>=PERIOD_RUN)
 		{
 			timeCnt=0;
 			SetRunFlag();
@@ -72,7 +72,7 @@ void EX0Handler(void) interrupt 0
 {
 	gParam.flag++;
 	gParam.flag%=2;
-	
+	P1=0xff;
 }
 
 void EX1Handler(void) interrupt 2
