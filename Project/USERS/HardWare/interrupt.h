@@ -13,6 +13,6 @@
 uint8_t GetRunFlag(void);
 
 void EXHandlerInit(uint8_t EXNumber,uint8_t workMode);
-
+void Interrupt_Priority(uint8_t priority);
 
 #endif

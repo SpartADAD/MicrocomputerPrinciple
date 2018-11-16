@@ -1,10 +1,10 @@
-C51 COMPILER V9.59.0.0   HD7279                                                            10/16/2018 22:59:28 PAGE 1   
+C51 COMPILER V9.59.0.0   HD7279                                                            11/16/2018 19:38:46 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE HD7279
 OBJECT MODULE PLACED IN .\Objects\HD7279.obj
-COMPILER INVOKED BY: E:\Keil5\C51\BIN\C51.EXE HD7279.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
-                    -s\HD7279.lst) TABS(2) OBJECT(.\Objects\HD7279.obj)
+COMPILER INVOKED BY: E:\Keil5\C51\BIN\C51.EXE USERS\HardWare\HD7279.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\USERS\Hard
+                    -Ware;.\USERS) DEBUG OBJECTEXTEND PRINT(.\Listings\HD7279.lst) TABS(2) OBJECT(.\Objects\HD7279.obj)
 
 line level    source
 
@@ -16,260 +16,147 @@ line level    source
    6          //HD7279显示内容对应数码
    7          unsigned char xdata realCode[] = \
    8            {0x7e , 0x30 , 0x6d , 0x79 , 0x33 , 0x5b , 0x5f , 0x70 , 0x7f , 0x7b , 0x01 , 0x80 , 0x00 , 0x6f};
-   9          //  0   1   2   3   4   5 6   7   8 9   -   .   blank error
+   9          //  0      1       2      3      4      5      6      7      8      9      -    .   blank error
   10          
   11          /**
   12            * @brief  HD7279发送一个字节
   13            * @note
   14            * @param  sendData：要发送的数据
-  15            *     @arg
-  16            * @param
-  17            * @retval none
-  18            */
-  19          void HD7279SendByte(unsigned char sendData)
-  20          {
-  21   1      #define SEND_DATA_LENGTH (8)
-  22   1        unsigned char xdata sendCounter = 0;
-  23   1        //片选端拉低
-  24   1        cs=0;
-  25   1        Delay10Us(12);
-  26   1        //生成时钟信号并将八位数字依次发送
-  27   1        for(sendCounter = 0 ; sendCounter < SEND_DATA_LENGTH ; sendCounter++)
-  28   1        {
-  29   2          if(sendData & 0x80)
-  30   2          {
-  31   3            dat = 1;
-  32   3          }
-  33   2          else
-  34   2          {
-  35   3            dat = 0;
-  36   3          }
-  37   2          //产生一个上升沿
-  38   2          clk = 1;
-  39   2          Delay10Us(2);
-  40   2          //产生一个下降沿
-  41   2          clk = 0;
-  42   2          Delay10Us(2);
-  43   2          sendData<<=1;
-  44   2        }
-  45   1        dat = 0;
-  46   1      }
-  47          
-  48          /**
-  49            * @brief  HD7279接收数据
-  50            * @note
-  51            * @param none
-  52            *     @arg
-  53            * @param none
-  54            * @retval ：接受到的一个字节数据
-C51 COMPILER V9.59.0.0   HD7279                                                            10/16/2018 22:59:28 PAGE 2   
+  15            * @param
+  16            * @retval none
+  17            */
+  18          void HD7279SendByte(unsigned char sendData)
+  19          {
+  20   1      #define SEND_DATA_LENGTH (8)
+  21   1        unsigned char xdata sendCounter = 0;
+  22   1        //片选端拉低
+  23   1        cs=0;
+  24   1        Delay10Us(12);
+  25   1        //生成时钟信号并将八位数字依次发送
+  26   1        for(sendCounter = 0 ; sendCounter < SEND_DATA_LENGTH ; sendCounter++)
+  27   1        {
+  28   2          if(sendData & 0x80)
+  29   2          {
+  30   3            dat = 1;
+  31   3          }
+  32   2          else
+  33   2          {
+  34   3            dat = 0;
+  35   3          }
+  36   2          //产生一个上升沿
+  37   2          clk = 1;
+  38   2          Delay10Us(2);
+  39   2          //产生一个下降沿
+  40   2          clk = 0;
+  41   2          Delay10Us(2);
+  42   2          sendData<<=1;
+  43   2        }
+  44   1        dat = 0;
+  45   1      }
+  46          
+  47          /**
+  48            * @brief  HD7279接收数据
+  49            * @note
+  50            * @param none
+  51            *     @arg
+  52            * @param none
+  53            * @retval ：接受到的一个字节数据
+  54            */
+C51 COMPILER V9.59.0.0   HD7279                                                            11/16/2018 19:38:46 PAGE 2   
 
-  55            */
-  56          unsigned char HD7279ReceiveByte(void)
-  57          {
-  58   1      #define RECEIVE_DATA_LENGTH (8)
-  59   1        unsigned char xdata receiveCounter  = 0;
-  60   1        unsigned char xdata receiveData = 0;
-  61   1        //数据端拉高准备接收数据
-  62   1        dat = 1;
-  63   1        Delay10Us(12);
-  64   1        //生成时钟信号并将八位数字一次接收
-  65   1        for(receiveCounter = 0 ; receiveCounter < RECEIVE_DATA_LENGTH ; receiveCounter++)
-  66   1        {
-  67   2          //产生一个上升沿
-  68   2          clk = 1;
-  69   2          Delay10Us(2);
-  70   2          receiveData*=2;
-  71   2          if(dat)
-  72   2          {
-  73   3            receiveData|=0x01;
-  74   3          }
-  75   2          else
-  76   2          {
-  77   3          
-  78   3          }
-  79   2          clk = 0;
-  80   2          Delay10Us(2);
-  81   2        }
-  82   1        dat = 0;
-  83   1        return receiveData;
-  84   1      }
-  85          
-  86          //通过HD7279让数码管显示对应内容
-  87          /**
-  88            * @brief  数码管显示函数
-  89            * @note
-  90            * @param cmd：命令字
-  91            *     @arg
-  92          * @param dataSend:数据字
-  93            * @retval
-  94            */
-  95          void LedWrite(unsigned char cmd , unsigned char dataSend)
-  96          {
-  97   1        HD7279SendByte(cmd);
-  98   1        
-  99   1        HD7279SendByte(dataSend); 
- 100   1      }
- 101          
- 102          /**
- 103            * @brief  读取按键状态
- 104            * @note
- 105            * @param
- 106            *     @arg
- 107            * @param
- 108            * @retval ：返回的按键状态
- 109            */
- 110          unsigned char KeyRead(void)
- 111          {
- 112   1        HD7279SendByte(CMD_READ);
- 113   1        
- 114   1        return (HD7279ReceiveByte());
- 115   1      }
- 116          
-C51 COMPILER V9.59.0.0   HD7279                                                            10/16/2018 22:59:28 PAGE 3   
+  55          unsigned char HD7279ReceiveByte(void)
+  56          {
+  57   1      #define RECEIVE_DATA_LENGTH (8)
+  58   1        unsigned char xdata receiveCounter  = 0;
+  59   1        unsigned char xdata receiveData = 0;
+  60   1        //数据端拉高准备接收数据
+  61   1        dat = 1;
+  62   1        Delay10Us(12);
+  63   1        //生成时钟信号并将八位数字一次接收
+  64   1        for(receiveCounter = 0 ; receiveCounter < RECEIVE_DATA_LENGTH ; receiveCounter++)
+  65   1        {
+  66   2          //产生一个上升沿
+  67   2          clk = 1;
+  68   2          Delay10Us(2);
+  69   2          receiveData*=2;
+  70   2          if(dat)
+  71   2          {
+  72   3            receiveData|=0x01;
+  73   3          }
+  74   2          else
+  75   2          {
+  76   3          
+  77   3          }
+  78   2          clk = 0;
+  79   2          Delay10Us(2);
+  80   2        }
+  81   1        dat = 0;
+  82   1        return receiveData;
+  83   1      }
+  84          
+  85          //通过HD7279让数码管显示对应内容
+  86          /**
+  87            * @brief  数码管显示函数
+  88            * @note
+  89            * @param cmd：命令字
+  90            *     @arg
+  91          * @param dataSend:数据字
+  92            * @retval
+  93            */
+  94          void HD7279Write(unsigned char cmd , unsigned char dataSend)
+  95          {
+  96   1        HD7279SendByte(cmd);
+  97   1        
+  98   1        HD7279SendByte(dataSend); 
+  99   1      }
+ 100          #define DIGITTAL_TUBE_LENGTH  8    
+ 101          void HD7279ShowInt(int showValue)
+ 102          {
+ 103   1        uint8_t xdata i=0;
+ 104   1        uint8_t xdata tubeString[DIGITTAL_TUBE_LENGTH];
+ 105   1        /*判断是否在显示范围内，将其转换为字符数串*/
+ 106   1        if(showValue>=0&&showValue<=99999999)
+ 107   1        {
+ 108   2          sprintf(tubeString,"%d",showValue);
+ 109   2        }
+ 110   1        else if(showValue<0 && showValue>=-9999999)
+ 111   1        {
+ 112   2          sprintf(tubeString,"-%d",showValue);
+ 113   2        }
+ 114   1        else
+ 115   1        {
+ 116   2          showValue = 0;
+C51 COMPILER V9.59.0.0   HD7279                                                            11/16/2018 19:38:46 PAGE 3   
 
- 117          /**
- 118            * @brief  数码管显示整数
- 119            * @note
- 120            * @param  showData：要显示的整形数
- 121            *     @arg
- 122            * @param
- 123            * @retval
- 124            */
- 125          void LEDShowInt(long int showData)
- 126          {
- 127   1        //要发送的八个数据
- 128   1        unsigned char xdata LedData[8] = {0x00};
- 129   1        //循环技术变量
- 130   1        unsigned char xdata i = 0;
- 131   1        //存放字符串用临时数组
- 132   1        signed char xdata tempBuff[8] = {0};
- 133   1        //数据长度记录变量
- 134   1        unsigned char xdata dataLength = 0;
- 135   1        
- 136   1        //检验输入数据是否在显示范围内
- 137   1        if(showData<=99999999&&showData>=-9999999)
- 138   1        {
- 139   2        
- 140   2          //将输入的整数转换为字符串
- 141   2          sprintf((char *)tempBuff,"%Ld",(long int)showData);
- 142   2          
- 143   2          //记录数字长度
- 144   2          for(i = 0; i< 8; i++)
- 145   2          {
- 146   3            if(tempBuff[i]!=0x00)
- 147   3            {
- 148   4              dataLength++;
- 149   4            }
- 150   3          }
- 151   2          
- 152   2          //将字符串转换为对应编码
- 153   2          for(i = dataLength;i > 0;i--)
- 154   2          {
- 155   3            if(tempBuff[i-1]!='-')
- 156   3            {
- 157   4              LedData[7 - (dataLength - i)]=tempBuff[i-1] - 0x30;
- 158   4              LedData[7 - (dataLength - i)] = realCode[LedData[7 - (dataLength - i)]];
- 159   4            }
- 160   3            else
- 161   3            {
- 162   4              LedData[7 - (dataLength - i)] = realCode[10];     
- 163   4            }
- 164   3          }
- 165   2          
- 166   2          //显示对应编码
- 167   2          for(i = 0;i<8;i++)
- 168   2          {
- 169   3            LedWrite(0x97 - i , LedData[i]);
- 170   3          }
- 171   2        }
- 172   1        else
- 173   1        {
- 174   2          //超出范围时全部显示e
- 175   2          for(i = 0;i<8;i++)
- 176   2          {
- 177   3            LedWrite(0x97 - i , 0x6f);
- 178   3          }
-C51 COMPILER V9.59.0.0   HD7279                                                            10/16/2018 22:59:28 PAGE 4   
-
- 179   2        }
- 180   1      }
- 181          /**
- 182            * @brief  显示浮点数
- 183            * @note
- 184          * @param showData:要显示的浮点数
- 185            *     @arg
- 186            * @param
- 187            * @retval
- 188            */
- 189          void LEDShowFloat(float showData)
- 190          {
- 191   1        //要发送的8个数据
- 192   1        unsigned char xdata LedData[8] = {0x00};
- 193   1        //循环技术变量
- 194   1        unsigned char xdata i = 0;
- 195   1        //储存字符串用临时变量
- 196   1        signed char xdata tempBuff[8] = {0};
- 197   1        //数据长度记录变量
- 198   1        unsigned char xdata dataLength = 0;
- 199   1        
- 200   1        //检验是否在显示范围内
- 201   1        if(showData<=9999.99&&showData>=-999.99)
- 202   1        {
- 203   2        
- 204   2          //将输入的整数转换为字符串
- 205   2          sprintf((char *)tempBuff,"%.2f",(float)showData);
- 206   2          
- 207   2          //记录数字长度
- 208   2          for(i = 0; i< 8; i++)
- 209   2          {
- 210   3            if(tempBuff[i]!=0x00)
- 211   3            {
- 212   4              dataLength++;
- 213   4            }
- 214   3          }
- 215   2          
- 216   2          //将字符串转换为对应编码
- 217   2          for(i = dataLength;i > 0;i--)
- 218   2          {
- 219   3            if(tempBuff[i-1]!='-'&&tempBuff[i-1]!='.')
- 220   3            {
- 221   4              LedData[7 - (dataLength - i)]=tempBuff[i-1] - 0x30;
- 222   4              LedData[7 - (dataLength - i)] = realCode[LedData[7 - (dataLength - i)]];
- 223   4            }
- 224   3            else if(tempBuff[i-1]=='.')
- 225   3            {
- 226   4              LedData[7 - (dataLength - i)]=0x80;
- 227   4            }
- 228   3            else if(tempBuff[i-1]=='-')
- 229   3            {
- 230   4              LedData[7 - (dataLength - i)] = realCode[10];     
- 231   4            }
- 232   3          }
- 233   2          
- 234   2          //显示对应编码
- 235   2          for(i = 0;i<8;i++)
- 236   2          {
- 237   3            LedWrite(0x97 - i, LedData[i]);       
- 238   3          }
- 239   2        }
- 240   1        else
-C51 COMPILER V9.59.0.0   HD7279                                                            10/16/2018 22:59:28 PAGE 5   
-
- 241   1        {
- 242   2          //超出范围时全部显示e
- 243   2          for(i = 0;i<8;i++)
- 244   2          {
- 245   3            LedWrite(0x97 - i , 0x6f);
- 246   3          }
- 247   2        }
- 248   1      }
+ 117   2          for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
+ 118   2          {
+ 119   3            HD7279Write(UNDECODE+i,0x01);
+ 120   3          }
+ 121   2          return;
+ 122   2        }
+ 123   1        /**/
+ 124   1        for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
+ 125   1        {
+ 126   2          if(tubeString[i]=='-')
+ 127   2          {
+ 128   3            tubeString[i]=0x01;
+ 129   3          }
+ 130   2          else
+ 131   2          {
+ 132   3            /*ASCII码 0x30*/
+ 133   3            tubeString[i]=realCode[(tubeString[i]-0x30)];
+ 134   3          }
+ 135   2          HD7279Write(UNDECODE+i,realCode[i]);
+ 136   2        }
+ 137   1      
+ 138   1      }
+ 139            
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1155    ----
-   CONSTANT SIZE    =     41    ----
-   XDATA SIZE       =     14      49
+   CODE SIZE        =    468    ----
+   CONSTANT SIZE    =      7    ----
+   XDATA SIZE       =     14      16
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

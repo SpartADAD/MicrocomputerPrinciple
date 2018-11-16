@@ -7,24 +7,25 @@
 #include <ABSACC.h>
 #include <math.h>
 #include <stdio.h>
-#define RUN_PERIOD_BY_TIM   FIVE_MS_RUN_BY_TIM1
+#define RUN_PERIOD_BY_TIM   FIVE_MS_RUN_BY_TIM0
 /*定义5ms运行周期通过定时器0*/
 #define FIVE_MS_RUN_BY_TIM0         0
 /*定义5ms运行周期通过定时器1*/
 #define FIVE_MS_RUN_BY_TIM1         1
-
+/*一次中断为200微秒*/
+#define ONE_INTTEUPT_TIME           200
 /*TIM0周期为200微秒进一次中断   25次为5ms*/
-#define PERIOD_RUN      25
+#define PERIOD_RUN      ((int)(5000/(MACHINE_PEROID*ONE_INTTEUPT_TIME)))
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 
-//系统时钟定于
-#define SYSCLK (4068000L)
+//系统时钟定义 
+#define  SYSCLK 	12000000
 
-//一微妙时间定义
-#define TIMERUS (int)(12.0f/(float)(SYSCLK/1000000))
+//机器周期   
+#define MACHINE_PEROID (int)(12.0f/(float)(SYSCLK/1000000))
 
 
 //圆周率宏定义

@@ -411,6 +411,16 @@
               <FileType>1</FileType>
               <FilePath>.\USERS\HardWare\interrupt.c</FilePath>
             </File>
+            <File>
+              <FileName>usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USERS\HardWare\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>HD7279.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USERS\HardWare\HD7279.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

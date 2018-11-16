@@ -4,6 +4,8 @@
 ".\Objects\motor.obj",
 ".\Objects\delay.obj",
 ".\Objects\interrupt.obj",
+".\Objects\usart.obj",
+".\Objects\HD7279.obj",
 ".\Objects\main.obj" 
 TO ".\Objects\keyLED" 
 PRINT(".\Listings\keyLED.m51") RAMSIZE(256) 

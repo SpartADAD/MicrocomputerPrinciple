@@ -82,3 +82,20 @@ void EX1Handler(void) interrupt 2
 
 
 } 
+
+void USART_Handler(void)	interrupt 4 
+{
+	if(RI)
+	{
+		RI=0;
+		GPIOx_ResetBits(GPIOP1,GPIO_PIN_0);
+		DelayMs(200);
+		GPIOx_SetBits(GPIOP1,GPIO_PIN_0);
+		DelayMs(200);
+	}
+}
+
+void Interrupt_Priority(uint8_t priority)
+{
+		IP |= priority;
+}

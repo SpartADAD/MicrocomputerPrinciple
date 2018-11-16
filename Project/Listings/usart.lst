@@ -1,251 +1,83 @@
-C51 COMPILER V9.59.0.0   USART                                                             10/16/2018 22:59:29 PAGE 1   
+C51 COMPILER V9.59.0.0   USART                                                             11/16/2018 17:42:37 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE USART
 OBJECT MODULE PLACED IN .\Objects\usart.obj
-COMPILER INVOKED BY: E:\Keil5\C51\BIN\C51.EXE usart.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
-                    -\usart.lst) TABS(2) OBJECT(.\Objects\usart.obj)
+COMPILER INVOKED BY: E:\Keil5\C51\BIN\C51.EXE USERS\HardWare\usart.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\USERS\HardW
+                    -are;.\USERS) DEBUG OBJECTEXTEND PRINT(.\Listings\usart.lst) TABS(2) OBJECT(.\Objects\usart.obj)
 
 line level    source
 
-   1          /*************************usart.c******************************/
-   2          
+   1          
+   2          /************************usart.c******************************/
    3          #include "usart.h"
-   4          #include "timer.h"
-   5          #include "HD7279.h"
-   6          
-   7          /****************************串口UART2部分代码存在问题，还没有更改************************
-             -****/
-   8          
-   9          //串口模式初始化
-  10          void UARTModeInit(UARTTypeDef_t UARTx, unsigned char UARTMode)
-  11          {
-  12   1        //根据输入的串口号和模式对相应寄存器进行配置
-  13   1        if(UARTx==UART1)
-  14   1        {
-  15   2          SCON=(UARTMode<<6)+(SCON&0x3f);
-  16   2        }
-  17   1        else if(UARTx==UART2)
-  18   1        {
-  19   2          S2CON=(UARTMode<<6)+(S2CON&0x3f);
-  20   2        }
-  21   1      }
-  22          
-  23          //串口波特率初始化
-  24          void UARTBaudrateInit(UARTTypeDef_t UARTx,unsigned char UARTMode, unsigned char isBaudrateDouble, unsigned
-             - int baudRate)
-  25          {
-  26   1        //对波特率是否加倍进行配置
-  27   1        if(UARTx==UART1)
-  28   1        {
-  29   2          PCON=(isBaudrateDouble<<7)+(PCON&0x7f);
-  30   2        }
-  31   1        else if(UARTx==UART2)
-  32   1        {
-  33   2        
-  34   2        }
-  35   1        switch(UARTMode)
-  36   1        {
-  37   2          case UART_MODE_0:
-  38   2          break;
-  39   2          case UART_MODE_1:
-  40   2            if(UARTx==UART1)
-  41   2            {
-  42   3              //定时器初始化结构体 
-  43   3              timeMode_t timeMode ={0};
-  44   3      
-  45   3              //对结构体进行赋值
-  46   3              timeMode.isGateCrl = noGateCrl;
-  47   3              timeMode.timeWorkMode = timer;
-  48   3      //        timeMode.timeTriggerMode = innerTrigger;
-  49   3              timeMode.timerMode = halfWordAutoReload;
-  50   3              
-  51   3              //计算波特率对应重装载值并对定时器进行初始化
-  52   3              TimeInit(TIM1 ,timeMode ,(int)(1000000/(baudRate*4)), TIMERUS);
-C51 COMPILER V9.59.0.0   USART                                                             10/16/2018 22:59:29 PAGE 2   
+   4          #include "main.h"
+   5          #include "timer.h"
+   6          #include "STC15F2K60S2.h"
+   7          void USART_Interrupt_Init(void)
+   8          {
+   9   1        EA = 1;
+  10   1        ES = 1;
+  11   1      }
+  12          void USART_Init(uint8_t USART_Mode,uint8_t baudRateDouble,uint32_t baudRate,uint8_t nightBitEnble)
+  13          {
+  14   1          uint8_t timer1Reload=0;
+  15   1          SCON|=((USART_Mode<<6)|0x10);
+  16   1          switch(USART_Mode)
+  17   1          {
+  18   2            case USART_MODE_0:
+  19   2              /*SYSCLK /12 bits/s*/
+  20   2            break;
+  21   2            
+  22   2            case USART_MODE_1:
+  23   2              timer1Reload=(uint8_t)(256 - SYSCLK*(2*baudRateDouble)/baudRate/384);
+  24   2              TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,timer1Reload);
+  25   2              PCON |= (baudRateDouble<<7);
+  26   2              /*指定定时器1为波特率发生器！！！*/
+  27   2              AUXR&=0xfe;
+  28   2            break;
+  29   2            
+  30   2            case USART_MODE_2:
+  31   2              /*SYSCLK/64*2*BaudRateDouble bits/s*/
+  32   2              SCON|=(nightBitEnble<<5);
+  33   2            break;
+  34   2            
+  35   2            case USART_MODE_3:
+  36   2              timer1Reload=(uint8_t)(256 - SYSCLK*(2*baudRateDouble)/baudRate/384);
+  37   2              TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,timer1Reload);
+  38   2              PCON |= (baudRateDouble<<7);
+  39   2              SCON|=(nightBitEnble<<5);
+  40   2              /*指定定时器1为波特率发生器！！！*/
+  41   2              AUXR&=0xfe;
+  42   2            break;
+  43   2            
+  44   2            default:
+  45   2              
+  46   2            break;
+  47   2          }
+  48   1          USART_Interrupt_Init();
+  49   1      }
+  50          
+  51          
+  52          
+  53          void USART_SendData(uint8_t sendData)
+  54          {
+C51 COMPILER V9.59.0.0   USART                                                             11/16/2018 17:42:37 PAGE 2   
 
-  53   3              
-  54   3              //选择定时器1作为串口波特率发生器
-  55   3              AUXR&=0xfe;
-  56   3            }
-  57   2            else if(UARTx==UART2)
-  58   2            {
-  59   3            
-  60   3            }
-  61   2          break;
-  62   2          case UART_MODE_2:
-  63   2      
-  64   2          break;
-  65   2          case UART_MODE_3:
-  66   2            if(UARTx==UART1)
-  67   2            {
-  68   3              //定时器初始化结构体 
-  69   3              timeMode_t timeMode ={0};
-  70   3      
-  71   3              //对结构体进行赋值
-  72   3              timeMode.isGateCrl = noGateCrl;
-  73   3              timeMode.timeWorkMode = timer;
-  74   3      //        timeMode.timeTriggerMode = innerTrigger;
-  75   3              timeMode.timerMode = halfWordAutoReload;
-  76   3              
-  77   3              //计算波特率对应重装载值并对定时器进行初始化
-  78   3              TimeInit(TIM1 ,timeMode ,(int)(1000000/(baudRate*4)), TIMERUS);
-  79   3              
-  80   3              //选择定时器1作为串口波特率发生器
-  81   3              AUXR&=0xfe;   
-  82   3            }
-  83   2            else if(UARTx==UART2)
-  84   2            {
-  85   3            
-  86   3            }
-  87   2          break;
-  88   2          default:
-  89   2          break;
-  90   2        }
-  91   1      }
-  92          
-  93          sbit RENx = SCON^4;
-  94          //串口使能和失能函数
-  95          void UARTRxCmd(UARTTypeDef_t UARTx, FunctionalState_t newState)
-  96          {
-  97   1        //根据输入串口号和状态对相应寄存器进行配置
-  98   1        if(UARTx == UART1)
-  99   1        {
- 100   2          RENx = newState;
- 101   2        }
- 102   1        else if(UARTx == UART2)
- 103   1        {
- 104   2          RENx = S2CON^4;
- 105   2          RENx = newState;
- 106   2        }
- 107   1      }
- 108          
- 109          //读取串口中断标志为函数
- 110          FlagStatus UARTGetFlagStatus(UARTTypeDef_t UARTx, unsigned char UARTFlag)
- 111          {
- 112   1        //根据输入的串口号和要读取的标志位返回对应的标志位值
- 113   1        if(UARTx==UART1)
- 114   1        {
-C51 COMPILER V9.59.0.0   USART                                                             10/16/2018 22:59:29 PAGE 3   
-
- 115   2          if(SCON&UARTFlag)
- 116   2          {
- 117   3            return SET;
- 118   3          }
- 119   2          else
- 120   2          {
- 121   3            return RESET;
- 122   3          }
- 123   2        }
- 124   1        else if(UARTx==UART2)
- 125   1        {
- 126   2          if(S2CON&UARTFlag)
- 127   2          {
- 128   3            return SET;
- 129   3          }
- 130   2          else
- 131   2          {
- 132   3            return RESET;
- 133   3          }
- 134   2        }
- 135   1        else
- 136   1        {
- 137   2          return RETURN_ERROR;
- 138   2        }
- 139   1      }
- 140          
- 141          //清除串口中断标志位函数
- 142          void UARTClearFlagStatus(UARTTypeDef_t UARTx, unsigned char UARTFlag)
- 143          {
- 144   1        //根据输入的串口号和标志位对相应寄存器进行复位
- 145   1        if(UARTx==UART1)
- 146   1        {
- 147   2          SCON&=(~UARTFlag);
- 148   2        }
- 149   1        else if(UARTx==UART2)
- 150   1        {
- 151   2          S2CON&=(~UARTFlag);
- 152   2        }
- 153   1      }
- 154          
- 155          //串口发送一个字节函数
- 156          void UARTSendByte(UARTTypeDef_t UARTx, unsigned char sendData)
- 157          {
- 158   1        //根据串口号将发送的数据填入发送寄存器
- 159   1        if(UARTx==UART1)
- 160   1        {
- 161   2          SBUF = sendData;
- 162   2        }
- 163   1        else if(UARTx==UART2)
- 164   1        {
- 165   2          S2BUF = sendData;
- 166   2      
- 167   2        }
- 168   1        //等待发送成功
- 169   1        while(UARTGetFlagStatus(UARTx,UART_Tx_IT_FLAG)==RESET);
- 170   1        UARTClearFlagStatus(UARTx, UART_Tx_IT_FLAG);
- 171   1      }
- 172          
- 173          //串口接收字节函数
- 174          unsigned char UARTRecieveByte(UARTTypeDef_t UARTx)
- 175          {
- 176   1        //根据属于的串口号读取接收数据寄存器
-C51 COMPILER V9.59.0.0   USART                                                             10/16/2018 22:59:29 PAGE 4   
-
- 177   1        if(UARTx==UART1)
- 178   1        {
- 179   2          return SBUF;
- 180   2        }
- 181   1        else if(UARTx==UART2)
- 182   1        {
- 183   2          return S2BUF;
- 184   2        }
- 185   1        else
- 186   1        {
- 187   2          return RETURN_ERROR;
- 188   2        }
- 189   1      }
- 190          
- 191          //串口初始化函数
- 192          void UARTInit(UARTTypeDef_t UARTx, UARTMode_t UARTMode, unsigned int baudRate)
- 193          {
- 194   1        //根据输入进行初始化并使能串口和中断
- 195   1        UARTModeInit(UARTx, UARTMode.UARTMode);
- 196   1        
- 197   1        UARTBaudrateInit(UARTx,UARTMode.UARTMode, UARTMode.isUARTBaudrateDouble, baudRate);
- 198   1        
- 199   1        UARTITConfig(UARTx, UARTMode.itPriority);
- 200   1        
- 201   1        UARTRxCmd(UARTx, enable);
- 202   1        
- 203   1      }
- 204          
- 205          //串口中断初始化函数
- 206          void UARTITConfig(UARTTypeDef_t UARTx, unsigned char UARTPriority)
- 207          {
- 208   1        //使能中断
- 209   1        EA = 1; 
- 210   1        //根据输入的串口号和优先级配置相应寄存器
- 211   1        if(UARTx==UART1)
- 212   1        {
- 213   2        
- 214   2          ES = 1;
- 215   2          PS = UARTPriority;
- 216   2        }
- 217   1        else if(UARTx==UART2)
- 218   1        {
- 219   2          IE2|=0x01;
- 220   2          IP2|=UARTPriority;
- 221   2        }
- 222   1      }
- 223          
- 224          
+  55   1        TI = 0;
+  56   1        SBUF = sendData;
+  57   1        while(!TI){};/*等待发数完成*/
+  58   1      }
+  59          
+  60          
+  61          
+  62          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    546    ----
-   CONSTANT SIZE    =      6    ----
-   XDATA SIZE       =   ----      15
+   CODE SIZE        =    259    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       6
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

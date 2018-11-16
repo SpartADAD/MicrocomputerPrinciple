@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         11/09/2018 14:27:04 PAGE 1   
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         11/16/2018 18:36:24 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE INTERRUPT
@@ -37,6 +37,21 @@ line level    source
   27          {
   28   1        
   29   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
+  30   1          timeCnt++;
+  31   1          if(timeCnt>=PERIOD_RUN)
+  32   1          {
+  33   2            timeCnt=0;
+  34   2            SetRunFlag();
+  35   2          }
+  36   1        #else
+                  
+                #endif
+  39   1      }
+  40          
+  41          
+  42          void TIM1_Handler() interrupt 3
+  43          {
+  44   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
                   timeCnt++;
                   if(timeCnt>=PERIOD_RUN)
                   {
@@ -44,25 +59,10 @@ line level    source
                     SetRunFlag();
                   }
                 #else
-  37   1          
-  38   1        #endif
-  39   1      }
-  40          
-  41          
-  42          void TIM1_Handler() interrupt 3
-  43          {
-  44   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
-  45   1          timeCnt++;
-  46   1          if(timeCnt>=PERIOD_RUN)
-  47   1          {
-  48   2            timeCnt=0;
-  49   2            SetRunFlag();
-  50   2          }
-  51   1        #else
-              
-                #endif
+  52   1      
+  53   1        #endif
   54   1      }
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         11/09/2018 14:27:04 PAGE 2   
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         11/16/2018 18:36:24 PAGE 2   
 
   55          
   56          void EXHandlerInit(uint8_t EXNumber,uint8_t workMode)
@@ -94,10 +94,27 @@ line level    source
   82   1      
   83   1      
   84   1      } 
+  85          
+  86          void USART_Handler(void)  interrupt 4 
+  87          {
+  88   1        if(RI)
+  89   1        {
+  90   2          RI=0;
+  91   2          GPIOx_ResetBits(GPIOP1,GPIO_PIN_0);
+  92   2          DelayMs(200);
+  93   2          GPIOx_SetBits(GPIOP1,GPIO_PIN_0);
+  94   2          DelayMs(200);
+  95   2        }
+  96   1      }
+  97          
+  98          void Interrupt_Priority(uint8_t priority)
+  99          {
+ 100   1          IP |= priority;
+ 101   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    129    ----
+   CODE SIZE        =    222    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      3    ----
    PDATA SIZE       =   ----    ----
