@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   GPIO                                                              11/17/2018 11:44:41 PAGE 1   
+C51 COMPILER V9.59.0.0   GPIO                                                              11/17/2018 23:23:35 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE GPIO
@@ -62,7 +62,7 @@ line level    source
   52   1        {
   53   2          case GPIOP0:
   54   2            P0 &=(~(int)pow(2,GPIO_Pin_x));
-C51 COMPILER V9.59.0.0   GPIO                                                              11/17/2018 11:44:41 PAGE 2   
+C51 COMPILER V9.59.0.0   GPIO                                                              11/17/2018 23:23:35 PAGE 2   
 
   55   2          break;
   56   2          
@@ -126,7 +126,7 @@ line level    source
  114   2        }
  115   1        
  116   1        return (returnStatus>>GPIO_Pin_x);
-C51 COMPILER V9.59.0.0   GPIO                                                              11/17/2018 11:44:41 PAGE 3   
+C51 COMPILER V9.59.0.0   GPIO                                                              11/17/2018 23:23:35 PAGE 3   
 
  117   1      }
  118          
@@ -157,66 +157,62 @@ line level    source
  143   2          codeMy+=((HighFour&((int)pow(2,i)))>>i)*(i+1);
  144   2        }
  145   1        GPIOx_SetBits(1,3);
- 146   1      //  if(HighFour==0x08)
- 147   1      //  {
- 148   1      //    GPIOx_ResetBits(1,0);
- 149   1      //    GPIOx_ResetBits(1,1);
- 150   1      //  }
- 151   1      //  else if(HighFour==0x04)
- 152   1      //  {
- 153   1      //    GPIOx_SetBits(1,0);
- 154   1      //    GPIOx_ResetBits(1,1);
- 155   1      //  }else if(HighFour==0x02)
- 156   1      //  {
- 157   1      //    GPIOx_ResetBits(1,0);
- 158   1      //    GPIOx_SetBits(1,1);
- 159   1      //  }else if (HighFour==0x01)
- 160   1      //  {
- 161   1      //    GPIOx_SetBits(1,0);
- 162   1      //    GPIOx_SetBits(1,1);
- 163   1      //  }else
- 164   1      //  {
- 165   1      //    GPIOx_SetBits(1,0);
- 166   1      //    GPIOx_SetBits(1,1);
- 167   1      //  }
- 168   1        P1=~codeMy;
- 169   1      
- 170   1      }
- 171          #define LED_NUMBER     8
- 172          void WaterLight(void)
- 173          {
- 174   1        static uint32_t xdata runTime=0;
- 175   1        static char xdata ledIndex=0;
- 176   1        uint16_t xdata timeControl=200;
- 177   1        
- 178   1        runTime++;
-C51 COMPILER V9.59.0.0   GPIO                                                              11/17/2018 11:44:41 PAGE 4   
+ 146   1        P1=~codeMy;
+ 147   1      
+ 148   1      }
+ 149          /*** @brief  流水灯2s切换 
+ 150                timeControl是半个周期的时间
+ 151                静态变量runTime用来计数 计算运行时间 由于本函数是5ms运行1次所以当runTime运�
+             -�等于2倍的timeControl相当于1个周期=2s
+ 152          runTime==timeControl半个周期时让led灯亮 另外半个周期让led灭
+ 153                ledIndex 是控制当前灯的序号，通过传入序号控制led
+ 154                外部中断内 控制全局变量gParam.flag的值通过改变 其大小改变流水灯样式
+ 155          
+ 156            * @param  void           
+ 157            * @retval None
+ 158            */
+ 159          /*led的数量*/
+ 160          #define LED_NUMBER     8
+ 161          void WaterLight(void)
+ 162          {
+ 163   1        static uint32_t xdata runTime=0;
+ 164   1        static char xdata ledIndex=0;
+ 165   1        uint16_t xdata timeControl=200;
+ 166   1        /*进行计时*/
+ 167   1        runTime++;
+ 168   1        if(runTime<=timeControl)
+ 169   1        {
+ 170   2          /*传入序号控制led*/
+ 171   2          GPIOx_ResetBits(GPIOP1,ledIndex);
+ 172   2        }
+ 173   1        else if(runTime>timeControl&&runTime<=timeControl*2)
+ 174   1        {
+ 175   2          GPIOx_SetBits(GPIOP1,ledIndex);
+ 176   2        }
+ 177   1        else if(runTime>timeControl*2)
+C51 COMPILER V9.59.0.0   GPIO                                                              11/17/2018 23:23:35 PAGE 4   
 
- 179   1        if(runTime<=timeControl)
- 180   1        {
- 181   2          GPIOx_ResetBits(GPIOP1,ledIndex);
- 182   2        }
- 183   1        else if(runTime>timeControl&&runTime<=timeControl*2)
- 184   1        {
- 185   2          GPIOx_SetBits(GPIOP1,ledIndex);
- 186   2        }
- 187   1        else if(runTime>timeControl*2)
- 188   1        {
- 189   2          runTime=0;
- 190   2          if(gParam.flag)
- 191   2          {
- 192   3            ledIndex++;
- 193   3            if(ledIndex>=LED_NUMBER)
- 194   3              ledIndex=0;
- 195   3          }
- 196   2          else
- 197   2          {
- 198   3            ledIndex--;
- 199   3            if(ledIndex<0)
- 200   3              ledIndex=LED_NUMBER-1;
- 201   3          }
- 202   2        }
- 203   1      }
+ 178   1        {
+ 179   2          /*1个周期后清空计数*/
+ 180   2          runTime=0;
+ 181   2          if(gParam.flag)
+ 182   2          {
+ 183   3            /*顺次控制P1.0到P1.7*/
+ 184   3            ledIndex++;
+ 185   3            /*回到循环开始*/
+ 186   3            if(ledIndex>=LED_NUMBER)
+ 187   3              ledIndex=0;
+ 188   3          }
+ 189   2          else
+ 190   2          {
+ 191   3            /*顺次控制P1.7到P1.0*/
+ 192   3            ledIndex--;
+ 193   3            /*回到循环开始*/
+ 194   3            if(ledIndex<0)
+ 195   3              ledIndex=LED_NUMBER-1;
+ 196   3          }
+ 197   2        }
+ 198   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

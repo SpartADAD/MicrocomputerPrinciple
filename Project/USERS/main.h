@@ -7,6 +7,7 @@
 #include <ABSACC.h>
 #include <math.h>
 #include <stdio.h>
+/*定义使用哪个定时器控制5ms运行周期*/
 #define RUN_PERIOD_BY_TIM   FIVE_MS_RUN_BY_TIM0
 /*定义5ms运行周期通过定时器0*/
 #define FIVE_MS_RUN_BY_TIM0         0
@@ -21,10 +22,10 @@ typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 
-//系统时钟定义 
+//系统时钟定义 12M HZ
 #define  SYSCLK 	12000000
 
-//机器周期   
+//机器周期   1us
 #define MACHINE_PEROID (int)(12.0f/(float)(SYSCLK/1000000))
 
 

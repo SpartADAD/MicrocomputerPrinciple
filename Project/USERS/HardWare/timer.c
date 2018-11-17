@@ -4,7 +4,12 @@
 #include "STC15F2K60S2.h"
 #include "main.h"
 
-
+/**
+  * @brief  定时器0初始化函数 通过位与 位移操作求得lowValue 填入低位 highValue 填入高位的值 
+  * @param  workMode: 工作模式，填入值宏定义  0-3              
+  * @param  timerStartValue：   定时器装载值  
+  * @retval None
+  */
 void TIM0_Init(uint16_t workMode,uint16_t timerStartValue)
 {
 		uint8_t lowValue =  0;
@@ -56,7 +61,12 @@ void TIM0_Init(uint16_t workMode,uint16_t timerStartValue)
 			break;
 		}
 }
-
+/**
+  * @brief  定时器1初始化函数 通过位与 位移操作求得lowValue 填入低位 highValue 填入高位的值 
+  * @param  workMode: 工作模式，填入值宏定义  0-3              
+  * @param  timerStartValue：   定时器装载值  
+  * @retval None
+  */
 void TIM1_Init(uint16_t workMode,uint16_t timerStartValue)
 {
 		uint8_t lowValue =  0;
@@ -100,7 +110,11 @@ void TIM1_Init(uint16_t workMode,uint16_t timerStartValue)
 			
 		}
 }
-
+/**
+  * @brief  定时器0 1中断初使能函数
+  * @param  timer: 选择定时器 0 或1              
+  * @retval None
+  */
 void Timer_Interrupt(uint8_t timer)
 {
 	/*总开关中断*/

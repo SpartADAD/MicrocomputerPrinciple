@@ -1,13 +1,15 @@
-/***********************gpio.h************************/
+/***********************interrupt.h************************/
 
 #ifndef __INTERRUPT_H
 #define __INTERRUPT_H
 
-
+/*外部中断0*/
 #define EX_INTERRUPT0    0
+/*外部中断1*/
 #define EX_INTERRUPT1    1
-
+/*外部中断低电平触发*/
 #define EX_INTERRUPT_BY_LOW_LEVEL    0
+/*外部中断边沿触发*/
 #define EX_INTERRUPT_BY_EDGE         1
 
 uint8_t GetRunFlag(void);

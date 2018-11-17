@@ -143,41 +143,31 @@ void ShowKeyValue(void)
 		codeMy+=((HighFour&((int)pow(2,i)))>>i)*(i+1);
 	}
 	GPIOx_SetBits(1,3);
-//	if(HighFour==0x08)
-//	{
-//		GPIOx_ResetBits(1,0);
-//		GPIOx_ResetBits(1,1);
-//	}
-//	else if(HighFour==0x04)
-//	{
-//		GPIOx_SetBits(1,0);
-//		GPIOx_ResetBits(1,1);
-//	}else if(HighFour==0x02)
-//	{
-//		GPIOx_ResetBits(1,0);
-//		GPIOx_SetBits(1,1);
-//	}else if (HighFour==0x01)
-//	{
-//		GPIOx_SetBits(1,0);
-//		GPIOx_SetBits(1,1);
-//	}else
-//	{
-//		GPIOx_SetBits(1,0);
-//		GPIOx_SetBits(1,1);
-//	}
 	P1=~codeMy;
 
 }
+/*** @brief  流水灯2s切换 
+			timeControl是半个周期的时间
+			静态变量runTime用来计数 计算运行时间 由于本函数是5ms运行1次所以当runTime运行等于2倍的timeControl相当于1个周期=2s
+runTime==timeControl半个周期时让led灯亮 另外半个周期让led灭
+			ledIndex 是控制当前灯的序号，通过传入序号控制led
+			外部中断内 控制全局变量gParam.flag的值通过改变 其大小改变流水灯样式
+
+  * @param  void           
+  * @retval None
+  */
+/*led的数量*/
 #define LED_NUMBER     8
 void WaterLight(void)
 {
 	static uint32_t xdata runTime=0;
 	static char xdata ledIndex=0;
 	uint16_t xdata timeControl=200;
-	
+	/*进行计时*/
 	runTime++;
 	if(runTime<=timeControl)
 	{
+		/*传入序号控制led*/
 		GPIOx_ResetBits(GPIOP1,ledIndex);
 	}
 	else if(runTime>timeControl&&runTime<=timeControl*2)
@@ -186,16 +176,21 @@ void WaterLight(void)
 	}
 	else if(runTime>timeControl*2)
 	{
+		/*1个周期后清空计数*/
 		runTime=0;
 		if(gParam.flag)
 		{
+			/*顺次控制P1.0到P1.7*/
 			ledIndex++;
+			/*回到循环开始*/
 			if(ledIndex>=LED_NUMBER)
 				ledIndex=0;
 		}
 		else
 		{
+			/*顺次控制P1.7到P1.0*/
 			ledIndex--;
+			/*回到循环开始*/
 			if(ledIndex<0)
 				ledIndex=LED_NUMBER-1;
 		}
