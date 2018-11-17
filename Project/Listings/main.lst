@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              11/17/2018 23:23:35 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              11/17/2018 23:35:55 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -23,50 +23,58 @@ line level    source
   13          gParam_t gParam={0};
   14          void HardWareInit(void)
   15          {
-  16   1        /*定义5ms运行周期*/
-  17   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
-  18   1            /*定时器0 8位自动重装载 初始值56*/
-  19   1            TIM0_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,256-ONE_INTTEUPT_TIME);
-  20   1            /*使能中断定时器0中断*/
-  21   1            Timer_Interrupt(TIM0);
-  22   1        #elif  RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
+  16   1        /*设置串口中断高优先级*/
+  17   1        Interrupt_Priority(0x10);
+  18   1        
+  19   1        /*定义5ms运行周期*/
+  20   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
+  21   1            /*定时器0 8位自动重装载 初始值56*/
+  22   1            TIM0_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,256-ONE_INTTEUPT_TIME);
+  23   1            /*使能中断定时器0中断*/
+  24   1            Timer_Interrupt(TIM0);
+  25   1        #elif  RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
                     /*定时器1 8位自动重装载 初始值56*/
                     TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,256-ONE_INTTEUPT_TIME);
                     /*使能中断定时器1中断*/
                     Timer_Interrupt(TIM1);
                 #endif
-  28   1        /*外部中断使能*/
-  29   1        EXHandlerInit(EX_INTERRUPT0,EX_INTERRUPT_BY_EDGE);
-  30   1      }
-  31          void main(void)
-  32          {
-  33   1        HardWareInit();
-  34   1        while(1)
-  35   1        {
-  36   2          #ifdef RUN_PERIOD_BY_TIM
-  37   2            /*5ms运行周期*/
-  38   2            if(GetRunFlag())
-  39   2            {
-  40   3              /*流水灯*/
-  41   3              WaterLight();
-  42   3            }
-  43   2          #endif
-  44   2        }
-  45   1      }
-  46          
-  47          
-  48          
-  49          
-  50          
-  51          
-  52          
-  53          
+  31   1        /*外部中断使能*/
+  32   1        EXHandlerInit(EX_INTERRUPT0,EX_INTERRUPT_BY_EDGE);
+  33   1        
+  34   1        USART_Init(USART_MODE_1,1,9600,0);
+  35   1        /*HD7279初始化*/
+  36   1        HD7279SendByte(CMD_RESET);
+  37   1      }
+  38          void main(void)
+  39          {
+  40   1        HardWareInit();
+  41   1        while(1)
+  42   1        {
+  43   2          #ifdef RUN_PERIOD_BY_TIM
+  44   2            /*5ms运行周期*/
+  45   2            if(GetRunFlag())
+  46   2            {
+  47   3              DelayMs(25);
+  48   3              USART_SendData(0xA5);
+  49   3              HD7279ShowInt(gParam.receiveDataByUsart);
+  50   3            }
+  51   2          #endif
+  52   2        }
+  53   1      }
+  54          
+C51 COMPILER V9.59.0.0   MAIN                                                              11/17/2018 23:35:55 PAGE 2   
 
-C51 COMPILER V9.59.0.0   MAIN                                                              11/17/2018 23:23:35 PAGE 2   
+  55          
+  56          
+  57          
+  58          
+  59          
+  60          
+  61          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     37    ----
+   CODE SIZE        =     82    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      2    ----
    PDATA SIZE       =   ----    ----
