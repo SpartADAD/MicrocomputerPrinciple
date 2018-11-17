@@ -12,7 +12,6 @@ void TIM0_Init(uint16_t workMode,uint16_t timerStartValue)
 		switch(workMode)
 		{
 			case THIRTEEN_BIT_COUNT:  
-				ET0=1;
 				TMOD |= workMode;
 				/*最大计数值0x1FFF*/
 				timerStartValue&=0x1FFF;
@@ -25,7 +24,6 @@ void TIM0_Init(uint16_t workMode,uint16_t timerStartValue)
 			break;
 			
 			case SIXTEEN_BIT_COUNT:  
-				ET0=1;
 				TMOD |= workMode;
 			  lowValue=timerStartValue&0xFF;
 			  highValue=(timerStartValue>>8);
@@ -35,7 +33,6 @@ void TIM0_Init(uint16_t workMode,uint16_t timerStartValue)
 			break;
 			
 			case EIGHT_BIT_AUTO_RELOUD_COUNT:  
-				ET0=1;
 				TMOD |= workMode;
 				/*计数最大值*/
 				timerStartValue&=0xFF;
@@ -48,7 +45,6 @@ void TIM0_Init(uint16_t workMode,uint16_t timerStartValue)
 			break;
 			
 			case TWO_EIGHT_BIT_COUNT:  
-				ET0=1;
 				TMOD |= workMode;
 				TH0  = highValue;
 				TL0  = lowValue;
@@ -59,8 +55,6 @@ void TIM0_Init(uint16_t workMode,uint16_t timerStartValue)
 			
 			break;
 		}
-		/*总开关中断*/
-		EA=1;
 }
 
 void TIM1_Init(uint16_t workMode,uint16_t timerStartValue)
@@ -70,7 +64,6 @@ void TIM1_Init(uint16_t workMode,uint16_t timerStartValue)
 		switch(workMode)
 		{
 			case THIRTEEN_BIT_COUNT:  
-				ET1=1;
 				TMOD |= (workMode<<4);
 				/*最大计数值0x1FFF*/
 				timerStartValue&=0x1FFF;
@@ -83,7 +76,6 @@ void TIM1_Init(uint16_t workMode,uint16_t timerStartValue)
 			break;
 			
 			case SIXTEEN_BIT_COUNT:  
-				ET1=1;
 				TMOD |= (workMode<<4);
 			  lowValue=timerStartValue&0xFF;
 			  highValue=(timerStartValue>>8);
@@ -93,11 +85,9 @@ void TIM1_Init(uint16_t workMode,uint16_t timerStartValue)
 			break;
 			
 			case EIGHT_BIT_AUTO_RELOUD_COUNT:  
-				ET1=1;
 				TMOD |= (workMode<<4);
 				/*计数最大值*/
 				timerStartValue&=0xFF;
-			
 				lowValue=timerStartValue;
 			  highValue=timerStartValue;
 				TH1  = highValue;
@@ -109,8 +99,24 @@ void TIM1_Init(uint16_t workMode,uint16_t timerStartValue)
 			break;
 			
 		}
-		/*总开关中断*/
-		EA=1;
 }
 
-
+void Timer_Interrupt(uint8_t timer)
+{
+	/*总开关中断*/
+	EA=1;
+	switch(timer)
+	{
+		case TIM0:
+			ET0=1;
+		break;
+	
+		case TIM1:
+			ET1=1;
+		break;
+		
+		default:
+			
+		break;
+	}
+}

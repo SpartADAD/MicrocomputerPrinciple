@@ -20,7 +20,7 @@ void USART_Init(uint8_t USART_Mode,uint8_t baudRateDouble,uint32_t baudRate,uint
 			break;
 			
 			case USART_MODE_1:
-				timer1Reload=(uint8_t)(256 - SYSCLK*(2*baudRateDouble)/baudRate/384);
+				timer1Reload=(uint8_t)(256 - SYSCLK*(1+baudRateDouble)/baudRate/384);
 				TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,timer1Reload);
 				PCON |= (baudRateDouble<<7);
 			  /*指定定时器1为波特率发生器！！！*/
@@ -33,7 +33,7 @@ void USART_Init(uint8_t USART_Mode,uint8_t baudRateDouble,uint32_t baudRate,uint
 			break;
 			
 			case USART_MODE_3:
-				timer1Reload=(uint8_t)(256 - SYSCLK*(2*baudRateDouble)/baudRate/384);
+				timer1Reload=(uint8_t)(256 - SYSCLK*(1+baudRateDouble)/baudRate/384);
 				TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,timer1Reload);
 				PCON |= (baudRateDouble<<7);
 				SCON|=(nightBitEnble<<5);
@@ -55,6 +55,8 @@ void USART_SendData(uint8_t sendData)
 	TI = 0;
 	SBUF = sendData;
 	while(!TI){};/*等待发数完成*/
+	/*清除标志位*/
+	TI = 0;
 }
 
 

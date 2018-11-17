@@ -88,10 +88,7 @@ void USART_Handler(void)	interrupt 4
 	if(RI)
 	{
 		RI=0;
-		GPIOx_ResetBits(GPIOP1,GPIO_PIN_0);
-		DelayMs(200);
-		GPIOx_SetBits(GPIOP1,GPIO_PIN_0);
-		DelayMs(200);
+		gParam.receiveDataByUsart = (uint8_t)SBUF;
 	}
 }
 

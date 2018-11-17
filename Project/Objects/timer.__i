@@ -1,0 +1,1 @@
+"USERS\HardWare\timer.c" LARGE OPTIMIZE (8,SPEED) BROWSE INCDIR(.\USERS\HardWare;.\USERS) DEBUG OBJECTEXTEND PRINT(.\Listings\timer.lst) TABS (2) OBJECT(.\Objects\timer.obj)

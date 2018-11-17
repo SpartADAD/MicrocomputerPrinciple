@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   USART                                                             11/16/2018 17:42:37 PAGE 1   
+C51 COMPILER V9.59.0.0   USART                                                             11/17/2018 11:44:42 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE USART
@@ -30,7 +30,7 @@ line level    source
   20   2            break;
   21   2            
   22   2            case USART_MODE_1:
-  23   2              timer1Reload=(uint8_t)(256 - SYSCLK*(2*baudRateDouble)/baudRate/384);
+  23   2              timer1Reload=(uint8_t)(256 - SYSCLK*(1+baudRateDouble)/baudRate/384);
   24   2              TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,timer1Reload);
   25   2              PCON |= (baudRateDouble<<7);
   26   2              /*指定定时器1为波特率发生器！！！*/
@@ -43,7 +43,7 @@ line level    source
   33   2            break;
   34   2            
   35   2            case USART_MODE_3:
-  36   2              timer1Reload=(uint8_t)(256 - SYSCLK*(2*baudRateDouble)/baudRate/384);
+  36   2              timer1Reload=(uint8_t)(256 - SYSCLK*(1+baudRateDouble)/baudRate/384);
   37   2              TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,timer1Reload);
   38   2              PCON |= (baudRateDouble<<7);
   39   2              SCON|=(nightBitEnble<<5);
@@ -62,20 +62,22 @@ line level    source
   52          
   53          void USART_SendData(uint8_t sendData)
   54          {
-C51 COMPILER V9.59.0.0   USART                                                             11/16/2018 17:42:37 PAGE 2   
+C51 COMPILER V9.59.0.0   USART                                                             11/17/2018 11:44:42 PAGE 2   
 
   55   1        TI = 0;
   56   1        SBUF = sendData;
   57   1        while(!TI){};/*等待发数完成*/
-  58   1      }
-  59          
-  60          
+  58   1        /*清除标志位*/
+  59   1        TI = 0;
+  60   1      }
   61          
   62          
+  63          
+  64          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    259    ----
+   CODE SIZE        =    267    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----       6
    PDATA SIZE       =   ----    ----

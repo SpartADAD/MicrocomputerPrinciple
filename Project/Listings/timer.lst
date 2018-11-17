@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   TIMER                                                             11/16/2018 14:56:39 PAGE 1   
+C51 COMPILER V9.59.0.0   TIMER                                                             11/17/2018 11:44:41 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE TIMER
@@ -22,116 +22,122 @@ line level    source
   12   1          switch(workMode)
   13   1          {
   14   2            case THIRTEEN_BIT_COUNT:  
-  15   2              ET0=1;
-  16   2              TMOD |= workMode;
-  17   2              /*最大计数值0x1FFF*/
-  18   2              timerStartValue&=0x1FFF;
-  19   2              
-  20   2              lowValue=timerStartValue&0x1F;
-  21   2              highValue=(timerStartValue>>5);
-  22   2              TH0  = highValue;
-  23   2              TL0  = lowValue;
-  24   2              TR0=1;
-  25   2            break;
-  26   2            
-  27   2            case SIXTEEN_BIT_COUNT:  
-  28   2              ET0=1;
-  29   2              TMOD |= workMode;
-  30   2              lowValue=timerStartValue&0xFF;
-  31   2              highValue=(timerStartValue>>8);
-  32   2              TH0  = highValue;
-  33   2              TL0  = lowValue;
-  34   2              TR0=1;
-  35   2            break;
-  36   2            
-  37   2            case EIGHT_BIT_AUTO_RELOUD_COUNT:  
-  38   2              ET0=1;
-  39   2              TMOD |= workMode;
-  40   2              /*计数最大值*/
-  41   2              timerStartValue&=0xFF;
-  42   2            
-  43   2              lowValue=timerStartValue;
-  44   2              highValue=timerStartValue;
-  45   2              TH0  = highValue;
-  46   2              TL0  = lowValue;
-  47   2              TR0=1;
-  48   2            break;
-  49   2            
-  50   2            case TWO_EIGHT_BIT_COUNT:  
-  51   2              ET0=1;
-  52   2              TMOD |= workMode;
-  53   2              TH0  = highValue;
-  54   2              TL0  = lowValue;
-C51 COMPILER V9.59.0.0   TIMER                                                             11/16/2018 14:56:39 PAGE 2   
+  15   2              TMOD |= workMode;
+  16   2              /*最大计数值0x1FFF*/
+  17   2              timerStartValue&=0x1FFF;
+  18   2              
+  19   2              lowValue=timerStartValue&0x1F;
+  20   2              highValue=(timerStartValue>>5);
+  21   2              TH0  = highValue;
+  22   2              TL0  = lowValue;
+  23   2              TR0=1;
+  24   2            break;
+  25   2            
+  26   2            case SIXTEEN_BIT_COUNT:  
+  27   2              TMOD |= workMode;
+  28   2              lowValue=timerStartValue&0xFF;
+  29   2              highValue=(timerStartValue>>8);
+  30   2              TH0  = highValue;
+  31   2              TL0  = lowValue;
+  32   2              TR0=1;
+  33   2            break;
+  34   2            
+  35   2            case EIGHT_BIT_AUTO_RELOUD_COUNT:  
+  36   2              TMOD |= workMode;
+  37   2              /*计数最大值*/
+  38   2              timerStartValue&=0xFF;
+  39   2            
+  40   2              lowValue=timerStartValue;
+  41   2              highValue=timerStartValue;
+  42   2              TH0  = highValue;
+  43   2              TL0  = lowValue;
+  44   2              TR0=1;
+  45   2            break;
+  46   2            
+  47   2            case TWO_EIGHT_BIT_COUNT:  
+  48   2              TMOD |= workMode;
+  49   2              TH0  = highValue;
+  50   2              TL0  = lowValue;
+  51   2              TR0=1;
+  52   2            break;
+  53   2            
+  54   2            default:
+C51 COMPILER V9.59.0.0   TIMER                                                             11/17/2018 11:44:41 PAGE 2   
 
-  55   2              TR0=1;
+  55   2            
   56   2            break;
-  57   2            
-  58   2            default:
-  59   2            
-  60   2            break;
-  61   2          }
-  62   1          /*总开关中断*/
-  63   1          EA=1;
-  64   1      }
-  65          
-  66          void TIM1_Init(uint16_t workMode,uint16_t timerStartValue)
-  67          {
-  68   1          uint8_t lowValue =  0;
-  69   1          uint8_t highValue = 0;
-  70   1          switch(workMode)
-  71   1          {
-  72   2            case THIRTEEN_BIT_COUNT:  
-  73   2              ET1=1;
-  74   2              TMOD |= (workMode<<4);
-  75   2              /*最大计数值0x1FFF*/
-  76   2              timerStartValue&=0x1FFF;
-  77   2              
-  78   2              lowValue=timerStartValue&0x1F;
-  79   2              highValue=(timerStartValue>>5);
-  80   2              TH1  = highValue;
-  81   2              TL1  = lowValue;
-  82   2              TR1=1;
-  83   2            break;
-  84   2            
-  85   2            case SIXTEEN_BIT_COUNT:  
-  86   2              ET1=1;
-  87   2              TMOD |= (workMode<<4);
-  88   2              lowValue=timerStartValue&0xFF;
-  89   2              highValue=(timerStartValue>>8);
-  90   2              TH1  = highValue;
-  91   2              TL1  = lowValue;
-  92   2              TR1=1;
-  93   2            break;
-  94   2            
-  95   2            case EIGHT_BIT_AUTO_RELOUD_COUNT:  
-  96   2              ET1=1;
-  97   2              TMOD |= (workMode<<4);
-  98   2              /*计数最大值*/
-  99   2              timerStartValue&=0xFF;
+  57   2          }
+  58   1      }
+  59          
+  60          void TIM1_Init(uint16_t workMode,uint16_t timerStartValue)
+  61          {
+  62   1          uint8_t lowValue =  0;
+  63   1          uint8_t highValue = 0;
+  64   1          switch(workMode)
+  65   1          {
+  66   2            case THIRTEEN_BIT_COUNT:  
+  67   2              TMOD |= (workMode<<4);
+  68   2              /*最大计数值0x1FFF*/
+  69   2              timerStartValue&=0x1FFF;
+  70   2              
+  71   2              lowValue=timerStartValue&0x1F;
+  72   2              highValue=(timerStartValue>>5);
+  73   2              TH1  = highValue;
+  74   2              TL1  = lowValue;
+  75   2              TR1=1;
+  76   2            break;
+  77   2            
+  78   2            case SIXTEEN_BIT_COUNT:  
+  79   2              TMOD |= (workMode<<4);
+  80   2              lowValue=timerStartValue&0xFF;
+  81   2              highValue=(timerStartValue>>8);
+  82   2              TH1  = highValue;
+  83   2              TL1  = lowValue;
+  84   2              TR1=1;
+  85   2            break;
+  86   2            
+  87   2            case EIGHT_BIT_AUTO_RELOUD_COUNT:  
+  88   2              TMOD |= (workMode<<4);
+  89   2              /*计数最大值*/
+  90   2              timerStartValue&=0xFF;
+  91   2              lowValue=timerStartValue;
+  92   2              highValue=timerStartValue;
+  93   2              TH1  = highValue;
+  94   2              TL1  = lowValue;
+  95   2              TR1=1;
+  96   2            break;
+  97   2            
+  98   2            default:
+  99   2            break;
  100   2            
- 101   2              lowValue=timerStartValue;
- 102   2              highValue=timerStartValue;
- 103   2              TH1  = highValue;
- 104   2              TL1  = lowValue;
- 105   2              TR1=1;
- 106   2            break;
- 107   2            
- 108   2            default:
- 109   2            break;
- 110   2            
- 111   2          }
- 112   1          /*总开关中断*/
- 113   1          EA=1;
- 114   1      }
- 115          
- 116          
-C51 COMPILER V9.59.0.0   TIMER                                                             11/16/2018 14:56:39 PAGE 3   
+ 101   2          }
+ 102   1      }
+ 103          
+ 104          void Timer_Interrupt(uint8_t timer)
+ 105          {
+ 106   1        /*总开关中断*/
+ 107   1        EA=1;
+ 108   1        switch(timer)
+ 109   1        {
+ 110   2          case TIM0:
+ 111   2            ET0=1;
+ 112   2          break;
+ 113   2        
+ 114   2          case TIM1:
+ 115   2            ET1=1;
+ 116   2          break;
+C51 COMPILER V9.59.0.0   TIMER                                                             11/17/2018 11:44:41 PAGE 3   
 
+ 117   2          
+ 118   2          default:
+ 119   2            
+ 120   2          break;
+ 121   2        }
+ 122   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    243    ----
+   CODE SIZE        =    238    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----       4
    PDATA SIZE       =   ----    ----

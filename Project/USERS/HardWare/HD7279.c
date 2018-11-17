@@ -97,19 +97,17 @@ void HD7279Write(unsigned char cmd , unsigned char dataSend)
 	
 	HD7279SendByte(dataSend);	
 }
-#define DIGITTAL_TUBE_LENGTH  8    
+#define DIGITTAL_TUBE_LENGTH  8  
 void HD7279ShowInt(int showValue)
 {
 	uint8_t xdata i=0;
-	uint8_t xdata tubeString[DIGITTAL_TUBE_LENGTH];
+	uint8_t xdata myString[DIGITTAL_TUBE_LENGTH]={0};
+	uint8_t xdata tubeString[DIGITTAL_TUBE_LENGTH]={0};
+	uint8_t xdata dataLength =0;
 	/*判断是否在显示范围内，将其转换为字符数串*/
-	if(showValue>=0&&showValue<=99999999)
+	if(showValue>=-9999999&&showValue<=99999999)
 	{
-		sprintf(tubeString,"%d",showValue);
-	}
-	else if(showValue<0 && showValue>=-9999999)
-	{
-		sprintf(tubeString,"-%d",showValue);
+		sprintf(myString,"%d",showValue);
 	}
 	else
 	{
@@ -120,20 +118,88 @@ void HD7279ShowInt(int showValue)
 		}
 		return;
 	}
-	/**/
+	/*计算长度*/
 	for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
 	{
-		if(tubeString[i]=='-')
+		if(myString[i]!=0x00)
 		{
-			tubeString[i]=0x01;
+			dataLength++;
+		}
+	}
+	for(i=0;i<dataLength;i++)
+	{
+		if(myString[i]=='-')
+		{
+			myString[i]=0x01;
 		}
 		else
 		{
 			/*ASCII码 0x30*/
-			tubeString[i]=realCode[(tubeString[i]-0x30)];
+			myString[i]=realCode[(myString[i]-0x30)];
 		}
-		HD7279Write(UNDECODE+i,realCode[i]);
 	}
+	
+	for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
+	{
+		HD7279Write(UNDECODE+DIGITTAL_TUBE_LENGTH-i-1,myString[i]);
+	}
+
 
 }
 	
+void LEDShowInt(long int showData)
+{
+	//要发送的八个数据
+	unsigned char xdata LedData[8] = {0x00};
+	//循环技术变量
+	unsigned char xdata i = 0;
+	//存放字符串用临时数组
+	signed char xdata tempBuff[8] = {0};
+	//数据长度记录变量
+	unsigned char xdata dataLength = 0;
+	
+	//检验输入数据是否在显示范围内
+	if(showData<=99999999&&showData>=-9999999)
+	{
+	
+		//将输入的整数转换为字符串
+		sprintf((char *)tempBuff,"%Ld",(long int)showData);
+		
+		//记录数字长度
+		for(i = 0; i< 8; i++)
+		{
+			if(tempBuff[i]!=0x00)
+			{
+				dataLength++;
+			}
+		}
+		
+		//将字符串转换为对应编码
+		for(i = dataLength;i > 0;i--)
+		{
+			if(tempBuff[i-1]!='-')
+			{
+				LedData[7 - (dataLength - i)]=tempBuff[i-1] - 0x30;
+				LedData[7 - (dataLength - i)] = realCode[LedData[7 - (dataLength - i)]];
+			}
+			else
+			{
+				LedData[7 - (dataLength - i)] = realCode[10];			
+			}
+		}
+		
+		//显示对应编码
+		for(i = 0;i<8;i++)
+		{
+			HD7279Write(0x97 - i , LedData[i]);
+		}
+	}
+	else
+	{
+		//超出范围时全部显示e
+		for(i = 0;i<8;i++)
+		{
+			HD7279Write(0x97 - i , 0x6f);
+		}
+	}
+}

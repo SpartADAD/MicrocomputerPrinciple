@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              11/16/2018 19:43:51 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              11/17/2018 11:45:50 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -25,53 +25,58 @@ line level    source
   15          {
   16   1        /*设置串口中断高优先级*/
   17   1        Interrupt_Priority(0x10);
-  18   1      
-  19   1        /*定义5ms运行周期*/
-  20   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
-  21   1            TIM0_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,256-ONE_INTTEUPT_TIME);
-  22   1        #elif  RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
+  18   1      //  TMOD =0x20;SCON=0x50;
+  19   1      //  TH1=0xF4;TL1=0xF4;
+  20   1      //  TR1=1;ES=1;EA=1;AUXR&=0xfe;
+  21   1        /*定义5ms运行周期*/
+  22   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
+  23   1            TIM0_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,256-ONE_INTTEUPT_TIME);
+  24   1            Timer_Interrupt(TIM0);
+  25   1        #elif  RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
                     TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,256-ONE_INTTEUPT_TIME);
+                    Timer_Interrupt(TIM1);
                 #endif
-  25   1        USART_Init(USART_MODE_1,0,9600,1);
-  26   1        EXHandlerInit(EX_INTERRUPT0,EX_INTERRUPT_BY_EDGE);
-  27   1        
-  28   1        /*HD7279初始化*/
-  29   1        HD7279SendByte(CMD_RESET);
-  30   1      }
-  31          void main(void)
-  32          {
-  33   1      //  P1=0xF0;
-  34   1        uint8_t da=1;
-  35   1        HardWareInit();
-  36   1        while(1)
-  37   1        {
-  38   2          #ifdef RUN_PERIOD_BY_TIM
-  39   2            if(GetRunFlag())
-  40   2            {
-  41   3              USART_SendData(0xA5);
-  42   3              
-  43   3              HD7279ShowInt(0xA5);
-  44   3      //        WaterLight();
-  45   3            }
-  46   2          #endif
-  47   2        }
-  48   1      }
-  49          
-  50          
-  51          
-  52          
-  53          
+  29   1        USART_Init(USART_MODE_1,1,9600,0);
+  30   1        
+  31   1      //  EXHandlerInit(EX_INTERRUPT0,EX_INTERRUPT_BY_EDGE);
+  32   1        
+  33   1        /*HD7279初始化*/
+  34   1        HD7279SendByte(CMD_RESET);
+  35   1      }
+  36          void main(void)
+  37          {
+  38   1      //  P1=0xF0;
+  39   1        HardWareInit();
+  40   1        while(1)
+  41   1        {
+  42   2          #ifdef RUN_PERIOD_BY_TIM
+  43   2            if(GetRunFlag())
+  44   2            {
+  45   3              DelayMs(25);
+  46   3              USART_SendData(84);
+  47   3              HD7279ShowInt(gParam.receiveDataByUsart);
+  48   3      //        LEDShowInt(gParam.receiveDataByUsart);
+  49   3      //        WaterLight();
+  50   3            }
+  51   2          #endif
+  52   2        }
+  53   1      }
   54          
-C51 COMPILER V9.59.0.0   MAIN                                                              11/16/2018 19:43:51 PAGE 2   
+C51 COMPILER V9.59.0.0   MAIN                                                              11/17/2018 11:45:50 PAGE 2   
 
   55          
   56          
+  57          
+  58          
+  59          
+  60          
+  61          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     74    ----
+   CODE SIZE        =     75    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      1       1
+   XDATA SIZE       =      2    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

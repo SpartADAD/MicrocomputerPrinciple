@@ -33,7 +33,7 @@ typedef unsigned int uint32_t;
 
 typedef struct{
 		uint8_t flag;
-
+		uint8_t receiveDataByUsart;
 
 
 
