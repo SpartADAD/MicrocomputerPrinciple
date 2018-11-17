@@ -43,7 +43,7 @@ void main(void)
 			if(GetRunFlag())
 			{
 				DelayMs(25);
-				USART_SendData(84);
+				USART_SendData(0xA5);
 				HD7279ShowInt(gParam.receiveDataByUsart);
 //				LEDShowInt(gParam.receiveDataByUsart);
 //				WaterLight();

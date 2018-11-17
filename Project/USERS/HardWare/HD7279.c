@@ -6,7 +6,7 @@
 //HD7279显示内容对应数码
 unsigned char xdata realCode[] = \
 	{0x7e , 0x30 , 0x6d , 0x79 , 0x33 , 0x5b , 0x5f , 0x70 , 0x7f , 0x7b , 0x01 , 0x80 , 0x00 , 0x6f};
-//	0		   1		   2		  3		   4		  5	     6		  7		   8	    9		   -		.		blank	error
+//	0		   1		   2		  3		   4		  5	     6		  7		   8	    9		   -		.		  blank	  error
 
 /**
   * @brief	HD7279发送一个字节
@@ -134,14 +134,15 @@ void HD7279ShowInt(int showValue)
 		}
 		else
 		{
-			/*ASCII码 0x30*/
+			/*ASCII码 0x30 进行赋值*/
 			myString[i]=realCode[(myString[i]-0x30)];
+			tubeString[(DIGITTAL_TUBE_LENGTH - dataLength) + i]=myString[i];
 		}
 	}
 	
 	for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
 	{
-		HD7279Write(UNDECODE+DIGITTAL_TUBE_LENGTH-i-1,myString[i]);
+		HD7279Write(UNDECODE+DIGITTAL_TUBE_LENGTH -1 - i,tubeString[i]);
 	}
 
 
