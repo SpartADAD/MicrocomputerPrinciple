@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   USART                                                             11/19/2018 22:45:28 PAGE 1   
+C51 COMPILER V9.59.0.0   USART                                                             11/20/2018 18:41:09 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE USART
@@ -14,66 +14,85 @@ line level    source
    4          #include "main.h"
    5          #include "timer.h"
    6          #include "STC15F2K60S2.h"
-   7          void USART_Interrupt_Init(void)
-   8          {
-   9   1        EA = 1;
-  10   1        ES = 1;
-  11   1      }
-  12          void USART_Init(uint8_t USART_Mode,uint8_t baudRateDouble,uint32_t baudRate,uint8_t nightBitEnble)
+   7          /**
+   8            * @brief  串口中断初始化函数
+   9            * @param  void  
+  10            * @retval none
+  11            */
+  12          void USART_Interrupt_Init(void)
   13          {
-  14   1          uint8_t timer1Reload=0;
-  15   1          SCON|=((USART_Mode<<6)|0x10);
-  16   1          switch(USART_Mode)
-  17   1          {
-  18   2            case USART_MODE_0:
-  19   2              /*SYSCLK /12 bits/s*/
-  20   2            break;
-  21   2            
-  22   2            case USART_MODE_1:
-  23   2              timer1Reload=(uint8_t)(256 - SYSCLK*(1+baudRateDouble)/baudRate/384);
-  24   2              TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,timer1Reload);
-  25   2              PCON |= (baudRateDouble<<7);
-  26   2              /*指定定时器1为波特率发生器！！！*/
-  27   2              AUXR&=0xfe;
-  28   2            break;
-  29   2            
-  30   2            case USART_MODE_2:
-  31   2              /*SYSCLK/64*2*BaudRateDouble bits/s*/
-  32   2              SCON|=(nightBitEnble<<5);
+  14   1        EA = 1;
+  15   1        ES = 1;
+  16   1      }
+  17          /**
+  18            * @brief  串口中断初始化函数
+  19            * @param  USART_Mode 串口工作模式
+  20            * @param  baudRateDouble 波特率是否加倍开关控制 输入值 1或0
+  21            * @param  baudRate 波特率  
+  22            * @param  nightBitEnble是否启用第九位接受  
+  23            * @retval none
+  24            */
+  25          void USART_Init(uint8_t USART_Mode,uint8_t baudRateDouble,uint32_t baudRate,uint8_t nightBitEnble)
+  26          {
+  27   1          uint8_t timer1Reload=0;
+  28   1          SCON|=((USART_Mode<<6)|0x10);
+  29   1          switch(USART_Mode)
+  30   1          {
+  31   2            case USART_MODE_0:
+  32   2              /*SYSCLK /12 bits/s*/
   33   2            break;
   34   2            
-  35   2            case USART_MODE_3:
+  35   2            case USART_MODE_1:
   36   2              timer1Reload=(uint8_t)(256 - SYSCLK*(1+baudRateDouble)/baudRate/384);
-  37   2              TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,timer1Reload);
-  38   2              PCON |= (baudRateDouble<<7);
-  39   2              SCON|=(nightBitEnble<<5);
+  37   2              /*定时器1初始化为八位重装载定时器 作为波特率发生器*/
+  38   2              TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,timer1Reload);
+  39   2              PCON |= (baudRateDouble<<7);
   40   2              /*指定定时器1为波特率发生器！！！*/
   41   2              AUXR&=0xfe;
   42   2            break;
   43   2            
-  44   2            default:
-  45   2              
-  46   2            break;
-  47   2          }
-  48   1          USART_Interrupt_Init();
-  49   1      }
-  50          
-  51          
-  52          
-  53          void USART_SendData(uint8_t sendData)
-  54          {
-C51 COMPILER V9.59.0.0   USART                                                             11/19/2018 22:45:28 PAGE 2   
+  44   2            case USART_MODE_2:
+  45   2              /*SYSCLK/64*2*BaudRateDouble bits/s*/
+  46   2              SCON|=(nightBitEnble<<5);
+  47   2            break;
+  48   2            
+  49   2            case USART_MODE_3:
+  50   2              timer1Reload=(uint8_t)(256 - SYSCLK*(1+baudRateDouble)/baudRate/384);
+  51   2              /*定时器1初始化为八位重装载定时器 作为波特率发生器*/
+  52   2              TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,timer1Reload);
+  53   2              PCON |= (baudRateDouble<<7);
+  54   2              SCON|=(nightBitEnble<<5);
+C51 COMPILER V9.59.0.0   USART                                                             11/20/2018 18:41:09 PAGE 2   
 
-  55   1        TI = 0;
-  56   1        SBUF = sendData;
-  57   1        while(!TI){};/*等待发数完成*/
-  58   1        /*清除标志位*/
-  59   1        TI = 0;
-  60   1      }
-  61          
-  62          
-  63          
+  55   2              /*指定定时器1为波特率发生器！！！*/
+  56   2              AUXR&=0xfe;
+  57   2            break;
+  58   2            
+  59   2            default:
+  60   2            break;
+  61   2          }
+  62   1          USART_Interrupt_Init();
+  63   1      }
   64          
+  65          
+  66          /**
+  67            * @brief  串口发数函数
+  68            * @param  sendData 串口需要发送的数据  
+  69            * @retval none
+  70            */
+  71          void USART_SendData(uint8_t sendData)
+  72          {
+  73   1        TI = 0;
+  74   1        SBUF = sendData;
+  75   1        /*等待发数完成*/
+  76   1        while(!TI){};
+  77   1        /*清除标志位*/
+  78   1        TI = 0;
+  79   1      }
+  80          
+  81          
+  82          
+  83          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

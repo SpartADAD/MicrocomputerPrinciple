@@ -44,8 +44,11 @@ void main(void)
 			/*5ms运行周期*/
 			if(GetRunFlag())
 			{
+				/*增加延时时间*/
 				DelayMs(25);
+				/*串口1发送数据*/
 				USART_SendData(0xA5);
+				/*HD7279显示整型数据*/
 				HD7279ShowInt(gParam.receiveDataByUsart);
 			}
 		#endif

@@ -98,20 +98,30 @@ void HD7279Write(unsigned char cmd , unsigned char dataSend)
 	HD7279SendByte(dataSend);	
 }
 #define DIGITTAL_TUBE_LENGTH  8  
+/** 
+	* @brief  HD7279  
+	* @param  showValue HD7279需要显示的整型数据	
+  * @retval none
+  */
 void HD7279ShowInt(int showValue)
 {
 	uint8_t xdata i=0;
+	/*通过Springf存储的字符数组*/
 	uint8_t xdata myString[DIGITTAL_TUBE_LENGTH]={0};
+	/*通过数码管显示字符数组*/
 	uint8_t xdata tubeString[DIGITTAL_TUBE_LENGTH]={0};
+	/*显示有效位计数*/
 	uint8_t xdata dataLength =0;
 	/*判断是否在显示范围内，将其转换为字符数串*/
 	if(showValue>=-9999999&&showValue<=99999999)
 	{
+		/*将输入数组转化为字符串*/
 		sprintf(myString,"%d",showValue);
 	}
 	else
 	{
 		showValue = 0;
+		/*超出最大显示值*/
 		for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
 		{
 			HD7279Write(UNDECODE+i,0x01);
@@ -121,6 +131,7 @@ void HD7279ShowInt(int showValue)
 	/*计算长度*/
 	for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
 	{
+		/*有效位计数*/
 		if(myString[i]!=0x00)
 		{
 			dataLength++;
@@ -128,13 +139,15 @@ void HD7279ShowInt(int showValue)
 	}
 	for(i=0;i<dataLength;i++)
 	{
+		/*如果是“-”便不管*/
 		if(myString[i]=='-')
 		{
 			myString[i]=0x01;
 		}
 		else
 		{
-			/*ASCII码 0x30 进行赋值*/
+			/*ASCII码 0x30 进行赋值   由于将数据转换为字符型数据 由ASCII码表可得0-9的数字的ASCII码减去0x30可得相对应的数字0-9
+			填入HD7279显示内容对应数码数组realCode*/
 			myString[i]=realCode[(myString[i]-0x30)];
 			tubeString[(DIGITTAL_TUBE_LENGTH - dataLength) + i]=myString[i];
 		}
