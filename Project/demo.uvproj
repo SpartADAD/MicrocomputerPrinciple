@@ -421,6 +421,11 @@
               <FileType>1</FileType>
               <FilePath>.\USERS\HardWare\HD7279.c</FilePath>
             </File>
+            <File>
+              <FileName>82C55.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USERS\HardWare\82C55.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

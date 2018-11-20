@@ -6,6 +6,7 @@
 ".\Objects\interrupt.obj",
 ".\Objects\usart.obj",
 ".\Objects\HD7279.obj",
+".\Objects\82C55.obj",
 ".\Objects\main.obj" 
 TO ".\Objects\keyLED" 
 PRINT(".\Listings\keyLED.m51") RAMSIZE(256) 

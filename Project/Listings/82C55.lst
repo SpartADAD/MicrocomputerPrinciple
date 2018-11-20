@@ -1,0 +1,102 @@
+C51 COMPILER V9.59.0.0   82C55                                                             11/19/2018 23:06:03 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE 82C55
+OBJECT MODULE PLACED IN .\Objects\82C55.obj
+COMPILER INVOKED BY: E:\Keil5\C51\BIN\C51.EXE USERS\HardWare\82C55.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\USERS\HardW
+                    -are;.\USERS) DEBUG OBJECTEXTEND PRINT(.\Listings\82C55.lst) TABS(2) OBJECT(.\Objects\82C55.obj)
+
+line level    source
+
+   1          /****************************82C55.c***********************/
+   2          #include "82C55.h"
+   3          #include "delay.h"
+   4          #include "stdio.h"
+   5          #include "main.h"
+   6          
+   7          
+   8          uint8_t xdata P8255_CTL _at_ 0xf803;
+   9          uint8_t xdata P8255_A _at_ 0xf800;
+  10          uint8_t xdata P8255_B _at_ 0xf801;
+  11          uint8_t xdata P8255_C _at_ 0xf802;
+  12          
+  13          #define A0    P0^0  
+  14          #define A1    P0^1  
+  15          
+  16          void C55_IORegister(uint8_t registerChoose)
+  17          {
+  18   1      //  switch()
+  19   1      
+  20   1      
+  21   1      
+  22   1      }
+*** WARNING C280 IN LINE 16 OF USERS\HardWare\82C55.c: 'registerChoose': unreferenced local variable
+  23          
+  24          void C55_Init(uint8_t group,uint8_t groupWorkMode,uint8_t Port,uint8_t PortInOrOut)
+  25          {
+  26   1        P8255_CTL|=0x80;
+  27   1      //  C55_IORegister();
+  28   1        switch(group)
+  29   1        {
+  30   2          case GROUP_A:
+  31   2            groupWorkMode&=0x10;
+  32   2            P8255_CTL|=(groupWorkMode<<5);
+  33   2          break;
+  34   2          
+  35   2          case GROUP_B:
+  36   2            groupWorkMode&=0x01;
+  37   2            P8255_CTL|=(groupWorkMode<<2);
+  38   2          break;
+  39   2          
+  40   2          default:
+  41   2          break;
+  42   2        }
+  43   1        
+  44   1        switch(Port)
+  45   1        {
+  46   2          case PORT_A:
+  47   2            P8255_CTL|=(PortInOrOut<<4);
+  48   2          break;
+  49   2          
+  50   2          case PORT_B:
+  51   2            P8255_CTL|=(PortInOrOut<<2);
+  52   2          break;
+  53   2          
+C51 COMPILER V9.59.0.0   82C55                                                             11/19/2018 23:06:03 PAGE 2   
+
+  54   2          case PORT_C_HIGH:
+  55   2            P8255_CTL|=(PortInOrOut<<3);
+  56   2          break;
+  57   2          
+  58   2          case PORT_C_LOW:
+  59   2            P8255_CTL|=(PortInOrOut<<1);
+  60   2          break;
+  61   2          
+  62   2          default:
+  63   2          break;
+  64   2        }
+  65   1      } 
+  66          
+  67          void KeyReadBy82C55(void)
+  68          {
+  69   1        uint8_t keyStatus =0;
+  70   1        
+  71   1        keyStatus = P8255_A;
+  72   1      
+  73   1        P8255_B=(~keyStatus);
+  74   1      
+  75   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    144    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       5
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
