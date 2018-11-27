@@ -32,6 +32,8 @@ void HardWareInit(void)
 	EXHandlerInit(EX_INTERRUPT0,EX_INTERRUPT_BY_EDGE);
 	
 	USART_Init(USART_MODE_1,1,9600,0);
+	/*上电延时等数码管能用*/
+	DelayMs(25);
 	/*HD7279初始化*/
 	HD7279SendByte(CMD_RESET);
 }
@@ -45,9 +47,9 @@ void main(void)
 			if(GetRunFlag())
 			{
 				/*增加延时时间*/
-				DelayMs(25);
+				DelayMs(10);
 				/*串口1发送数据*/
-				USART_SendData(0xA5);
+				USART_SendData(0xA0);
 				/*HD7279显示整型数据*/
 				HD7279ShowInt(gParam.receiveDataByUsart);
 			}

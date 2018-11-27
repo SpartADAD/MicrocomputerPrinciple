@@ -160,4 +160,41 @@ void HD7279ShowInt(int showValue)
 
 
 }
+
+void HD7279ShowFloat(int showAfterSmall,double showValue)
+{
+	uint8_t storeIndex = 0;
+	/*通过Springf存储的字符数组*/
+	uint8_t xdata myString[DIGITTAL_TUBE_LENGTH]={0};
+	/*通过数码管显示字符数组*/
+	uint8_t xdata tubeString[DIGITTAL_TUBE_LENGTH]={0};
+	/*判断是否在显示范围内，将其转换为字符数串*/
+	uint32_t xdata smallBit = (uint32_t)(showValue - (int)showValue)*showAfterSmall*10;
+	uint8_t xdata pointIndex = DIGITTAL_TUBE_LENGTH - showAfterSmall - 1;
 	
+	if(showValue<0)
+	{
+	  tubeString[storeIndex]=realCode[10];
+		storeIndex++;
+	}
+	else
+	{
+		for(storeIndex<DIGITTAL_TUBE_LENGTH;storeIndex++;)
+		{
+			if(storeIndex == pointIndex)
+			{
+				
+			}
+			else
+			{
+			
+			}
+		
+		}
+	
+	}
+	
+
+
+
+}

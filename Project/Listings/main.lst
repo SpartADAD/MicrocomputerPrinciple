@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              11/20/2018 18:41:09 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              11/20/2018 19:34:54 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -42,42 +42,44 @@ line level    source
   32   1        EXHandlerInit(EX_INTERRUPT0,EX_INTERRUPT_BY_EDGE);
   33   1        
   34   1        USART_Init(USART_MODE_1,1,9600,0);
-  35   1        /*HD7279初始化*/
-  36   1        HD7279SendByte(CMD_RESET);
-  37   1      }
-  38          void main(void)
-  39          {
-  40   1        HardWareInit();
-  41   1        while(1)
-  42   1        {
-  43   2          #ifdef RUN_PERIOD_BY_TIM
-  44   2            /*5ms运行周期*/
-  45   2            if(GetRunFlag())
-  46   2            {
-  47   3              /*增加延时时间*/
-  48   3              DelayMs(25);
-  49   3              /*串口1发送数据*/
-  50   3              USART_SendData(0xA5);
-  51   3              /*HD7279显示整型数据*/
-  52   3              HD7279ShowInt(gParam.receiveDataByUsart);
-  53   3            }
-  54   2          #endif
-C51 COMPILER V9.59.0.0   MAIN                                                              11/20/2018 18:41:09 PAGE 2   
+  35   1        /*上电延时等数码管能用*/
+  36   1        DelayMs(25);
+  37   1        /*HD7279初始化*/
+  38   1        HD7279SendByte(CMD_RESET);
+  39   1      }
+  40          void main(void)
+  41          {
+  42   1        HardWareInit();
+  43   1        while(1)
+  44   1        {
+  45   2          #ifdef RUN_PERIOD_BY_TIM
+  46   2            /*5ms运行周期*/
+  47   2            if(GetRunFlag())
+  48   2            {
+  49   3              /*增加延时时间*/
+  50   3              DelayMs(10);
+  51   3              /*串口1发送数据*/
+  52   3              USART_SendData(0xA0);
+  53   3              /*HD7279显示整型数据*/
+  54   3              HD7279ShowInt(gParam.receiveDataByUsart);
+C51 COMPILER V9.59.0.0   MAIN                                                              11/20/2018 19:34:54 PAGE 2   
 
-  55   2        }
-  56   1      }
-  57          
-  58          
+  55   3            }
+  56   2          #endif
+  57   2        }
+  58   1      }
   59          
   60          
   61          
   62          
   63          
   64          
+  65          
+  66          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     82    ----
+   CODE SIZE        =     89    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      2    ----
    PDATA SIZE       =   ----    ----
