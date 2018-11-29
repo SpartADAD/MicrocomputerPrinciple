@@ -160,40 +160,65 @@ void HD7279ShowInt(int showValue)
 
 
 }
-
-void HD7279ShowFloat(int showAfterSmall,double showValue)
+/*通过数据提取*/
+void HD7279ShowFloat(uint8_t showAfterSmall,double showValue)
 {
-	uint8_t storeIndex = 0;
-	/*通过Springf存储的字符数组*/
-	uint8_t xdata myString[DIGITTAL_TUBE_LENGTH]={0};
+	uint8_t xdata index=0;
+	/*通过个人译码*/
+	uint8_t xdata myCode[DIGITTAL_TUBE_LENGTH]={0};
 	/*通过数码管显示字符数组*/
 	uint8_t xdata tubeString[DIGITTAL_TUBE_LENGTH]={0};
 	/*判断是否在显示范围内，将其转换为字符数串*/
-	uint32_t xdata smallBit = (uint32_t)(showValue - (int)showValue)*showAfterSmall*10;
+	int xdata showValueInt = (int)showValue*showAfterSmall*10;
 	uint8_t xdata pointIndex = DIGITTAL_TUBE_LENGTH - showAfterSmall - 1;
+	int xdata getNum=DIGITTAL_TUBE_LENGTH *10;
+	uint8_t xdata dataLength=0;
 	
-	if(showValue<0)
+	if(showValue>-(7-showAfterSmall)*10&&showValue<(8-showAfterSmall)*10)
 	{
-	  tubeString[storeIndex]=realCode[10];
-		storeIndex++;
+		if(showValue<0)
+		{
+			myCode[index]=10;
+			showValue = fabs(showValueInt);
+		  index++;
+			dataLength++;
+		}
+		
+		for(;index<DIGITTAL_TUBE_LENGTH;index++)
+		{
+			if((showValueInt/getNum)!=0)
+			{
+				myCode[index]=showValueInt/getNum;
+				showValueInt   = showValueInt % getNum;
+				dataLength++;
+			}
+			getNum=getNum/10;
+		}
+		
+		for(index=0;index<dataLength;index++)
+		{
+			tubeString[index]=realCode[myCode[index]];
+			dataLength++;
+		}
+		
 	}
 	else
 	{
-		for(storeIndex<DIGITTAL_TUBE_LENGTH;storeIndex++;)
+		showValue = 0;
+		/*超出最大显示值*/
+		for(index=0;index<DIGITTAL_TUBE_LENGTH;index++)
 		{
-			if(storeIndex == pointIndex)
-			{
-				
-			}
-			else
-			{
-			
-			}
-		
+			HD7279Write(UNDECODE+index,0x01);
 		}
-	
+		return;
 	}
 	
+	HD7279Write(UNDECODE + showAfterSmall + 1,tubeString[index]);
+	
+	for(index=0;index<DIGITTAL_TUBE_LENGTH;index++)
+	{
+		HD7279Write(UNDECODE+DIGITTAL_TUBE_LENGTH -1 - index,tubeString[index]);
+	}
 
 
 
