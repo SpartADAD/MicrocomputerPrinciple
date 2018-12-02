@@ -226,7 +226,7 @@ void BReceive(void)
 	uint8_t receiveFromA=0;
 	while(STB_STATUS);
 	BUSY_SET;
-	receiveFromA=C55_ReceiveByte();
+	receiveFromA=C55_ReceiveByte(PORT_A);
 	BUSY_RESET;
 }
 
@@ -234,15 +234,14 @@ void SendAndReceive(void)
 {
 	uint8_t receiveFromA=0;
 	
-	C55_Init();
 	
 	STB_SET;
-	C55_SendByte(PORT_A,sendArray[1]);
+	C55_SendByte(PORT_A,receiveFromA);
 	
 	STB_RESET;
 	
 	
-	receiveFromA=C55_ReceiveByte();
+	receiveFromA=C55_ReceiveByte(receiveFromA);
 	BUSY_RESET;
 
 

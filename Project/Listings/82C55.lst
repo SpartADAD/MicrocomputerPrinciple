@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   82C55                                                             11/29/2018 23:00:47 PAGE 1   
+C51 COMPILER V9.59.0.0   82C55                                                             12/02/2018 00:25:22 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE 82C55
@@ -62,7 +62,7 @@ line level    source
   52   2          
   53   2          default:
   54   2          break;
-C51 COMPILER V9.59.0.0   82C55                                                             11/29/2018 23:00:47 PAGE 2   
+C51 COMPILER V9.59.0.0   82C55                                                             12/02/2018 00:25:22 PAGE 2   
 
   55   2        }
   56   1      } 
@@ -126,7 +126,7 @@ line level    source
  114   1        {
  115   2          case PORT_A:
  116   2            P8255_A |=(int)pow(2,PORT_Pin_x);
-C51 COMPILER V9.59.0.0   82C55                                                             11/29/2018 23:00:47 PAGE 3   
+C51 COMPILER V9.59.0.0   82C55                                                             12/02/2018 00:25:22 PAGE 3   
 
  117   2          break;
  118   2          
@@ -190,7 +190,7 @@ line level    source
  176   2            returnStatus = P8255_A & Port_Pin_x_BIN;
  177   2          break;
  178   2          
-C51 COMPILER V9.59.0.0   82C55                                                             11/29/2018 23:00:47 PAGE 4   
+C51 COMPILER V9.59.0.0   82C55                                                             12/02/2018 00:25:22 PAGE 4   
 
  179   2          case PORT_B:
  180   2      //      P8255_B|=Port_Pin_x_BIN;
@@ -242,8 +242,7 @@ line level    source
  226   1        uint8_t receiveFromA=0;
  227   1        while(STB_STATUS);
  228   1        BUSY_SET;
- 229   1        receiveFromA=C55_ReceiveByte();
-*** WARNING C209 IN LINE 229 OF USERS\HardWare\82C55.c: '_C55_ReceiveByte': too few actual parameters
+ 229   1        receiveFromA=C55_ReceiveByte(PORT_A);
  230   1        BUSY_RESET;
  231   1      }
  232          
@@ -251,24 +250,33 @@ line level    source
  234          {
  235   1        uint8_t receiveFromA=0;
  236   1        
- 237   1        C55_Init();
-*** WARNING C209 IN LINE 237 OF USERS\HardWare\82C55.c: '_C55_Init': too few actual parameters
- 238   1        
-C51 COMPILER V9.59.0.0   82C55                                                             11/29/2018 23:00:47 PAGE 5   
+ 237   1        
+ 238   1        STB_SET;
+ 239   1        C55_SendByte(PORT_A,receiveFromA);
+ 240   1        
+C51 COMPILER V9.59.0.0   82C55                                                             12/02/2018 00:25:22 PAGE 5   
 
- 239   1        STB_SET;
- 240   1        C55_SendByte(PORT_A,sendArray[1]);
-*** ERROR C202 IN LINE 240 OF USERS\HardWare\82C55.c: 'sendArray': undefined identifier
- 241   1        
- 242   1        STB_RESET;
+ 241   1        STB_RESET;
+ 242   1        
  243   1        
- 244   1        
- 245   1        receiveFromA=C55_ReceiveByte();
- 246   1        BUSY_RESET;
+ 244   1        receiveFromA=C55_ReceiveByte(receiveFromA);
+ 245   1        BUSY_RESET;
+ 246   1      
  247   1      
  248   1      
- 249   1      
- 250   1      }
- 251          
+ 249   1      }
+ 250          
 
-C51 COMPILATION COMPLETE.  2 WARNING(S),  1 ERROR(S)
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    736    ----
+   CONSTANT SIZE    =      1    ----
+   XDATA SIZE       =   ----      11
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -51,7 +51,8 @@ void main(void)
 				/*串口1发送数据*/
 				USART_SendData(0xA0);
 				/*HD7279显示整型数据*/
-				HD7279ShowInt(gParam.receiveDataByUsart);
+//				HD7279ShowInt(gParam.receiveDataByUsart);
+				HD7279ShowFloat(-25.016555f);
 			}
 		#endif
 	}

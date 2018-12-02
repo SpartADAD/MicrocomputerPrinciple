@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   HD7279                                                            11/29/2018 22:59:14 PAGE 1   
+C51 COMPILER V9.59.0.0   HD7279                                                            12/02/2018 13:14:30 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE HD7279
@@ -12,240 +12,258 @@ line level    source
    2          #include "HD7279.h"
    3          #include "delay.h"
    4          #include "stdio.h"
-   5          
-   6          //HD7279显示内容对应数码
-   7          unsigned char xdata realCode[] = \
-   8            {0x7e , 0x30 , 0x6d , 0x79 , 0x33 , 0x5b , 0x5f , 0x70 , 0x7f , 0x7b , 0x01 , 0x80 , 0x00 , 0x6f};
-   9          //  0      1       2      3      4      5      6      7      8      9      -    .     blank   error
-  10          
-  11          /**
-  12            * @brief  HD7279发送一个字节
-  13            * @note
-  14            * @param  sendData：要发送的数据
-  15            * @param
-  16            * @retval none
-  17            */
-  18          void HD7279SendByte(unsigned char sendData)
-  19          {
-  20   1      #define SEND_DATA_LENGTH (8)
-  21   1        unsigned char xdata sendCounter = 0;
-  22   1        //片选端拉低
-  23   1        cs=0;
-  24   1        Delay10Us(12);
-  25   1        //生成时钟信号并将八位数字依次发送
-  26   1        for(sendCounter = 0 ; sendCounter < SEND_DATA_LENGTH ; sendCounter++)
-  27   1        {
-  28   2          if(sendData & 0x80)
-  29   2          {
-  30   3            dat = 1;
-  31   3          }
-  32   2          else
-  33   2          {
-  34   3            dat = 0;
-  35   3          }
-  36   2          //产生一个上升沿
-  37   2          clk = 1;
-  38   2          Delay10Us(2);
-  39   2          //产生一个下降沿
-  40   2          clk = 0;
-  41   2          Delay10Us(2);
-  42   2          sendData<<=1;
-  43   2        }
-  44   1        dat = 0;
-  45   1      }
-  46          
-  47          /**
-  48            * @brief  HD7279接收数据
-  49            * @note
-  50            * @param none
-  51            *     @arg
-  52            * @param none
-  53            * @retval ：接受到的一个字节数据
-  54            */
-C51 COMPILER V9.59.0.0   HD7279                                                            11/29/2018 22:59:14 PAGE 2   
+   5          #include "math.h"
+   6          
+   7          //HD7279显示内容对应数码
+   8          unsigned char xdata realCode[] = \
+   9            {0x7e , 0x30 , 0x6d , 0x79 , 0x33 , 0x5b , 0x5f , 0x70 , 0x7f , 0x7b , 0x01 , 0x80 , 0x00 , 0x6f};
+  10          //  0      1       2      3      4      5      6      7      8      9      -    .     blank   error
+  11          
+  12          /**
+  13            * @brief  HD7279发送一个字节
+  14            * @note
+  15            * @param  sendData：要发送的数据
+  16            * @param
+  17            * @retval none
+  18            */
+  19          void HD7279SendByte(unsigned char sendData)
+  20          {
+  21   1      #define SEND_DATA_LENGTH (8)
+  22   1        unsigned char xdata sendCounter = 0;
+  23   1        //片选端拉低
+  24   1        cs=0;
+  25   1        Delay10Us(12);
+  26   1        //生成时钟信号并将八位数字依次发送
+  27   1        for(sendCounter = 0 ; sendCounter < SEND_DATA_LENGTH ; sendCounter++)
+  28   1        {
+  29   2          if(sendData & 0x80)
+  30   2          {
+  31   3            dat = 1;
+  32   3          }
+  33   2          else
+  34   2          {
+  35   3            dat = 0;
+  36   3          }
+  37   2          //产生一个上升沿
+  38   2          clk = 1;
+  39   2          Delay10Us(2);
+  40   2          //产生一个下降沿
+  41   2          clk = 0;
+  42   2          Delay10Us(2);
+  43   2          sendData<<=1;
+  44   2        }
+  45   1        dat = 0;
+  46   1      }
+  47          
+  48          /**
+  49            * @brief  HD7279接收数据
+  50            * @note
+  51            * @param none
+  52            *     @arg
+  53            * @param none
+  54            * @retval ：接受到的一个字节数据
+C51 COMPILER V9.59.0.0   HD7279                                                            12/02/2018 13:14:30 PAGE 2   
 
-  55          unsigned char HD7279ReceiveByte(void)
-  56          {
-  57   1      #define RECEIVE_DATA_LENGTH (8)
-  58   1        unsigned char xdata receiveCounter  = 0;
-  59   1        unsigned char xdata receiveData = 0;
-  60   1        //数据端拉高准备接收数据
-  61   1        dat = 1;
-  62   1        Delay10Us(12);
-  63   1        //生成时钟信号并将八位数字一次接收
-  64   1        for(receiveCounter = 0 ; receiveCounter < RECEIVE_DATA_LENGTH ; receiveCounter++)
-  65   1        {
-  66   2          //产生一个上升沿
-  67   2          clk = 1;
-  68   2          Delay10Us(2);
-  69   2          receiveData*=2;
-  70   2          if(dat)
-  71   2          {
-  72   3            receiveData|=0x01;
-  73   3          }
-  74   2          else
-  75   2          {
-  76   3          
-  77   3          }
-  78   2          clk = 0;
-  79   2          Delay10Us(2);
-  80   2        }
-  81   1        dat = 0;
-  82   1        return receiveData;
-  83   1      }
-  84          
-  85          //通过HD7279让数码管显示对应内容
-  86          /**
-  87            * @brief  数码管显示函数
-  88            * @note
-  89            * @param cmd：命令字
-  90            *     @arg
-  91          * @param dataSend:数据字
-  92            * @retval
-  93            */
-  94          void HD7279Write(unsigned char cmd , unsigned char dataSend)
-  95          {
-  96   1        HD7279SendByte(cmd);
-  97   1        
-  98   1        HD7279SendByte(dataSend); 
-  99   1      }
- 100          #define DIGITTAL_TUBE_LENGTH  8  
- 101          /** 
- 102            * @brief  HD7279  
- 103            * @param  showValue HD7279需要显示的整型数据 
- 104            * @retval none
- 105            */
- 106          void HD7279ShowInt(int showValue)
- 107          {
- 108   1        uint8_t xdata i=0;
- 109   1        /*通过Springf存储的字符数组*/
- 110   1        uint8_t xdata myString[DIGITTAL_TUBE_LENGTH]={0};
- 111   1        /*通过数码管显示字符数组*/
- 112   1        uint8_t xdata tubeString[DIGITTAL_TUBE_LENGTH]={0};
- 113   1        /*显示有效位计数*/
- 114   1        uint8_t xdata dataLength =0;
- 115   1        /*判断是否在显示范围内，将其转换为字符数串*/
- 116   1        if(showValue>=-9999999&&showValue<=99999999)
-C51 COMPILER V9.59.0.0   HD7279                                                            11/29/2018 22:59:14 PAGE 3   
+  55            */
+  56          unsigned char HD7279ReceiveByte(void)
+  57          {
+  58   1      #define RECEIVE_DATA_LENGTH (8)
+  59   1        unsigned char xdata receiveCounter  = 0;
+  60   1        unsigned char xdata receiveData = 0;
+  61   1        //数据端拉高准备接收数据
+  62   1        dat = 1;
+  63   1        Delay10Us(12);
+  64   1        //生成时钟信号并将八位数字一次接收
+  65   1        for(receiveCounter = 0 ; receiveCounter < RECEIVE_DATA_LENGTH ; receiveCounter++)
+  66   1        {
+  67   2          //产生一个上升沿
+  68   2          clk = 1;
+  69   2          Delay10Us(2);
+  70   2          receiveData*=2;
+  71   2          if(dat)
+  72   2          {
+  73   3            receiveData|=0x01;
+  74   3          }
+  75   2          else
+  76   2          {
+  77   3          
+  78   3          }
+  79   2          clk = 0;
+  80   2          Delay10Us(2);
+  81   2        }
+  82   1        dat = 0;
+  83   1        return receiveData;
+  84   1      }
+  85          
+  86          //通过HD7279让数码管显示对应内容
+  87          /**
+  88            * @brief  数码管显示函数
+  89            * @note
+  90            * @param cmd：命令字
+  91            *     @arg
+  92          * @param dataSend:数据字
+  93            * @retval
+  94            */
+  95          void HD7279Write(unsigned char cmd , unsigned char dataSend)
+  96          {
+  97   1        HD7279SendByte(cmd);
+  98   1        
+  99   1        HD7279SendByte(dataSend); 
+ 100   1      }
+ 101          #define DIGITTAL_TUBE_LENGTH  8  
+ 102          /** 
+ 103            * @brief  HD7279  
+ 104            * @param  showValue HD7279需要显示的整型数据 
+ 105            * @retval none
+ 106            */
+ 107          void HD7279ShowInt(int showValue)
+ 108          {
+ 109   1        uint8_t xdata i=0;
+ 110   1        /*通过Springf存储的字符数组*/
+ 111   1        uint8_t xdata myString[DIGITTAL_TUBE_LENGTH]={0};
+ 112   1        /*通过数码管显示字符数组*/
+ 113   1        uint8_t xdata tubeString[DIGITTAL_TUBE_LENGTH]={0};
+ 114   1        /*显示有效位计数*/
+ 115   1        uint8_t xdata dataLength =0;
+ 116   1        /*判断是否在显示范围内，将其转换为字符数串*/
+C51 COMPILER V9.59.0.0   HD7279                                                            12/02/2018 13:14:30 PAGE 3   
 
- 117   1        {
- 118   2          /*将输入数组转化为字符串*/
- 119   2          sprintf(myString,"%d",showValue);
- 120   2        }
- 121   1        else
- 122   1        {
- 123   2          showValue = 0;
- 124   2          /*超出最大显示值*/
- 125   2          for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
- 126   2          {
- 127   3            HD7279Write(UNDECODE+i,0x01);
- 128   3          }
- 129   2          return;
- 130   2        }
- 131   1        /*计算长度*/
- 132   1        for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
- 133   1        {
- 134   2          /*有效位计数*/
- 135   2          if(myString[i]!=0x00)
- 136   2          {
- 137   3            dataLength++;
- 138   3          }
- 139   2        }
- 140   1        for(i=0;i<dataLength;i++)
- 141   1        {
- 142   2          /*如果是“-”便不管*/
- 143   2          if(myString[i]=='-')
- 144   2          {
- 145   3            myString[i]=0x01;
- 146   3          }
- 147   2          else
- 148   2          {
- 149   3            /*ASCII码 0x30 进行赋值   由于将数据转换为字符型数据 由ASCII码表可得0-9的数字
+ 117   1        if(showValue>=-9999999&&showValue<=99999999)
+ 118   1        {
+ 119   2          /*将输入数组转化为字符串*/
+ 120   2          sprintf(myString,"%d",showValue);
+ 121   2        }
+ 122   1        else
+ 123   1        {
+ 124   2          showValue = 0;
+ 125   2          /*超出最大显示值*/
+ 126   2          for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
+ 127   2          {
+ 128   3            HD7279Write(UNDECODE+i,0x01);
+ 129   3          }
+ 130   2          return;
+ 131   2        }
+ 132   1        /*计算长度*/
+ 133   1        for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
+ 134   1        {
+ 135   2          /*有效位计数*/
+ 136   2          if(myString[i]!=0x00)
+ 137   2          {
+ 138   3            dataLength++;
+ 139   3          }
+ 140   2        }
+ 141   1        for(i=0;i<dataLength;i++)
+ 142   1        {
+ 143   2          /*如果是“-”便不管*/
+ 144   2          if(myString[i]=='-')
+ 145   2          {
+ 146   3            myString[i]=0x01;
+ 147   3          }
+ 148   2          else
+ 149   2          {
+ 150   3            /*ASCII码 0x30 进行赋值   由于将数据转换为字符型数据 由ASCII码表可得0-9的数字
              -的ASCII码减去0x30可得相对应的数字0-9
- 150   3            填入HD7279显示内容对应数码数组realCode*/
- 151   3            myString[i]=realCode[(myString[i]-0x30)];
- 152   3            tubeString[(DIGITTAL_TUBE_LENGTH - dataLength) + i]=myString[i];
- 153   3          }
- 154   2        }
- 155   1        
- 156   1        for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
- 157   1        {
- 158   2          HD7279Write(UNDECODE+DIGITTAL_TUBE_LENGTH -1 - i,tubeString[i]);
- 159   2        }
- 160   1      
+ 151   3            填入HD7279显示内容对应数码数组realCode*/
+ 152   3            myString[i]=realCode[(myString[i]-0x30)];
+ 153   3            tubeString[(DIGITTAL_TUBE_LENGTH - dataLength) + i]=myString[i];
+ 154   3          }
+ 155   2        }
+ 156   1        
+ 157   1        for(i=0;i<DIGITTAL_TUBE_LENGTH;i++)
+ 158   1        {
+ 159   2          HD7279Write(UNDECODE+DIGITTAL_TUBE_LENGTH -1 - i,tubeString[i]);
+ 160   2        }
  161   1      
- 162   1      }
- 163          /*通过数据提取*/
- 164          void HD7279ShowFloat(uint8_t showAfterSmall,double showValue)
- 165          {
- 166   1        uint8_t xdata index=0;
- 167   1        /*通过个人译码*/
- 168   1        uint8_t xdata myCode[DIGITTAL_TUBE_LENGTH]={0};
- 169   1        /*通过数码管显示字符数组*/
- 170   1        uint8_t xdata tubeString[DIGITTAL_TUBE_LENGTH]={0};
- 171   1        /*判断是否在显示范围内，将其转换为字符数串*/
- 172   1        int xdata showValueInt = (int)showValue*showAfterSmall*10;
- 173   1        uint8_t xdata pointIndex = DIGITTAL_TUBE_LENGTH - showAfterSmall - 1;
- 174   1        int xdata getNum=DIGITTAL_TUBE_LENGTH *10;
- 175   1        uint8_t xdata dataLength=0;
- 176   1        
- 177   1        if(showValue>-(7-showAfterSmall)*10&&showValue<(8-showAfterSmall)*10)
-C51 COMPILER V9.59.0.0   HD7279                                                            11/29/2018 22:59:14 PAGE 4   
+ 162   1      
+ 163   1      }
+ 164          /*通过数据提取*/
+ 165          void HD7279ShowFloat(double showValue)
+ 166          {
+ 167   1        uint8_t xdata index=0;
+ 168   1        /*通过个人译码*/
+ 169   1        uint8_t xdata myCode[DIGITTAL_TUBE_LENGTH]={0};
+ 170   1        /*通过数码管显示字符数组*/
+ 171   1        uint8_t xdata tubeString[DIGITTAL_TUBE_LENGTH]={0};
+ 172   1        /*判断是否在显示范围内，将其转换为字符数串*/
+ 173   1        uint8_t xdata pointIndex = 0;
+ 174   1        /*整数部分*/
+ 175   1        uint32_t xdata showValueInt = (uint32_t)fabs(showValue);
+ 176   1        /*小数部分*/
+ 177   1        double xdata showValueFloat = fabs(showValue) - showValueInt;
+C51 COMPILER V9.59.0.0   HD7279                                                            12/02/2018 13:14:30 PAGE 4   
 
- 178   1        {
- 179   2          if(showValue<0)
- 180   2          {
- 181   3            myCode[index]=10;
- 182   3            showValue = fabs(showValueInt);
- 183   3            index++;
- 184   3            dataLength++;
- 185   3          }
- 186   2          
- 187   2          for(;index<DIGITTAL_TUBE_LENGTH;index++)
- 188   2          {
- 189   3            if((showValueInt/getNum)!=0)
- 190   3            {
- 191   4              myCode[index]=showValueInt/getNum;
- 192   4              showValueInt   = showValueInt % getNum;
- 193   4              dataLength++;
- 194   4            }
- 195   3            getNum=getNum/10;
- 196   3          }
- 197   2          
- 198   2          for(index=0;index<dataLength;index++)
- 199   2          {
- 200   3            tubeString[index]=realCode[myCode[index]];
- 201   3            dataLength++;
- 202   3          }
- 203   2          
- 204   2        }
- 205   1        else
- 206   1        {
- 207   2          showValue = 0;
- 208   2          /*超出最大显示值*/
- 209   2          for(index=0;index<DIGITTAL_TUBE_LENGTH;index++)
- 210   2          {
- 211   3            HD7279Write(UNDECODE+index,0x01);
- 212   3          }
- 213   2          return;
- 214   2        }
- 215   1        
- 216   1        HD7279Write(UNDECODE + showAfterSmall + 1,tubeString[index]);
- 217   1        
- 218   1        for(index=0;index<DIGITTAL_TUBE_LENGTH;index++)
+ 178   1        uint32_t xdata getNum=1;
+ 179   1        /*有效数据长度*/
+ 180   1        uint8_t xdata dataLength=0;
+ 181   1        
+ 182   1        
+ 183   1        
+ 184   1        if(showValue<0)
+ 185   1        {
+ 186   2          myCode[dataLength]=10;
+ 187   2          showValue = fabs(showValue);
+ 188   2          dataLength++;
+ 189   2        }
+ 190   1          
+ 191   1        if(showValue>1.f)
+ 192   1        {
+ 193   2          /*获取整数位前有几位*/
+ 194   2          while(showValueInt/getNum)
+ 195   2          {
+ 196   3            getNum =getNum*10;
+ 197   3          }
+ 198   2          getNum=getNum /10;
+ 199   2          
+ 200   2          while(getNum)
+ 201   2          {
+ 202   3            myCode[dataLength]=showValueInt/getNum;
+ 203   3            dataLength++;
+ 204   3            showValueInt%=getNum;
+ 205   3            getNum =getNum/10;
+ 206   3          }
+ 207   2        }
+ 208   1        else
+ 209   1        {
+ 210   2          myCode[dataLength]=0;
+ 211   2          dataLength++;
+ 212   2        } 
+ 213   1        /*得到小数点显示的位数*/  
+ 214   1        pointIndex=dataLength - 1;
+ 215   1        getNum=pow(10,(DIGITTAL_TUBE_LENGTH - dataLength- 1))+1;
+ 216   1        showValueInt = (showValueFloat*getNum*10);
+ 217   1      
+ 218   1        while(getNum)
  219   1        {
- 220   2          HD7279Write(UNDECODE+DIGITTAL_TUBE_LENGTH -1 - index,tubeString[index]);
- 221   2        }
- 222   1      
- 223   1      
- 224   1      
- 225   1      }
+ 220   2          myCode[dataLength]=showValueInt/getNum;
+ 221   2          dataLength++;
+ 222   2          showValueInt %= getNum;
+ 223   2          getNum =getNum/10;
+ 224   2        }
+ 225   1          
+ 226   1        for(index=0;index<DIGITTAL_TUBE_LENGTH;index++)
+ 227   1        {
+ 228   2          tubeString[index]=realCode[myCode[index]];
+ 229   2          if(index == pointIndex)
+ 230   2          {
+ 231   3            tubeString[index]|=realCode[11];
+ 232   3          }
+ 233   2        }
+ 234   1        
+ 235   1        for(index=0;index<DIGITTAL_TUBE_LENGTH;index++)
+ 236   1        {
+ 237   2          
+ 238   2          HD7279Write(UNDECODE+DIGITTAL_TUBE_LENGTH -1 - index,tubeString[index]);
+ 239   2        }
+C51 COMPILER V9.59.0.0   HD7279                                                            12/02/2018 13:14:30 PAGE 5   
+
+ 240   1      
+ 241   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1147    ----
+   CODE SIZE        =   1360    ----
    CONSTANT SIZE    =     35    ----
-   XDATA SIZE       =     14      53
+   XDATA SIZE       =     14      56
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
