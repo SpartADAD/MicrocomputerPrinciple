@@ -6,6 +6,7 @@
 #include "gpio.h"
 #include "interrupt.h"
 #include "delay.h"
+#include "82C55.h"
 /*运行程序标志位*/
 static uint8_t runFlag=0;
 /*** @brief   运行程序标志位置1函数

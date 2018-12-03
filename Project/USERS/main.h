@@ -15,8 +15,8 @@
 #define FIVE_MS_RUN_BY_TIM1         1
 /*一次中断为200微秒*/
 #define ONE_INTTEUPT_TIME           200
-/*TIM0周期为200微秒进一次中断   25次为5ms*/
-#define PERIOD_RUN      ((int)(5000/(MACHINE_PEROID*ONE_INTTEUPT_TIME)))
+/*TIM0周期为200微秒进一次中断   25次为5ms  5000*/
+#define PERIOD_RUN      ((int)(1000000/(MACHINE_PEROID*ONE_INTTEUPT_TIME)))
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;

@@ -10,6 +10,7 @@
 #include "delay.h"
 #include "main.h"
 #include "HD7279.h"
+#include "82c55.h"
 gParam_t gParam={0};
 void HardWareInit(void)
 {
@@ -35,7 +36,8 @@ void HardWareInit(void)
 	/*上电延时等数码管能用*/
 	DelayMs(25);
 	/*HD7279初始化*/
-	HD7279SendByte(CMD_RESET);
+//	HD7279SendByte(CMD_RESET);
+	MyC55_Init();
 }
 void main(void)
 {
@@ -46,13 +48,8 @@ void main(void)
 			/*5ms运行周期*/
 			if(GetRunFlag())
 			{
-				/*增加延时时间*/
-				DelayMs(10);
-				/*串口1发送数据*/
-				USART_SendData(0xA0);
-				/*HD7279显示整型数据*/
-//				HD7279ShowInt(gParam.receiveDataByUsart);
-				HD7279ShowFloat(-25.016555f);
+				//KeyReadBy82C55();
+				SendOrReceive();
 			}
 		#endif
 	}

@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              12/02/2018 13:13:03 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              12/03/2018 23:43:23 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -20,67 +20,64 @@ line level    source
   10          #include "delay.h"
   11          #include "main.h"
   12          #include "HD7279.h"
-  13          gParam_t gParam={0};
-  14          void HardWareInit(void)
-  15          {
-  16   1        /*设置串口中断高优先级*/
-  17   1        Interrupt_Priority(0x10);
-  18   1        
-  19   1        /*定义5ms运行周期*/
-  20   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
-  21   1            /*定时器0 8位自动重装载 初始值56*/
-  22   1            TIM0_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,256-ONE_INTTEUPT_TIME);
-  23   1            /*使能中断定时器0中断*/
-  24   1            Timer_Interrupt(TIM0);
-  25   1        #elif  RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
+  13          #include "82c55.h"
+  14          gParam_t gParam={0};
+  15          void HardWareInit(void)
+  16          {
+  17   1        /*设置串口中断高优先级*/
+  18   1        Interrupt_Priority(0x10);
+  19   1        
+  20   1        /*定义5ms运行周期*/
+  21   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
+  22   1            /*定时器0 8位自动重装载 初始值56*/
+  23   1            TIM0_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,256-ONE_INTTEUPT_TIME);
+  24   1            /*使能中断定时器0中断*/
+  25   1            Timer_Interrupt(TIM0);
+  26   1        #elif  RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
                     /*定时器1 8位自动重装载 初始值56*/
                     TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,256-ONE_INTTEUPT_TIME);
                     /*使能中断定时器1中断*/
                     Timer_Interrupt(TIM1);
                 #endif
-  31   1        /*外部中断使能*/
-  32   1        EXHandlerInit(EX_INTERRUPT0,EX_INTERRUPT_BY_EDGE);
-  33   1        
-  34   1        USART_Init(USART_MODE_1,1,9600,0);
-  35   1        /*上电延时等数码管能用*/
-  36   1        DelayMs(25);
-  37   1        /*HD7279初始化*/
-  38   1        HD7279SendByte(CMD_RESET);
-  39   1      }
-  40          void main(void)
-  41          {
-  42   1        HardWareInit();
-  43   1        while(1)
-  44   1        {
-  45   2          #ifdef RUN_PERIOD_BY_TIM
-  46   2            /*5ms运行周期*/
-  47   2            if(GetRunFlag())
-  48   2            {
-  49   3              /*增加延时时间*/
-  50   3              DelayMs(10);
-  51   3              /*串口1发送数据*/
-  52   3              USART_SendData(0xA0);
-  53   3              /*HD7279显示整型数据*/
-  54   3      //        HD7279ShowInt(gParam.receiveDataByUsart);
-C51 COMPILER V9.59.0.0   MAIN                                                              12/02/2018 13:13:03 PAGE 2   
+  32   1        /*外部中断使能*/
+  33   1        EXHandlerInit(EX_INTERRUPT0,EX_INTERRUPT_BY_EDGE);
+  34   1        
+  35   1        USART_Init(USART_MODE_1,1,9600,0);
+  36   1        /*上电延时等数码管能用*/
+  37   1        DelayMs(25);
+  38   1        /*HD7279初始化*/
+  39   1      //  HD7279SendByte(CMD_RESET);
+  40   1        MyC55_Init();
+  41   1      }
+  42          void main(void)
+  43          {
+  44   1        HardWareInit();
+  45   1        while(1)
+  46   1        {
+  47   2          #ifdef RUN_PERIOD_BY_TIM
+  48   2            /*5ms运行周期*/
+  49   2            if(GetRunFlag())
+  50   2            {
+  51   3              //KeyReadBy82C55();
+  52   3              SendOrReceive();
+  53   3            }
+  54   2          #endif
+C51 COMPILER V9.59.0.0   MAIN                                                              12/03/2018 23:43:23 PAGE 2   
 
-  55   3              HD7279ShowFloat(-25.016555f);
-  56   3            }
-  57   2          #endif
-  58   2        }
-  59   1      }
+  55   2        }
+  56   1      }
+  57          
+  58          
+  59          
   60          
   61          
   62          
   63          
   64          
-  65          
-  66          
-  67          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     90    ----
+   CODE SIZE        =     68    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      2    ----
    PDATA SIZE       =   ----    ----
