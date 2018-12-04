@@ -11,4 +11,5 @@
 
 void MotorRotate(uint8_t rotateDirection,uint32_t rotateVel);
 void MotorControl(void);
+void MotorRotateByTIM(void);
 #endif

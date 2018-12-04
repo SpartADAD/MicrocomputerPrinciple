@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 22:37:25 PAGE 1   
+C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 23:33:26 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE 82C55
@@ -62,7 +62,7 @@ line level    source
   52   1        {
   53   2          case PORT_A:
   54   2            P8255_A = dataSend;
-C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 22:37:25 PAGE 2   
+C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 23:33:26 PAGE 2   
 
   55   2          break;
   56   2          
@@ -126,7 +126,7 @@ line level    source
  114   2            P8255_B = portB;
  115   2          break;
  116   2          
-C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 22:37:25 PAGE 3   
+C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 23:33:26 PAGE 3   
 
  117   2          case PORT_C:
  118   2            portC = (PORT_Pin_x<<1)|0x01;
@@ -190,7 +190,7 @@ line level    source
  176   1        switch(PORTx)
  177   1        {
  178   2          case PORT_A:
-C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 22:37:25 PAGE 4   
+C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 23:33:26 PAGE 4   
 
  179   2      //      P8255_A|=Port_Pin_x_BIN;
  180   2            returnStatus = portA & Port_Pin_x_BIN;
@@ -227,7 +227,7 @@ line level    source
  211          
  212          void AToB(void)
  213          {
- 214   1        uint8_t sendArray[1]={'H'};
+ 214   1        uint8_t sendArray[1]={1};
  215   1      
  216   1        STB_SET;
  217   1        C55_SendByte(PORT_A,sendArray[0]);
@@ -254,7 +254,7 @@ line level    source
                 #endif
  239   1      }
  240          //void SendOrReceive(void)
-C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 22:37:25 PAGE 5   
+C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 23:33:26 PAGE 5   
 
  241          //{
  242          //  uint8_t xdata pc0 = BUSY_STATUS;
