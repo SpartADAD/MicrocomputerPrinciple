@@ -96,9 +96,9 @@ void EXHandlerInit(uint8_t EXNumber,uint8_t workMode)
   */
 void EX0Handler(void) interrupt 0
 {
-	gParam.flag++;
-	gParam.flag%=2;
-	P1=0xff;
+//	gParam.flag++;
+//	gParam.flag%=2;
+//	P1=0xff;
 }
 /*** @brief    外部中断1中断函数 
   *  @param    void       

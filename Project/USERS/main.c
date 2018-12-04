@@ -15,7 +15,7 @@ gParam_t gParam={0};
 void HardWareInit(void)
 {
 	/*设置串口中断高优先级*/
-	Interrupt_Priority(0x10);
+	//Interrupt_Priority(0x10);
 	
 	/*定义5ms运行周期*/
 	#if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
@@ -32,11 +32,11 @@ void HardWareInit(void)
 	/*外部中断使能*/
 	EXHandlerInit(EX_INTERRUPT0,EX_INTERRUPT_BY_EDGE);
 	
-	USART_Init(USART_MODE_1,1,9600,0);
+	//USART_Init(USART_MODE_1,1,9600,0);
 	/*上电延时等数码管能用*/
 	DelayMs(25);
 	/*HD7279初始化*/
-//	HD7279SendByte(CMD_RESET);
+	//HD7279SendByte(CMD_RESET);
 	MyC55_Init();
 }
 void main(void)

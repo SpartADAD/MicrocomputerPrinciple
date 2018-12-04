@@ -211,10 +211,10 @@ void KeyReadBy82C55(void)
 
 void AToB(void)
 {
-	uint8_t sendArray[1]={'H'};
+	uint8_t sendArray[1]={1};
 
 	STB_SET;
-	C55_SendByte(PORT_A,sendArray[1]);
+	C55_SendByte(PORT_A,sendArray[0]);
 	STB_RESET;
 	while(BUSY_STATUS);
 }
@@ -224,7 +224,7 @@ void BReceive(void)
 //	uint8_t receiveFromA=0;
 	while(STB_STATUS);
 	BUSY_SET;
-	receiveFromA=C55_ReceiveByte(PORT_A);
+	receiveFromA=C55_ReceiveByte(PORT_B);
 	HD7279ShowInt(receiveFromA);
 	BUSY_RESET;
 }
@@ -246,4 +246,3 @@ void SendOrReceive(void)
 ////	STB_RESET;
 ////	while(BUSY_STATUS);
 //}
-
