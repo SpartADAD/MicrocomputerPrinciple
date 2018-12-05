@@ -4,6 +4,7 @@
 #include "stdio.h"
 #include "main.h"
 #include "HD7279.h"
+#include "string.h"
 
 uint8_t xdata P8255_CTL _at_ 0xf803;
 uint8_t xdata P8255_A _at_ 0xf800;
@@ -208,41 +209,97 @@ void KeyReadBy82C55(void)
 
 }
 
-
+#define DATA_LENGTH   20
+static uint8_t xdata receiveFromB[DATA_LENGTH]={0};
 void AToB(void)
 {
-	uint8_t sendArray[1]={1};
+	uint8_t xdata i=0;
+//	uint8_t sendArray[DATA_LENGTH]={20,19,18,17,16,15,14,13,55,22,33,44,54,65,78,46,63,126,52,40};
+	uint8_t sendArray[DATA_LENGTH]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
 
-	STB_SET;
-	C55_SendByte(PORT_A,sendArray[0]);
-	STB_RESET;
-	while(BUSY_STATUS);
+	for(i=0;i<DATA_LENGTH;i++)
+	{
+		STB_SET;
+		C55_SendByte(PORT_A,sendArray[i]);
+		receiveFromB[i]=C55_ReceiveByte(PORT_B);
+		STB_RESET;
+		while(BUSY_STATUS);
+	}
+	
+	/*显示一下哈*/
+//	for(i=0;i<DATA_LENGTH;i++)
+//	{
+//		HD7279ShowInt(receiveFromB[i]);
+//	}
+//	STB_RESET;
 }
-uint8_t receiveFromA=0;
-void BReceive(void)
+
+static uint8_t xdata receiveFromA[DATA_LENGTH]={0};
+void BReceiveNoSort(void)
 {
-//	uint8_t receiveFromA=0;
+	uint8_t xdata i=0;
 	while(STB_STATUS);
 	BUSY_SET;
-	receiveFromA=C55_ReceiveByte(PORT_B);
-	HD7279ShowInt(receiveFromA);
+	receiveFromA[i]=C55_ReceiveByte(PORT_B);
+	HD7279ShowInt(receiveFromA[i]);
 	BUSY_RESET;
 }
+void BReceiveSort(void)
+{
+	static uint8_t xdata i=0;
+	static uint8_t xdata dataSort[DATA_LENGTH]={0};
+	i++;
+	if(i>=20)
+	{
+//		while(STB_STATUS);
+//		BUSY_SET;
+//		/*开始排序*/
+//	//	memcpy(dataSort,receiveFromA,DATA_LENGTH);
+////		MaoPaoSort(DATA_LENGTH,(int *)dataSort);
+//		for(i=0;i<DATA_LENGTH;i++)
+//		{
+//			
+//		}
+//		BUSY_RESET;
+		i=0;
+		/*排序结束*/
+	}	
+	
+	while(STB_STATUS);
+	BUSY_SET;
+	receiveFromA[i]=C55_ReceiveByte(PORT_B);
+	C55_SendByte(PORT_A,dataSort[i]);
+	DelayMs(100);
+	HD7279ShowInt(receiveFromA[i]);
+	BUSY_RESET;
 
+}
 void SendOrReceive(void)
 {
 	#if  ROLE ==     1
 		AToB();
 	#elif ROLE ==     2
-		BReceive();
+		BReceiveSort();
 	#endif
 }
-//void SendOrReceive(void)
-//{
-//	uint8_t xdata pc0 = BUSY_STATUS;
-//	P8255_CTL=0x09;	
-//  //STB_SET;
-////	C55_SendByte(PORT_A,sendArray[1]);
-////	STB_RESET;
-////	while(BUSY_STATUS);
-//}
+void MaoPaoSort(uint32_t dataLength,int *dataSorted)
+{
+	//比较的轮数
+  uint32_t xdata i=0;  
+	 //每轮比较的次数
+  uint32_t xdata j=0;
+	int temp=0;
+	for (i=0; i<dataLength-1; ++i)  //比较n-1轮
+	{
+			for (j=0; j<dataLength-1-i; ++j)  //每轮比较n-1-i次,
+			{
+					if (dataSorted[j] < dataSorted[j+1])
+					{
+							temp = dataSorted[j];
+							dataSorted[j] = dataSorted[j+1];
+							dataSorted[j+1] = temp;
+					}
+			}
+	}
+
+}

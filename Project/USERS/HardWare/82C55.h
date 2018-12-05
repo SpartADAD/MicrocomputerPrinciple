@@ -3,7 +3,7 @@
 #define __82C55_H
 
 #include "main.h"
-#define ROLE  1
+#define ROLE  2
 #if  ROLE ==     1
 #define STB_STATUS  PORTx_ReadBits(PORT_C,PORT_PIN_4)
 #define STB_RESET		PORTx_ResetBits(PORT_C,PORT_PIN_4)
@@ -66,10 +66,12 @@ typedef struct
 void MyC55_Init(void);
 void C55_Init(C55Init_t C55InitStuct);
 void AToB(void);
-void BReceive(void);
+void BReceiveNoSort(void);
+void BReceiveSort(void);
 uint8_t C55_ReceiveByte(uint8_t Port);
 void C55_SendByte(uint8_t Port,uint8_t dataSend);
 uint8_t C55_ReadBits(uint8_t Port, unsigned char Port_Pin_x);
 void KeyReadBy82C55(void);
 void SendOrReceive(void);
+void MaoPaoSort(uint32_t dataLength,int *dataSorted);
 #endif

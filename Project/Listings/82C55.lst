@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 23:33:26 PAGE 1   
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 00:44:45 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE 82C55
@@ -14,262 +14,321 @@ line level    source
    4          #include "stdio.h"
    5          #include "main.h"
    6          #include "HD7279.h"
-   7          
-   8          uint8_t xdata P8255_CTL _at_ 0xf803;
-   9          uint8_t xdata P8255_A _at_ 0xf800;
-  10          uint8_t xdata P8255_B _at_ 0xf801;
-  11          uint8_t xdata P8255_C _at_ 0xf802;
-  12          
-  13          #define A0    P0^0  
-  14          #define A1    P0^1  
-  15          void MyC55_Init(void)
-  16          {
-  17   1        C55Init_t C55InitStucture={0};
-  18   1        C55InitStucture.portAInit.workMode = IO8255_MODE0;
-  19   1        C55InitStucture.portAInit.inOrOut =  IO8255_OUTPUT;
-  20   1        
-  21   1        C55InitStucture.portBInit.workMode = IO8255_MODE0;
-  22   1        C55InitStucture.portBInit.inOrOut =  IO8255_INPUT;
-  23   1        
-  24   1        C55InitStucture.portCHInit.inOrOut = IO8255_OUTPUT;
-  25   1        C55InitStucture.portCLInit.inOrOut = IO8255_INPUT;
-  26   1      
-  27   1        C55_Init(C55InitStucture);
-  28   1      
-  29   1      }
-  30          void C55_Init(C55Init_t C55InitStuct)
-  31          {
-  32   1        uint8_t xdata initCode = 0x80;
-  33   1        
-  34   1        //根据输入状态配置控制字并发送
-  35   1        initCode|=(C55InitStuct.portAInit.workMode<<5);
-  36   1        initCode|=(C55InitStuct.portAInit.inOrOut<<4);
-  37   1        
-  38   1        initCode|=(C55InitStuct.portBInit.workMode<<2);
-  39   1        initCode|=(C55InitStuct.portBInit.inOrOut<<1);
-  40   1        
-  41   1        initCode|=(C55InitStuct.portCHInit.inOrOut<<3);
-  42   1        initCode|=(C55InitStuct.portCLInit.inOrOut);
-  43   1        
-  44   1        P8255_CTL = initCode;
-  45   1      } 
-  46          
+   7          #include "string.h"
+   8          
+   9          uint8_t xdata P8255_CTL _at_ 0xf803;
+  10          uint8_t xdata P8255_A _at_ 0xf800;
+  11          uint8_t xdata P8255_B _at_ 0xf801;
+  12          uint8_t xdata P8255_C _at_ 0xf802;
+  13          
+  14          #define A0    P0^0  
+  15          #define A1    P0^1  
+  16          void MyC55_Init(void)
+  17          {
+  18   1        C55Init_t C55InitStucture={0};
+  19   1        C55InitStucture.portAInit.workMode = IO8255_MODE0;
+  20   1        C55InitStucture.portAInit.inOrOut =  IO8255_OUTPUT;
+  21   1        
+  22   1        C55InitStucture.portBInit.workMode = IO8255_MODE0;
+  23   1        C55InitStucture.portBInit.inOrOut =  IO8255_INPUT;
+  24   1        
+  25   1        C55InitStucture.portCHInit.inOrOut = IO8255_OUTPUT;
+  26   1        C55InitStucture.portCLInit.inOrOut = IO8255_INPUT;
+  27   1      
+  28   1        C55_Init(C55InitStucture);
+  29   1      
+  30   1      }
+  31          void C55_Init(C55Init_t C55InitStuct)
+  32          {
+  33   1        uint8_t xdata initCode = 0x80;
+  34   1        
+  35   1        //根据输入状态配置控制字并发送
+  36   1        initCode|=(C55InitStuct.portAInit.workMode<<5);
+  37   1        initCode|=(C55InitStuct.portAInit.inOrOut<<4);
+  38   1        
+  39   1        initCode|=(C55InitStuct.portBInit.workMode<<2);
+  40   1        initCode|=(C55InitStuct.portBInit.inOrOut<<1);
+  41   1        
+  42   1        initCode|=(C55InitStuct.portCHInit.inOrOut<<3);
+  43   1        initCode|=(C55InitStuct.portCLInit.inOrOut);
+  44   1        
+  45   1        P8255_CTL = initCode;
+  46   1      } 
   47          
   48          
-  49          void C55_SendByte(uint8_t Port,uint8_t dataSend)
-  50          {
-  51   1        switch(Port)
-  52   1        {
-  53   2          case PORT_A:
-  54   2            P8255_A = dataSend;
-C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 23:33:26 PAGE 2   
+  49          
+  50          void C55_SendByte(uint8_t Port,uint8_t dataSend)
+  51          {
+  52   1        switch(Port)
+  53   1        {
+  54   2          case PORT_A:
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 00:44:45 PAGE 2   
 
-  55   2          break;
-  56   2          
-  57   2          case PORT_B:
-  58   2            P8255_B = dataSend;
-  59   2          break;
-  60   2          
-  61   2          case PORT_C:
-  62   2            P8255_C = dataSend;
-  63   2          break;
-  64   2          
-  65   2          default:
-  66   2          break;
-  67   2        }
-  68   1      }
-  69          
-  70          uint8_t C55_ReceiveByte(uint8_t Port)
-  71          {
-  72   1        uint8_t dataReceive= 0;
-  73   1        switch(Port)
-  74   1        {
-  75   2          case PORT_A:
-  76   2            dataReceive = P8255_A;
-  77   2          break;
-  78   2          
-  79   2          case PORT_B:
-  80   2            dataReceive = P8255_B;
-  81   2          break;
-  82   2          
-  83   2          case PORT_C:
-  84   2            dataReceive = P8255_C;
-  85   2          break;
-  86   2          
-  87   2          default:
-  88   2          break;
-  89   2        }
-  90   1        
-  91   1        return dataReceive;
-  92   1      }
-  93            
-  94          /**
-  95            * @brief  GPIO口某位置位函数
-  96            * @param  GPIOx 某一GPIO口  
-  97            * @param  GPIO_Pin_x  某一GPIO口的某一位
-  98            * @retval void
-  99            */
- 100          void PORTx_SetBits(unsigned char PORTx,unsigned char PORT_Pin_x)
- 101          {
- 102   1        uint8_t xdata portA = P8255_A;
- 103   1        uint8_t xdata portB = P8255_B;
- 104   1        uint8_t xdata portC = 0;
- 105   1        switch(PORTx)
- 106   1        {
- 107   2          case PORT_A:
- 108   2            portA |=(int)pow(2,PORT_Pin_x);
- 109   2            P8255_A = portA;
- 110   2          break;
- 111   2          
- 112   2          case PORT_B:
- 113   2            portB |=(int)pow(2,PORT_Pin_x);
- 114   2            P8255_B = portB;
- 115   2          break;
- 116   2          
-C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 23:33:26 PAGE 3   
+  55   2            P8255_A = dataSend;
+  56   2          break;
+  57   2          
+  58   2          case PORT_B:
+  59   2            P8255_B = dataSend;
+  60   2          break;
+  61   2          
+  62   2          case PORT_C:
+  63   2            P8255_C = dataSend;
+  64   2          break;
+  65   2          
+  66   2          default:
+  67   2          break;
+  68   2        }
+  69   1      }
+  70          
+  71          uint8_t C55_ReceiveByte(uint8_t Port)
+  72          {
+  73   1        uint8_t dataReceive= 0;
+  74   1        switch(Port)
+  75   1        {
+  76   2          case PORT_A:
+  77   2            dataReceive = P8255_A;
+  78   2          break;
+  79   2          
+  80   2          case PORT_B:
+  81   2            dataReceive = P8255_B;
+  82   2          break;
+  83   2          
+  84   2          case PORT_C:
+  85   2            dataReceive = P8255_C;
+  86   2          break;
+  87   2          
+  88   2          default:
+  89   2          break;
+  90   2        }
+  91   1        
+  92   1        return dataReceive;
+  93   1      }
+  94            
+  95          /**
+  96            * @brief  GPIO口某位置位函数
+  97            * @param  GPIOx 某一GPIO口  
+  98            * @param  GPIO_Pin_x  某一GPIO口的某一位
+  99            * @retval void
+ 100            */
+ 101          void PORTx_SetBits(unsigned char PORTx,unsigned char PORT_Pin_x)
+ 102          {
+ 103   1        uint8_t xdata portA = P8255_A;
+ 104   1        uint8_t xdata portB = P8255_B;
+ 105   1        uint8_t xdata portC = 0;
+ 106   1        switch(PORTx)
+ 107   1        {
+ 108   2          case PORT_A:
+ 109   2            portA |=(int)pow(2,PORT_Pin_x);
+ 110   2            P8255_A = portA;
+ 111   2          break;
+ 112   2          
+ 113   2          case PORT_B:
+ 114   2            portB |=(int)pow(2,PORT_Pin_x);
+ 115   2            P8255_B = portB;
+ 116   2          break;
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 00:44:45 PAGE 3   
 
- 117   2          case PORT_C:
- 118   2            portC = (PORT_Pin_x<<1)|0x01;
- 119   2            P8255_CTL = portC;
- 120   2          break;
- 121   2          
+ 117   2          
+ 118   2          case PORT_C:
+ 119   2            portC = (PORT_Pin_x<<1)|0x01;
+ 120   2            P8255_CTL = portC;
+ 121   2          break;
  122   2          
- 123   2          default:
- 124   2            
- 125   2          break;
- 126   2        }
- 127   1          
- 128   1      }
- 129          /**
- 130            * @brief  GPIO口某位复位函数
- 131            * @param  GPIOx 某一GPIO口  
- 132            * @param  GPIO_Pin_x  某一GPIO口的某一位
- 133            * @retval void
- 134            */
- 135          void PORTx_ResetBits(unsigned char PORTx,unsigned char PORT_Pin_x)
- 136          {
- 137   1        uint8_t xdata portA = P8255_A;
- 138   1        uint8_t xdata portB = P8255_B;
- 139   1        uint8_t xdata portC = 0;
- 140   1        switch(PORTx)
- 141   1        {
- 142   2          case PORT_A:
- 143   2            portA &=(~(int)pow(2,PORT_Pin_x));
- 144   2            P8255_A =portA;
- 145   2          break;
- 146   2          
- 147   2          case PORT_B:
- 148   2            portB &=(~(int)pow(2,PORT_Pin_x));
- 149   2            P8255_B = portB;
- 150   2          break;
- 151   2          
- 152   2          case PORT_C:
- 153   2            portC = (PORT_Pin_x<<1)&0xfe;
- 154   2            P8255_CTL = portC;
- 155   2          break;
- 156   2          
- 157   2          default:
- 158   2          break;
- 159   2        }
- 160   1      }
- 161          
- 162          /**
- 163            * @brief  GPIO口某位读取当前状态函数
- 164            * @param  GPIOx 某一GPIO口  
- 165            * @param  GPIO_Pin_x  某一GPIO口的某一位
- 166            * @retval 某一GPIO口当前GPIO的状态
- 167            */
- 168          uint8_t PORTx_ReadBits(uint8_t PORTx, unsigned char Port_Pin_x)
- 169          {
- 170   1        uint8_t xdata portA = P8255_A;
- 171   1        uint8_t xdata portB = P8255_B;
- 172   1        uint8_t xdata portC = P8255_C;
- 173   1        unsigned char returnStatus=0;
- 174   1        unsigned char Port_Pin_x_BIN=(int)pow(2,Port_Pin_x);
- 175   1        
- 176   1        switch(PORTx)
- 177   1        {
- 178   2          case PORT_A:
-C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 23:33:26 PAGE 4   
+ 123   2          
+ 124   2          default:
+ 125   2            
+ 126   2          break;
+ 127   2        }
+ 128   1          
+ 129   1      }
+ 130          /**
+ 131            * @brief  GPIO口某位复位函数
+ 132            * @param  GPIOx 某一GPIO口  
+ 133            * @param  GPIO_Pin_x  某一GPIO口的某一位
+ 134            * @retval void
+ 135            */
+ 136          void PORTx_ResetBits(unsigned char PORTx,unsigned char PORT_Pin_x)
+ 137          {
+ 138   1        uint8_t xdata portA = P8255_A;
+ 139   1        uint8_t xdata portB = P8255_B;
+ 140   1        uint8_t xdata portC = 0;
+ 141   1        switch(PORTx)
+ 142   1        {
+ 143   2          case PORT_A:
+ 144   2            portA &=(~(int)pow(2,PORT_Pin_x));
+ 145   2            P8255_A =portA;
+ 146   2          break;
+ 147   2          
+ 148   2          case PORT_B:
+ 149   2            portB &=(~(int)pow(2,PORT_Pin_x));
+ 150   2            P8255_B = portB;
+ 151   2          break;
+ 152   2          
+ 153   2          case PORT_C:
+ 154   2            portC = (PORT_Pin_x<<1)&0xfe;
+ 155   2            P8255_CTL = portC;
+ 156   2          break;
+ 157   2          
+ 158   2          default:
+ 159   2          break;
+ 160   2        }
+ 161   1      }
+ 162          
+ 163          /**
+ 164            * @brief  GPIO口某位读取当前状态函数
+ 165            * @param  GPIOx 某一GPIO口  
+ 166            * @param  GPIO_Pin_x  某一GPIO口的某一位
+ 167            * @retval 某一GPIO口当前GPIO的状态
+ 168            */
+ 169          uint8_t PORTx_ReadBits(uint8_t PORTx, unsigned char Port_Pin_x)
+ 170          {
+ 171   1        uint8_t xdata portA = P8255_A;
+ 172   1        uint8_t xdata portB = P8255_B;
+ 173   1        uint8_t xdata portC = P8255_C;
+ 174   1        unsigned char returnStatus=0;
+ 175   1        unsigned char Port_Pin_x_BIN=(int)pow(2,Port_Pin_x);
+ 176   1        
+ 177   1        switch(PORTx)
+ 178   1        {
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 00:44:45 PAGE 4   
 
- 179   2      //      P8255_A|=Port_Pin_x_BIN;
- 180   2            returnStatus = portA & Port_Pin_x_BIN;
- 181   2          break;
- 182   2          
- 183   2          case PORT_B:
- 184   2      //      P8255_B|=Port_Pin_x_BIN;
- 185   2            returnStatus = portB & Port_Pin_x_BIN;
- 186   2          break;
- 187   2          
- 188   2          case PORT_C:
- 189   2      //      P8255_C|=Port_Pin_x_BIN;
- 190   2            returnStatus = portC & Port_Pin_x_BIN;
- 191   2          break;
- 192   2          
+ 179   2          case PORT_A:
+ 180   2      //      P8255_A|=Port_Pin_x_BIN;
+ 181   2            returnStatus = portA & Port_Pin_x_BIN;
+ 182   2          break;
+ 183   2          
+ 184   2          case PORT_B:
+ 185   2      //      P8255_B|=Port_Pin_x_BIN;
+ 186   2            returnStatus = portB & Port_Pin_x_BIN;
+ 187   2          break;
+ 188   2          
+ 189   2          case PORT_C:
+ 190   2      //      P8255_C|=Port_Pin_x_BIN;
+ 191   2            returnStatus = portC & Port_Pin_x_BIN;
+ 192   2          break;
  193   2          
- 194   2          default:
- 195   2          break;
- 196   2        }
- 197   1        
- 198   1        return (returnStatus>>Port_Pin_x);
- 199   1      }
- 200          
- 201          void KeyReadBy82C55(void)
- 202          {
- 203   1        uint8_t keyStatus =0;
- 204   1        
- 205   1        keyStatus = P8255_A;
- 206   1      
- 207   1        P8255_B=~keyStatus;
- 208   1      
- 209   1      }
- 210          
+ 194   2          
+ 195   2          default:
+ 196   2          break;
+ 197   2        }
+ 198   1        
+ 199   1        return (returnStatus>>Port_Pin_x);
+ 200   1      }
+ 201          
+ 202          void KeyReadBy82C55(void)
+ 203          {
+ 204   1        uint8_t keyStatus =0;
+ 205   1        
+ 206   1        keyStatus = P8255_A;
+ 207   1      
+ 208   1        P8255_B=~keyStatus;
+ 209   1      
+ 210   1      }
  211          
- 212          void AToB(void)
- 213          {
- 214   1        uint8_t sendArray[1]={1};
- 215   1      
- 216   1        STB_SET;
- 217   1        C55_SendByte(PORT_A,sendArray[0]);
- 218   1        STB_RESET;
- 219   1        while(BUSY_STATUS);
- 220   1      }
- 221          uint8_t receiveFromA=0;
- 222          void BReceive(void)
- 223          {
- 224   1      //  uint8_t receiveFromA=0;
- 225   1        while(STB_STATUS);
- 226   1        BUSY_SET;
- 227   1        receiveFromA=C55_ReceiveByte(PORT_B);
- 228   1        HD7279ShowInt(receiveFromA);
- 229   1        BUSY_RESET;
- 230   1      }
- 231          
- 232          void SendOrReceive(void)
- 233          {
- 234   1        #if  ROLE ==     1
- 235   1          AToB();
- 236   1        #elif ROLE ==     2
-                  BReceive();
-                #endif
- 239   1      }
- 240          //void SendOrReceive(void)
-C51 COMPILER V9.59.0.0   82C55                                                             12/04/2018 23:33:26 PAGE 5   
+ 212          #define DATA_LENGTH   20
+ 213          static uint8_t xdata receiveFromB[DATA_LENGTH]={0};
+ 214          void AToB(void)
+ 215          {
+ 216   1        uint8_t xdata i=0;
+ 217   1      //  uint8_t sendArray[DATA_LENGTH]={20,19,18,17,16,15,14,13,55,22,33,44,54,65,78,46,63,126,52,40};
+ 218   1        uint8_t sendArray[DATA_LENGTH]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+ 219   1      
+ 220   1        for(i=0;i<DATA_LENGTH;i++)
+ 221   1        {
+ 222   2          STB_SET;
+ 223   2          C55_SendByte(PORT_A,sendArray[i]);
+ 224   2          receiveFromB[i]=C55_ReceiveByte(PORT_B);
+ 225   2          STB_RESET;
+ 226   2          while(BUSY_STATUS);
+ 227   2        }
+ 228   1        
+ 229   1        /*显示一下哈*/
+ 230   1      //  for(i=0;i<DATA_LENGTH;i++)
+ 231   1      //  {
+ 232   1      //    HD7279ShowInt(receiveFromB[i]);
+ 233   1      //  }
+ 234   1      //  STB_RESET;
+ 235   1      }
+ 236          
+ 237          static uint8_t xdata receiveFromA[DATA_LENGTH]={0};
+ 238          void BReceiveNoSort(void)
+ 239          {
+ 240   1        uint8_t xdata i=0;
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 00:44:45 PAGE 5   
 
- 241          //{
- 242          //  uint8_t xdata pc0 = BUSY_STATUS;
- 243          //  P8255_CTL=0x09; 
- 244          //  //STB_SET;
- 245          ////  C55_SendByte(PORT_A,sendArray[1]);
- 246          ////  STB_RESET;
- 247          ////  while(BUSY_STATUS);
- 248          //}
+ 241   1        while(STB_STATUS);
+ 242   1        BUSY_SET;
+ 243   1        receiveFromA[i]=C55_ReceiveByte(PORT_B);
+ 244   1        HD7279ShowInt(receiveFromA[i]);
+ 245   1        BUSY_RESET;
+ 246   1      }
+ 247          void BReceiveSort(void)
+ 248          {
+ 249   1        static uint8_t xdata i=0;
+ 250   1        static uint8_t xdata dataSort[DATA_LENGTH]={0};
+ 251   1        i++;
+ 252   1        if(i>=20)
+ 253   1        {
+ 254   2      //    while(STB_STATUS);
+ 255   2      //    BUSY_SET;
+ 256   2      //    /*开始排序*/
+ 257   2      //  //  memcpy(dataSort,receiveFromA,DATA_LENGTH);
+ 258   2      ////    MaoPaoSort(DATA_LENGTH,(int *)dataSort);
+ 259   2      //    for(i=0;i<DATA_LENGTH;i++)
+ 260   2      //    {
+ 261   2      //      
+ 262   2      //    }
+ 263   2      //    BUSY_RESET;
+ 264   2          i=0;
+ 265   2          /*排序结束*/
+ 266   2        } 
+ 267   1        
+ 268   1        while(STB_STATUS);
+ 269   1        BUSY_SET;
+ 270   1        receiveFromA[i]=C55_ReceiveByte(PORT_B);
+ 271   1        C55_SendByte(PORT_A,dataSort[i]);
+ 272   1        DelayMs(100);
+ 273   1        HD7279ShowInt(receiveFromA[i]);
+ 274   1        BUSY_RESET;
+ 275   1      
+ 276   1      }
+ 277          void SendOrReceive(void)
+ 278          {
+ 279   1        #if  ROLE ==     1
+                  AToB();
+                #elif ROLE ==     2
+ 282   1          BReceiveSort();
+ 283   1        #endif
+ 284   1      }
+ 285          void MaoPaoSort(uint32_t dataLength,int *dataSorted)
+ 286          {
+ 287   1        //比较的轮数
+ 288   1        uint32_t xdata i=0;  
+ 289   1         //每轮比较的次数
+ 290   1        uint32_t xdata j=0;
+ 291   1        int temp=0;
+ 292   1        for (i=0; i<dataLength-1; ++i)  //比较n-1轮
+ 293   1        {
+ 294   2            for (j=0; j<dataLength-1-i; ++j)  //每轮比较n-1-i次,
+ 295   2            {
+ 296   3                if (dataSorted[j] < dataSorted[j+1])
+ 297   3                {
+ 298   4                    temp = dataSorted[j];
+ 299   4                    dataSorted[j] = dataSorted[j+1];
+ 300   4                    dataSorted[j+1] = temp;
+ 301   4                }
+ 302   3            }
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 00:44:45 PAGE 6   
+
+ 303   2        }
+ 304   1      
+ 305   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    707    ----
-   CONSTANT SIZE    =      9    ----
-   XDATA SIZE       =      1      31
+   CODE SIZE        =   1212    ----
+   CONSTANT SIZE    =     28    ----
+   XDATA SIZE       =     61      60
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
