@@ -3,7 +3,7 @@
 #define __82C55_H
 
 #include "main.h"
-#define ROLE  2
+#define ROLE  	2
 #if  ROLE ==     1
 #define STB_STATUS  PORTx_ReadBits(PORT_C,PORT_PIN_4)
 #define STB_RESET		PORTx_ResetBits(PORT_C,PORT_PIN_4)

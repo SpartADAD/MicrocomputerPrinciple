@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 00:44:45 PAGE 1   
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 22:10:00 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE 82C55
@@ -62,7 +62,7 @@ line level    source
   52   1        switch(Port)
   53   1        {
   54   2          case PORT_A:
-C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 00:44:45 PAGE 2   
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 22:10:00 PAGE 2   
 
   55   2            P8255_A = dataSend;
   56   2          break;
@@ -82,7 +82,7 @@ line level    source
   70          
   71          uint8_t C55_ReceiveByte(uint8_t Port)
   72          {
-  73   1        uint8_t dataReceive= 0;
+  73   1        uint8_t xdata dataReceive= 0;
   74   1        switch(Port)
   75   1        {
   76   2          case PORT_A:
@@ -126,7 +126,7 @@ line level    source
  114   2            portB |=(int)pow(2,PORT_Pin_x);
  115   2            P8255_B = portB;
  116   2          break;
-C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 00:44:45 PAGE 3   
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 22:10:00 PAGE 3   
 
  117   2          
  118   2          case PORT_C:
@@ -190,7 +190,7 @@ line level    source
  176   1        
  177   1        switch(PORTx)
  178   1        {
-C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 00:44:45 PAGE 4   
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 22:10:00 PAGE 4   
 
  179   2          case PORT_A:
  180   2      //      P8255_A|=Port_Pin_x_BIN;
@@ -254,7 +254,7 @@ line level    source
  238          void BReceiveNoSort(void)
  239          {
  240   1        uint8_t xdata i=0;
-C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 00:44:45 PAGE 5   
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 22:10:00 PAGE 5   
 
  241   1        while(STB_STATUS);
  242   1        BUSY_SET;
@@ -269,60 +269,59 @@ line level    source
  251   1        i++;
  252   1        if(i>=20)
  253   1        {
- 254   2      //    while(STB_STATUS);
- 255   2      //    BUSY_SET;
- 256   2      //    /*开始排序*/
- 257   2      //  //  memcpy(dataSort,receiveFromA,DATA_LENGTH);
- 258   2      ////    MaoPaoSort(DATA_LENGTH,(int *)dataSort);
- 259   2      //    for(i=0;i<DATA_LENGTH;i++)
- 260   2      //    {
- 261   2      //      
- 262   2      //    }
- 263   2      //    BUSY_RESET;
- 264   2          i=0;
- 265   2          /*排序结束*/
- 266   2        } 
- 267   1        
- 268   1        while(STB_STATUS);
- 269   1        BUSY_SET;
- 270   1        receiveFromA[i]=C55_ReceiveByte(PORT_B);
- 271   1        C55_SendByte(PORT_A,dataSort[i]);
- 272   1        DelayMs(100);
- 273   1        HD7279ShowInt(receiveFromA[i]);
- 274   1        BUSY_RESET;
- 275   1      
- 276   1      }
- 277          void SendOrReceive(void)
- 278          {
- 279   1        #if  ROLE ==     1
+ 254   2      //    BUSY_SET;
+ 255   2      //    /*开始排序*/
+ 256   2      //  //  memcpy(dataSort,receiveFromA,DATA_LENGTH);
+ 257   2      ////    MaoPaoSort(DATA_LENGTH,(int *)dataSort);
+ 258   2      //    for(i=0;i<DATA_LENGTH;i++)
+ 259   2      //    {
+ 260   2      //      
+ 261   2      //    }
+ 262   2      //    BUSY_RESET;
+ 263   2          i=0;
+ 264   2          /*排序结束*/
+ 265   2        } 
+ 266   1        
+ 267   1        while(STB_STATUS);
+ 268   1        BUSY_SET;
+ 269   1        receiveFromA[i]=C55_ReceiveByte(PORT_B);
+ 270   1        C55_SendByte(PORT_A,dataSort[i]);
+ 271   1        HD7279ShowInt(receiveFromA[i]);
+ 272   1        DelayMs(500);
+ 273   1        BUSY_RESET;
+ 274   1      
+ 275   1      }
+ 276          void SendOrReceive(void)
+ 277          {
+ 278   1        #if  ROLE ==     1
                   AToB();
                 #elif ROLE ==     2
- 282   1          BReceiveSort();
- 283   1        #endif
- 284   1      }
- 285          void MaoPaoSort(uint32_t dataLength,int *dataSorted)
- 286          {
- 287   1        //比较的轮数
- 288   1        uint32_t xdata i=0;  
- 289   1         //每轮比较的次数
- 290   1        uint32_t xdata j=0;
- 291   1        int temp=0;
- 292   1        for (i=0; i<dataLength-1; ++i)  //比较n-1轮
- 293   1        {
- 294   2            for (j=0; j<dataLength-1-i; ++j)  //每轮比较n-1-i次,
- 295   2            {
- 296   3                if (dataSorted[j] < dataSorted[j+1])
- 297   3                {
- 298   4                    temp = dataSorted[j];
- 299   4                    dataSorted[j] = dataSorted[j+1];
- 300   4                    dataSorted[j+1] = temp;
- 301   4                }
- 302   3            }
-C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 00:44:45 PAGE 6   
+ 281   1          BReceiveSort();
+ 282   1        #endif
+ 283   1      }
+ 284          void MaoPaoSort(uint32_t dataLength,int *dataSorted)
+ 285          {
+ 286   1        //比较的轮数
+ 287   1        uint32_t xdata i=0;  
+ 288   1         //每轮比较的次数
+ 289   1        uint32_t xdata j=0;
+ 290   1        int temp=0;
+ 291   1        for (i=0; i<dataLength-1; ++i)  //比较n-1轮
+ 292   1        {
+ 293   2            for (j=0; j<dataLength-1-i; ++j)  //每轮比较n-1-i次,
+ 294   2            {
+ 295   3                if (dataSorted[j] < dataSorted[j+1])
+ 296   3                {
+ 297   4                    temp = dataSorted[j];
+ 298   4                    dataSorted[j] = dataSorted[j+1];
+ 299   4                    dataSorted[j+1] = temp;
+ 300   4                }
+ 301   3            }
+ 302   2        }
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 22:10:00 PAGE 6   
 
- 303   2        }
- 304   1      
- 305   1      }
+ 303   1      
+ 304   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

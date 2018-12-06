@@ -70,7 +70,7 @@ void C55_SendByte(uint8_t Port,uint8_t dataSend)
 
 uint8_t C55_ReceiveByte(uint8_t Port)
 {
-	uint8_t dataReceive= 0;
+	uint8_t xdata dataReceive= 0;
 	switch(Port)
 	{
 		case PORT_A:
@@ -251,7 +251,6 @@ void BReceiveSort(void)
 	i++;
 	if(i>=20)
 	{
-//		while(STB_STATUS);
 //		BUSY_SET;
 //		/*开始排序*/
 //	//	memcpy(dataSort,receiveFromA,DATA_LENGTH);
@@ -269,8 +268,8 @@ void BReceiveSort(void)
 	BUSY_SET;
 	receiveFromA[i]=C55_ReceiveByte(PORT_B);
 	C55_SendByte(PORT_A,dataSort[i]);
-	DelayMs(100);
 	HD7279ShowInt(receiveFromA[i]);
+	DelayMs(500);
 	BUSY_RESET;
 
 }
