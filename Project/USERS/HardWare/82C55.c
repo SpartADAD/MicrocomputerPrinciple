@@ -252,21 +252,17 @@ void BReceiveSort(void)
 	while(STB_STATUS);
 	BUSY_SET;
 	receiveFromA[i]=C55_ReceiveByte(PORT_B);
-	C55_SendByte(PORT_A,dataSort[i]);
+	dataSort[i]=receiveFromA[i];
 	i++;
 	
 	if(i>=20)
 	{
-		for(i=0;i<DATA_LENGTH;i++)
-		{
-			dataSort[i]=receiveFromA[i];
-		}
 		/*开始排序*/
 		MaoPaoSort(DATA_LENGTH,dataSort);
 		/*排序结束*/
 		for(i=0;i<DATA_LENGTH;i++)
 		{
-			HD7279ShowInt(dataSort[i]);
+			HD7279ShowInt(receiveFromA[i]);
 			DelayMs(1000);
 		}
 		i=0;
