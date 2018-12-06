@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 22:10:00 PAGE 1   
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 23:56:59 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE 82C55
@@ -62,7 +62,7 @@ line level    source
   52   1        switch(Port)
   53   1        {
   54   2          case PORT_A:
-C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 22:10:00 PAGE 2   
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 23:56:59 PAGE 2   
 
   55   2            P8255_A = dataSend;
   56   2          break;
@@ -126,7 +126,7 @@ line level    source
  114   2            portB |=(int)pow(2,PORT_Pin_x);
  115   2            P8255_B = portB;
  116   2          break;
-C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 22:10:00 PAGE 3   
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 23:56:59 PAGE 3   
 
  117   2          
  118   2          case PORT_C:
@@ -190,7 +190,7 @@ line level    source
  176   1        
  177   1        switch(PORTx)
  178   1        {
-C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 22:10:00 PAGE 4   
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 23:56:59 PAGE 4   
 
  179   2          case PORT_A:
  180   2      //      P8255_A|=Port_Pin_x_BIN;
@@ -226,11 +226,11 @@ line level    source
  210   1      }
  211          
  212          #define DATA_LENGTH   20
- 213          static uint8_t xdata receiveFromB[DATA_LENGTH]={0};
+ 213          static int xdata receiveFromB[DATA_LENGTH]={0};
  214          void AToB(void)
  215          {
  216   1        uint8_t xdata i=0;
- 217   1      //  uint8_t sendArray[DATA_LENGTH]={20,19,18,17,16,15,14,13,55,22,33,44,54,65,78,46,63,126,52,40};
+ 217   1        //uint8_t sendArray[DATA_LENGTH]={20,19,18,17,16,15,14,13,55,22,33,44,54,65,78,46,63,126,52,40};
  218   1        uint8_t sendArray[DATA_LENGTH]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
  219   1      
  220   1        for(i=0;i<DATA_LENGTH;i++)
@@ -250,11 +250,11 @@ line level    source
  234   1      //  STB_RESET;
  235   1      }
  236          
- 237          static uint8_t xdata receiveFromA[DATA_LENGTH]={0};
+ 237          static int xdata receiveFromA[DATA_LENGTH]={0};
  238          void BReceiveNoSort(void)
  239          {
  240   1        uint8_t xdata i=0;
-C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 22:10:00 PAGE 5   
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 23:56:59 PAGE 5   
 
  241   1        while(STB_STATUS);
  242   1        BUSY_SET;
@@ -265,69 +265,73 @@ line level    source
  247          void BReceiveSort(void)
  248          {
  249   1        static uint8_t xdata i=0;
- 250   1        static uint8_t xdata dataSort[DATA_LENGTH]={0};
- 251   1        i++;
- 252   1        if(i>=20)
- 253   1        {
- 254   2      //    BUSY_SET;
- 255   2      //    /*开始排序*/
- 256   2      //  //  memcpy(dataSort,receiveFromA,DATA_LENGTH);
- 257   2      ////    MaoPaoSort(DATA_LENGTH,(int *)dataSort);
- 258   2      //    for(i=0;i<DATA_LENGTH;i++)
- 259   2      //    {
- 260   2      //      
- 261   2      //    }
- 262   2      //    BUSY_RESET;
- 263   2          i=0;
- 264   2          /*排序结束*/
- 265   2        } 
- 266   1        
- 267   1        while(STB_STATUS);
- 268   1        BUSY_SET;
- 269   1        receiveFromA[i]=C55_ReceiveByte(PORT_B);
- 270   1        C55_SendByte(PORT_A,dataSort[i]);
- 271   1        HD7279ShowInt(receiveFromA[i]);
- 272   1        DelayMs(500);
- 273   1        BUSY_RESET;
- 274   1      
- 275   1      }
- 276          void SendOrReceive(void)
- 277          {
- 278   1        #if  ROLE ==     1
-                  AToB();
-                #elif ROLE ==     2
- 281   1          BReceiveSort();
- 282   1        #endif
- 283   1      }
- 284          void MaoPaoSort(uint32_t dataLength,int *dataSorted)
- 285          {
- 286   1        //比较的轮数
- 287   1        uint32_t xdata i=0;  
- 288   1         //每轮比较的次数
- 289   1        uint32_t xdata j=0;
- 290   1        int temp=0;
- 291   1        for (i=0; i<dataLength-1; ++i)  //比较n-1轮
- 292   1        {
- 293   2            for (j=0; j<dataLength-1-i; ++j)  //每轮比较n-1-i次,
- 294   2            {
- 295   3                if (dataSorted[j] < dataSorted[j+1])
- 296   3                {
- 297   4                    temp = dataSorted[j];
- 298   4                    dataSorted[j] = dataSorted[j+1];
- 299   4                    dataSorted[j+1] = temp;
- 300   4                }
- 301   3            }
- 302   2        }
-C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 22:10:00 PAGE 6   
+ 250   1        static int xdata dataSort[DATA_LENGTH]={0};
+ 251   1        
+ 252   1        while(STB_STATUS);
+ 253   1        BUSY_SET;
+ 254   1        receiveFromA[i]=C55_ReceiveByte(PORT_B);
+ 255   1        C55_SendByte(PORT_A,dataSort[i]);
+ 256   1        i++;
+ 257   1        
+ 258   1        if(i>=20)
+ 259   1        {
+ 260   2          for(i=0;i<DATA_LENGTH;i++)
+ 261   2          {
+ 262   3            dataSort[i]=receiveFromA[i];
+ 263   3          }
+ 264   2          /*开始排序*/
+ 265   2          MaoPaoSort(DATA_LENGTH,dataSort);
+ 266   2          /*排序结束*/
+ 267   2          for(i=0;i<DATA_LENGTH;i++)
+ 268   2          {
+ 269   3            HD7279ShowInt(dataSort[i]);
+ 270   3            DelayMs(1000);
+ 271   3          }
+ 272   2          i=0;
+ 273   2          
+ 274   2        }
+ 275   1      //  HD7279ShowInt(receiveFromA[i]);
+ 276   1        DelayMs(200);
+ 277   1        BUSY_RESET;
+ 278   1      
+ 279   1      }
+ 280          void SendOrReceive(void)
+ 281          {
+ 282   1        #if  ROLE ==     1
+ 283   1          AToB();
+ 284   1        #elif ROLE ==     2
+                  BReceiveSort();
+                #endif
+ 287   1      }
+ 288          void MaoPaoSort(uint32_t dataLength,int *dataSorted)
+ 289          {
+ 290   1        //比较的轮数
+ 291   1        uint32_t xdata i=0;  
+ 292   1         //每轮比较的次数
+ 293   1        uint32_t xdata j=0;
+ 294   1        int temp=0;
+ 295   1        for (i=0; i<dataLength-1; ++i)  //比较n-1轮
+ 296   1        {
+ 297   2            for (j=0; j<dataLength-1-i; ++j)  //每轮比较n-1-i次,
+ 298   2            {
+ 299   3                if (dataSorted[j] < dataSorted[j+1])
+ 300   3                {
+ 301   4                    temp = dataSorted[j];
+ 302   4                    dataSorted[j] = dataSorted[j+1];
+C51 COMPILER V9.59.0.0   82C55                                                             12/06/2018 23:56:59 PAGE 6   
 
- 303   1      
- 304   1      }
+ 303   4                    dataSorted[j+1] = temp;
+ 304   4                }
+ 305   3            }
+ 306   2        }
+ 307   1      
+ 308   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1212    ----
+   CODE SIZE        =   1348    ----
    CONSTANT SIZE    =     28    ----
-   XDATA SIZE       =     61      60
+   XDATA SIZE       =    121      60
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

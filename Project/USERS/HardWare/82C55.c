@@ -210,11 +210,11 @@ void KeyReadBy82C55(void)
 }
 
 #define DATA_LENGTH   20
-static uint8_t xdata receiveFromB[DATA_LENGTH]={0};
+static int xdata receiveFromB[DATA_LENGTH]={0};
 void AToB(void)
 {
 	uint8_t xdata i=0;
-//	uint8_t sendArray[DATA_LENGTH]={20,19,18,17,16,15,14,13,55,22,33,44,54,65,78,46,63,126,52,40};
+	//uint8_t sendArray[DATA_LENGTH]={20,19,18,17,16,15,14,13,55,22,33,44,54,65,78,46,63,126,52,40};
 	uint8_t sendArray[DATA_LENGTH]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
 
 	for(i=0;i<DATA_LENGTH;i++)
@@ -234,7 +234,7 @@ void AToB(void)
 //	STB_RESET;
 }
 
-static uint8_t xdata receiveFromA[DATA_LENGTH]={0};
+static int xdata receiveFromA[DATA_LENGTH]={0};
 void BReceiveNoSort(void)
 {
 	uint8_t xdata i=0;
@@ -247,29 +247,33 @@ void BReceiveNoSort(void)
 void BReceiveSort(void)
 {
 	static uint8_t xdata i=0;
-	static uint8_t xdata dataSort[DATA_LENGTH]={0};
-	i++;
-	if(i>=20)
-	{
-//		BUSY_SET;
-//		/*开始排序*/
-//	//	memcpy(dataSort,receiveFromA,DATA_LENGTH);
-////		MaoPaoSort(DATA_LENGTH,(int *)dataSort);
-//		for(i=0;i<DATA_LENGTH;i++)
-//		{
-//			
-//		}
-//		BUSY_RESET;
-		i=0;
-		/*排序结束*/
-	}	
+	static int xdata dataSort[DATA_LENGTH]={0};
 	
 	while(STB_STATUS);
 	BUSY_SET;
 	receiveFromA[i]=C55_ReceiveByte(PORT_B);
 	C55_SendByte(PORT_A,dataSort[i]);
-	HD7279ShowInt(receiveFromA[i]);
-	DelayMs(500);
+	i++;
+	
+	if(i>=20)
+	{
+		for(i=0;i<DATA_LENGTH;i++)
+		{
+			dataSort[i]=receiveFromA[i];
+		}
+		/*开始排序*/
+		MaoPaoSort(DATA_LENGTH,dataSort);
+		/*排序结束*/
+		for(i=0;i<DATA_LENGTH;i++)
+		{
+			HD7279ShowInt(dataSort[i]);
+			DelayMs(1000);
+		}
+		i=0;
+		
+	}
+//	HD7279ShowInt(receiveFromA[i]);
+	DelayMs(200);
 	BUSY_RESET;
 
 }
