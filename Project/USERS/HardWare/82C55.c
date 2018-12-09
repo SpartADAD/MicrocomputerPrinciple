@@ -161,11 +161,12 @@ void PORTx_ResetBits(unsigned char PORTx,unsigned char PORT_Pin_x)
 }
 
 /**
-	* @brief  GPIO口某位读取当前状态函数
-  * @param  GPIOx 某一GPIO口  
-	* @param  GPIO_Pin_x	某一GPIO口的某一位
-  * @retval 某一GPIO口当前GPIO的状态
+  * @brief  PORT口某位读取当前状态函数
+  * @param  PORTx 某一PORT口  
+  * @param  PORT_Pin_x	某一PORT口的某一位
+  * @retval 某一PORT口某一位当前的状态
   */
+
 uint8_t PORTx_ReadBits(uint8_t PORTx, unsigned char Port_Pin_x)
 {
 	uint8_t xdata portA = P8255_A;

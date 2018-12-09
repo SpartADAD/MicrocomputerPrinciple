@@ -72,7 +72,16 @@ void MotorRotate(uint8_t rotateDirection,uint32_t rotateVel)
 	}
 
 }
-#define MAIN_PERIOD_MS    5
+/*** @brief  电机旋转
+			timeControl是半个周期的时间2.5ms*400 =1s
+			静态变量runTime用来计数 计算运行时间 由于本函数是2.5ms运行1次所以当runTime运行等于2倍的timeControl相当于1个周期=2s
+runtime<=timeControl时电机顺时针 timeControl<runTime<=2*timeControl另外半个周期让电机逆时针
+			runStep是控制通电相序，通过传入序号控制电机相序通电（由82C55 A0 A1 A2 A3控制）
+			通过读取82C55 B1 B0读取开关去控制电机转速rotateVel由1-4 每次相当于增加2.5ms延时 
+  * @param  void           
+  * @retval None
+  */
+
 #define MOTOR_VEL_HIGH_C55 PORTx_ReadBits(PORT_B,PORT_PIN_1)
 #define MOTOR_VEL_LOW_C55 PORTx_ReadBits(PORT_B,PORT_PIN_0)
 
