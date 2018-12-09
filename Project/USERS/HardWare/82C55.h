@@ -70,8 +70,11 @@ void BReceiveNoSort(void);
 void BReceiveSort(void);
 uint8_t C55_ReceiveByte(uint8_t Port);
 void C55_SendByte(uint8_t Port,uint8_t dataSend);
-uint8_t C55_ReadBits(uint8_t Port, unsigned char Port_Pin_x);
 void KeyReadBy82C55(void);
 void SendOrReceive(void);
 void MaoPaoSort(uint32_t dataLength,int *dataSorted);
+uint8_t PORTx_ReadBits(uint8_t PORTx, unsigned char Port_Pin_x);
+
+extern uint8_t xdata P8255_A ;
+
 #endif

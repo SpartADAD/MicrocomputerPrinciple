@@ -5,6 +5,7 @@
 #include "math.h"
 #include "main.h"
 #include "delay.h"
+#include "82c55.h"
 
 #define CLOCK_WISE		        1
 #define COUNTER_CLOCK_WISE		0
@@ -71,12 +72,15 @@ void MotorRotate(uint8_t rotateDirection,uint32_t rotateVel)
 	}
 
 }
+#define MAIN_PERIOD_MS    5
+#define MOTOR_VEL_HIGH_C55 PORTx_ReadBits(PORT_B,PORT_PIN_1)
+#define MOTOR_VEL_LOW_C55 PORTx_ReadBits(PORT_B,PORT_PIN_0)
 
 void MotorRotateByTIM(void)
 {
 	uint8_t xdata myCode[8]={0x01,0x03,0x02,0x06,0x04,0x0C,0x08,0x09};
-	uint16_t xdata timeControl=200;
-	uint16_t xdata rotateVel=((MOTOR_VEL_HIGH<<1)|MOTOR_VEL_LOW);
+	uint16_t xdata timeControl=400;
+	uint16_t xdata rotateVel=1+((MOTOR_VEL_HIGH_C55<<1)|MOTOR_VEL_LOW_C55);
 	static  uint8_t xdata rotateDirection=CLOCK_WISE;
 	static uint32_t xdata runTime=0;
 	static uint16_t xdata rotateVelTime=0;
@@ -115,8 +119,6 @@ void MotorRotateByTIM(void)
 		}
 	}
 	
-	P1 = myCode[runStep];
-	
-		
+	P8255_A = myCode[runStep];
 }
 
