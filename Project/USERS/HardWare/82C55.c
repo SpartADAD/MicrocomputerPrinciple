@@ -11,8 +11,12 @@ uint8_t xdata P8255_A _at_ 0xf800;
 uint8_t xdata P8255_B _at_ 0xf801;
 uint8_t xdata P8255_C _at_ 0xf802;
 
-#define A0    P0^0  
-#define A1    P0^1  
+
+/**
+	* @brief  82C55初始化函数 A口作为输出B口作为输入 C口高位做输出 低位做输入
+  * @param  void
+  * @retval void
+  */
 void MyC55_Init(void)
 {
 	C55Init_t C55InitStucture={0};
@@ -28,6 +32,11 @@ void MyC55_Init(void)
 	C55_Init(C55InitStucture);
 
 }
+/**
+	* @brief  82C55初始化函数
+  * @param  C55InitStuct 初始化结构体 通过传递结构体对控制字进行赋值
+  * @retval void
+  */
 void C55_Init(C55Init_t C55InitStuct)
 {
 	uint8_t xdata initCode = 0x80;
@@ -46,7 +55,12 @@ void C55_Init(C55Init_t C55InitStuct)
 }	
 
 
-
+/**
+	* @brief  82C55某个端口发数函数 相当于改变端口状态
+  * @param  Port 82C55某一个端口
+	* @param  dataSend 要发送的字节
+  * @retval void
+  */
 void C55_SendByte(uint8_t Port,uint8_t dataSend)
 {
 	switch(Port)
@@ -67,7 +81,11 @@ void C55_SendByte(uint8_t Port,uint8_t dataSend)
 		break;
 	}
 }
-
+/**
+	* @brief  82C55某个端口接受函数 得到当前端口8位的数据大小
+  * @param  Port 82C55某一个端口
+  * @retval dataReceive 读取端口当前的电平值得到8位返回值
+  */
 uint8_t C55_ReceiveByte(uint8_t Port)
 {
 	uint8_t xdata dataReceive= 0;
@@ -93,9 +111,9 @@ uint8_t C55_ReceiveByte(uint8_t Port)
 }
 	
 /**
-  * @brief  GPIO口某位置位函数
-  * @param  GPIOx 某一GPIO口  
-	* @param  GPIO_Pin_x	某一GPIO口的某一位
+  * @brief  82C55 PORT口某位置位函数
+  * @param  PORTx 某一GPIO口  
+	* @param  PORT_Pin_x	某一GPIO口的某一位
   * @retval void
   */
 void PORTx_SetBits(unsigned char PORTx,unsigned char PORT_Pin_x)
@@ -128,9 +146,9 @@ void PORTx_SetBits(unsigned char PORTx,unsigned char PORT_Pin_x)
 		
 }
 /**
-	* @brief  GPIO口某位复位函数
-  * @param  GPIOx 某一GPIO口  
-	* @param  GPIO_Pin_x	某一GPIO口的某一位
+	* @brief  82C55 PORT口某位复位函数
+  * @param  PORTx 某一GPIO口  
+	* @param  PORT_Pin_x	某一GPIO口的某一位
   * @retval void
   */
 void PORTx_ResetBits(unsigned char PORTx,unsigned char PORT_Pin_x)
@@ -178,17 +196,14 @@ uint8_t PORTx_ReadBits(uint8_t PORTx, unsigned char Port_Pin_x)
 	switch(PORTx)
 	{
 		case PORT_A:
-//			P8255_A|=Port_Pin_x_BIN;
 			returnStatus = portA & Port_Pin_x_BIN;
 		break;
 		
 		case PORT_B:
-//			P8255_B|=Port_Pin_x_BIN;
 			returnStatus = portB & Port_Pin_x_BIN;
 		break;
 		
 		case PORT_C:
-//			P8255_C|=Port_Pin_x_BIN;
 			returnStatus = portC & Port_Pin_x_BIN;
 		break;
 		
@@ -199,7 +214,11 @@ uint8_t PORTx_ReadBits(uint8_t PORTx, unsigned char Port_Pin_x)
 	
 	return (returnStatus>>Port_Pin_x);
 }
-
+/**
+  * @brief  读取82C55（A口作为输入B口作为输出）通过开关控制led亮灭
+  * @param  void
+  * @retval void
+  */
 void KeyReadBy82C55(void)
 {
 	uint8_t keyStatus =0;
@@ -209,13 +228,18 @@ void KeyReadBy82C55(void)
 	P8255_B=~keyStatus;
 
 }
-
+/*定义发送的字节大小*/
 #define DATA_LENGTH   20
+/*定义发送的字节大小*/
 static int xdata receiveFromB[DATA_LENGTH]={0};
+/**
+  * @brief  甲箱发数函数
+  * @param  void
+  * @retval void
+  */
 void AToB(void)
 {
 	uint8_t xdata i=0;
-	//uint8_t sendArray[DATA_LENGTH]={20,19,18,17,16,15,14,13,55,22,33,44,54,65,78,46,63,126,52,40};
 	uint8_t sendArray[DATA_LENGTH]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
 
 	for(i=0;i<DATA_LENGTH;i++)
@@ -226,25 +250,14 @@ void AToB(void)
 		STB_RESET;
 		while(BUSY_STATUS);
 	}
-	
-	/*显示一下哈*/
-//	for(i=0;i<DATA_LENGTH;i++)
-//	{
-//		HD7279ShowInt(receiveFromB[i]);
-//	}
-//	STB_RESET;
 }
-
+/*从A端口接受的数组*/
 static int xdata receiveFromA[DATA_LENGTH]={0};
-void BReceiveNoSort(void)
-{
-	uint8_t xdata i=0;
-	while(STB_STATUS);
-	BUSY_SET;
-	receiveFromA[i]=C55_ReceiveByte(PORT_B);
-	HD7279ShowInt(receiveFromA[i]);
-	BUSY_RESET;
-}
+/**
+  * @brief  乙箱接受函数
+  * @param  void
+  * @retval void
+  */
 void BReceiveSort(void)
 {
 	static uint8_t xdata i=0;
@@ -267,13 +280,16 @@ void BReceiveSort(void)
 			DelayMs(1000);
 		}
 		i=0;
-		
 	}
-//	HD7279ShowInt(receiveFromA[i]);
 	DelayMs(200);
 	BUSY_RESET;
 
 }
+/**
+	* @brief  发送或者接受 通过预编译宏下载到不同箱子上
+  * @param  void
+  * @retval void
+  */
 void SendOrReceive(void)
 {
 	#if  ROLE ==     1
@@ -282,6 +298,12 @@ void SendOrReceive(void)
 		BReceiveSort();
 	#endif
 }
+/**
+  * @brief  冒泡排序法 从左到右由大到小
+  * @param  dataLength 排血数组长度
+	* @param  dataSorted 要排序的数组
+  * @retval void
+  */
 void MaoPaoSort(uint32_t dataLength,int *dataSorted)
 {
 	//比较的轮数

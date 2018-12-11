@@ -3,6 +3,7 @@
 #define __82C55_H
 
 #include "main.h"
+/*定义当前是哪个箱子 下载不同程序*/
 #define ROLE  	2
 #if  ROLE ==     1
 #define STB_STATUS  PORTx_ReadBits(PORT_C,PORT_PIN_4)

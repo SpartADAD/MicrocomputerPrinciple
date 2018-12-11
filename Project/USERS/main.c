@@ -49,8 +49,8 @@ void main(void)
 			if(GetRunFlag())
 			{
 				//KeyReadBy82C55();
-				//SendOrReceive();
-				MotorRotateByTIM();
+				SendOrReceive();
+//				MotorRotateByTIM();
 			}
 		#endif
 	}
