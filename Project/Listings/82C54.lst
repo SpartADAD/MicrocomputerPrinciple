@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   82C54                                                             12/11/2018 22:46:14 PAGE 1   
+C51 COMPILER V9.59.0.0   82C54                                                             12/11/2018 23:00:30 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE 82C54
@@ -62,7 +62,7 @@ line level    source
   52          
   53          void EXInterruptLed(void)
   54          {
-C51 COMPILER V9.59.0.0   82C54                                                             12/11/2018 22:46:14 PAGE 2   
+C51 COMPILER V9.59.0.0   82C54                                                             12/11/2018 23:00:30 PAGE 2   
 
   55   1        uint32_t time0Cnt=P8254_0;
   56   1        static uint16_t timeDelay=0;

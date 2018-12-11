@@ -67,7 +67,6 @@ typedef struct
 void MyC55_Init(void);
 void C55_Init(C55Init_t C55InitStuct);
 void AToB(void);
-void BReceiveNoSort(void);
 void BReceiveSort(void);
 uint8_t C55_ReceiveByte(uint8_t Port);
 void C55_SendByte(uint8_t Port,uint8_t dataSend);
