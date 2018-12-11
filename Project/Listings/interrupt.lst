@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/09/2018 18:01:07 PAGE 1   
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/11/2018 22:57:50 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE INTERRUPT
@@ -62,7 +62,7 @@ line level    source
                   
                 #endif
   53   1      }
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/09/2018 18:01:07 PAGE 2   
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/11/2018 22:57:50 PAGE 2   
 
   54          
   55          /*** @brief   定时器1中断 timeCnt计数，可能进一次中断的时间太短，通过软件增
@@ -110,47 +110,49 @@ line level    source
   96            */
   97          void EX0Handler(void) interrupt 0
   98          {
-  99   1      //  gParam.flag++;
- 100   1      //  gParam.flag%=2;
- 101   1      //  P1=0xff;
- 102   1      }
- 103          /*** @brief    外部中断1中断函数 
- 104            *  @param    void       
- 105            *  @retval   None
- 106            */
- 107          void EX1Handler(void) interrupt 2
- 108          {
- 109   1      
- 110   1      
+  99   1        gParam.c55LedMode++;
+ 100   1        gParam.c55LedMode%=2;
+ 101   1      //  gParam.flag++;
+ 102   1      //  gParam.flag%=2;
+ 103   1      //  P1=0xff;
+ 104   1      }
+ 105          /*** @brief    外部中断1中断函数 
+ 106            *  @param    void       
+ 107            *  @retval   None
+ 108            */
+ 109          void EX1Handler(void) interrupt 2
+ 110          {
  111   1      
  112   1      
- 113   1      } 
- 114          /*** @brief    串口中断函数
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/09/2018 18:01:07 PAGE 3   
+ 113   1      
+ 114   1      
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/11/2018 22:57:50 PAGE 3   
 
- 115            *  @param    void       
- 116            *  @retval   None
- 117            */
- 118          void USART_Handler(void)  interrupt 4 
- 119          {
- 120   1        if(RI)
- 121   1        {
- 122   2          RI=0;
- 123   2          gParam.receiveDataByUsart = (uint8_t)SBUF;
- 124   2        }
- 125   1      }
- 126          /*** @brief    中断优先级配置
- 127            *  @param    void       
- 128            *  @retval   None
- 129            */
- 130          void Interrupt_Priority(uint8_t priority)
- 131          {
- 132   1          IP |= priority;
- 133   1      }
+ 115   1      } 
+ 116          /*** @brief    串口中断函数
+ 117            *  @param    void       
+ 118            *  @retval   None
+ 119            */
+ 120          void USART_Handler(void)  interrupt 4 
+ 121          {
+ 122   1        if(RI)
+ 123   1        {
+ 124   2          RI=0;
+ 125   2          gParam.receiveDataByUsart = (uint8_t)SBUF;
+ 126   2        }
+ 127   1      }
+ 128          /*** @brief    中断优先级配置
+ 129            *  @param    void       
+ 130            *  @retval   None
+ 131            */
+ 132          void Interrupt_Priority(uint8_t priority)
+ 133          {
+ 134   1          IP |= priority;
+ 135   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    132    ----
+   CODE SIZE        =    154    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      3    ----
    PDATA SIZE       =   ----    ----

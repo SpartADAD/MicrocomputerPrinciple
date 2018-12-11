@@ -96,6 +96,8 @@ void EXHandlerInit(uint8_t EXNumber,uint8_t workMode)
   */
 void EX0Handler(void) interrupt 0
 {
+	gParam.c55LedMode++;
+	gParam.c55LedMode%=2;
 //	gParam.flag++;
 //	gParam.flag%=2;
 //	P1=0xff;

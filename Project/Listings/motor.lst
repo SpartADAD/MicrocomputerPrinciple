@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MOTOR                                                             12/09/2018 18:01:07 PAGE 1   
+C51 COMPILER V9.59.0.0   MOTOR                                                             12/11/2018 22:57:50 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MOTOR
@@ -62,7 +62,7 @@ line level    source
   52   3          }
   53   2        }
   54   1        else
-C51 COMPILER V9.59.0.0   MOTOR                                                             12/09/2018 18:01:07 PAGE 2   
+C51 COMPILER V9.59.0.0   MOTOR                                                             12/11/2018 22:57:50 PAGE 2   
 
   55   1        {
   56   2          for(sequence = SEQUENCE-1; sequence>0;sequence--)
@@ -84,58 +84,71 @@ line level    source
   72   2        }
   73   1      
   74   1      }
-  75          #define MAIN_PERIOD_MS    5
-  76          #define MOTOR_VEL_HIGH_C55 PORTx_ReadBits(PORT_B,PORT_PIN_1)
-  77          #define MOTOR_VEL_LOW_C55 PORTx_ReadBits(PORT_B,PORT_PIN_0)
-  78          
-  79          void MotorRotateByTIM(void)
-  80          {
-  81   1        uint8_t xdata myCode[8]={0x01,0x03,0x02,0x06,0x04,0x0C,0x08,0x09};
-  82   1        uint16_t xdata timeControl=400;
-  83   1        uint16_t xdata rotateVel=1+((MOTOR_VEL_HIGH_C55<<1)|MOTOR_VEL_LOW_C55);
-  84   1        static  uint8_t xdata rotateDirection=CLOCK_WISE;
-  85   1        static uint32_t xdata runTime=0;
-  86   1        static uint16_t xdata rotateVelTime=0;
-  87   1        static char xdata runStep =0;
-  88   1        runTime++;
-  89   1        rotateVelTime++;
-  90   1        
-  91   1        if(runTime<=timeControl)
-  92   1        {
-  93   2          rotateDirection = CLOCK_WISE;
-  94   2        }
-  95   1        else if(runTime>timeControl&&runTime<=2*timeControl)
-  96   1        {
-  97   2          rotateDirection = COUNTER_CLOCK_WISE;
-  98   2        }
-  99   1        else if(runTime>2*timeControl)
- 100   1        {
- 101   2          runTime=0;
+  75          /*** @brief  电机旋转
+  76                timeControl是半个周期的时间2.5ms*400 =1s
+  77                静态变量runTime用来计数 计算运行时间 由于本函数是2.5ms运行1次所以当runTime运
+             -行等于2倍的timeControl相当于1个周期=2s
+  78          runtime<=timeControl时电机顺时针 timeControl<runTime<=2*timeControl另外半个周期让电机逆时
+             -针
+  79                runStep是控制通电相序，通过传入序号控制电机相序通电（由82C55 A0 A1 A2 A3控制�
+             -��
+  80                通过读取82C55 B1 B0读取开关去控制电机转速rotateVel由1-4 每次相当于增加2.5ms延�
+             -� 
+  81            * @param  void           
+  82            * @retval None
+  83            */
+  84          
+  85          #define MOTOR_VEL_HIGH_C55 PORTx_ReadBits(PORT_B,PORT_PIN_1)
+  86          #define MOTOR_VEL_LOW_C55 PORTx_ReadBits(PORT_B,PORT_PIN_0)
+  87          
+  88          void MotorRotateByTIM(void)
+  89          {
+  90   1        uint8_t xdata myCode[8]={0x01,0x03,0x02,0x06,0x04,0x0C,0x08,0x09};
+  91   1        uint16_t xdata timeControl=400;
+  92   1        uint16_t xdata rotateVel=1+((MOTOR_VEL_HIGH_C55<<1)|MOTOR_VEL_LOW_C55);
+  93   1        static  uint8_t xdata rotateDirection=CLOCK_WISE;
+  94   1        static uint32_t xdata runTime=0;
+  95   1        static uint16_t xdata rotateVelTime=0;
+  96   1        static char xdata runStep =0;
+  97   1        runTime++;
+  98   1        rotateVelTime++;
+  99   1        
+ 100   1        if(runTime<=timeControl)
+ 101   1        {
  102   2          rotateDirection = CLOCK_WISE;
  103   2        }
- 104   1        
- 105   1        if(rotateVelTime>=rotateVel)
- 106   1        {
- 107   2          rotateVelTime = 0;
- 108   2          if(rotateDirection)
- 109   2          {
- 110   3            runStep++;
- 111   3            if(runStep>=8)
- 112   3              runStep=0;
- 113   3          }
- 114   2          else
- 115   2          {
- 116   3            runStep--;
-C51 COMPILER V9.59.0.0   MOTOR                                                             12/09/2018 18:01:07 PAGE 3   
+ 104   1        else if(runTime>timeControl&&runTime<=2*timeControl)
+ 105   1        {
+ 106   2          rotateDirection = COUNTER_CLOCK_WISE;
+ 107   2        }
+ 108   1        else if(runTime>2*timeControl)
+ 109   1        {
+ 110   2          runTime=0;
+ 111   2          rotateDirection = CLOCK_WISE;
+ 112   2        }
+C51 COMPILER V9.59.0.0   MOTOR                                                             12/11/2018 22:57:50 PAGE 3   
 
- 117   3            if(runStep<0)
- 118   3              runStep=7;
- 119   3          }
- 120   2        }
- 121   1        
- 122   1        P8255_A = myCode[runStep];
- 123   1      }
- 124          
+ 113   1        
+ 114   1        if(rotateVelTime>=rotateVel)
+ 115   1        {
+ 116   2          rotateVelTime = 0;
+ 117   2          if(rotateDirection)
+ 118   2          {
+ 119   3            runStep++;
+ 120   3            if(runStep>=8)
+ 121   3              runStep=0;
+ 122   3          }
+ 123   2          else
+ 124   2          {
+ 125   3            runStep--;
+ 126   3            if(runStep<0)
+ 127   3              runStep=7;
+ 128   3          }
+ 129   2        }
+ 130   1        
+ 131   1        P8255_A = myCode[runStep];
+ 132   1      }
+ 133          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
