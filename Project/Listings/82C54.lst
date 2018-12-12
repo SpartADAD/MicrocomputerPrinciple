@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   82C54                                                             12/12/2018 23:34:31 PAGE 1   
+C51 COMPILER V9.59.0.0   82C54                                                             12/12/2018 23:46:49 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE 82C54
@@ -62,7 +62,7 @@ line level    source
   52   2            P8254_0 = highValue;
   53   2            break;
   54   2          
-C51 COMPILER V9.59.0.0   82C54                                                             12/12/2018 23:34:31 PAGE 2   
+C51 COMPILER V9.59.0.0   82C54                                                             12/12/2018 23:46:49 PAGE 2   
 
   55   2          case COUNT_1 :        //对应计数器1
   56   2            P8254_1= lowValue;
@@ -126,7 +126,7 @@ line level    source
  114   1        uint8_t key = KEY_VALUE;
  115   1        uint16_t xdata countTime1=P8254_0;
  116   1        
-C51 COMPILER V9.59.0.0   82C54                                                             12/12/2018 23:34:31 PAGE 3   
+C51 COMPILER V9.59.0.0   82C54                                                             12/12/2018 23:46:49 PAGE 3   
 
  117   1        if(lastValue==key)
  118   1        { 
@@ -172,7 +172,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    409    ----
+   CODE SIZE        =    419    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      5      12
    PDATA SIZE       =   ----    ----

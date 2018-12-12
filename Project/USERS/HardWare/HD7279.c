@@ -104,7 +104,7 @@ void HD7279Write(unsigned char cmd , unsigned char dataSend)
 	* @param  showValue HD7279需要显示的整型数据	
   * @retval none
   */
-void HD7279ShowInt(int showValue)
+void HD7279ShowInt(long showValue)
 {
 	uint8_t xdata i=0;
 	/*通过Springf存储的字符数组*/
@@ -117,7 +117,7 @@ void HD7279ShowInt(int showValue)
 	if(showValue>=-9999999&&showValue<=99999999)
 	{
 		/*将输入数组转化为字符串*/
-		sprintf(myString,"%d",showValue);
+		sprintf(myString,"%ld",showValue);
 	}
 	else
 	{
