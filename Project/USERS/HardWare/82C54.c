@@ -1,26 +1,43 @@
 /****************************82C55.c***********************/
 #include "82C54.h"
 #include "main.h"
+#include "STC15F2K60S2.h"
+
 uint8_t xdata P8254_CTL _at_ 0xF903;
 uint8_t xdata P8254_0 _at_ 0xF900;
 uint8_t xdata P8254_1 _at_ 0xF901;
 uint8_t xdata P8254_2 _at_ 0xF902;
 
 uint8_t  P374       _at_ 0xFa00; 
+void My82C54Init(void)
+{
+	CLK_DIV=0x40;
+	#if C54_EXPERIMENT == C54_EXPERIMENT_1
+			Init_82C54(COUNT_0, INTERRUPT_MODE,5,BINARY_COUNT);
+	#elif	C54_EXPERIMENT == C54_EXPERIMENT_2
+			/**/
+			Init_82C54(COUNT_1, SQUARE_WAVE_MODE,2000,BINARY_COUNT);
+			Init_82C54(COUNT_2, SQUARE_WAVE_MODE,2000,BINARY_COUNT);
+	#elif	C54_EXPERIMENT == C54_EXPERIMENT_3
+			
+	#endif
 
-void Init_8254(uint8_t count_x, uint8_t timerMode, uint8_t countTime,uint8_t codeMode)
+
+}
+
+void Init_82C54(uint8_t count_x, uint8_t counterMode, uint16_t countTime,uint8_t codeMode)
 {
 	uint8_t lowValue=0;
 	uint8_t highValue=0;
 	uint8_t  initCode=0;
 	
 	count_x&=0x03;
-	timerMode&=0x05;
-	initCode = ((count_x << 6) | (timerMode << 1)) | 0X30 | codeMode;
+	counterMode&=0x07;
+	initCode = ((count_x << 6) | (counterMode << 1)) | 0X30 | codeMode;
 	//先写低位，再写高位，选择二进制计数
 	P8254_CTL = initCode;		
 	//当为工作方式即方式0时，计数值需要减1
-	if(timerMode == INTERRUPT_MODE)			
+	if(counterMode == INTERRUPT_MODE)			
 	{
 		countTime -= 1;
 	}
@@ -52,22 +69,25 @@ void Init_8254(uint8_t count_x, uint8_t timerMode, uint8_t countTime,uint8_t cod
 
 void EXInterruptLed(void)
 {
-	uint32_t time0Cnt=P8254_0;
 	static uint16_t timeDelay=0;
 	static uint8_t rightShift=0x01;
 	timeDelay++;
-	if(gParam.c55LedMode)
+	if(gParam.c55LedMode==0)
 	{
-		if(time0Cnt%2)
+		if(timeDelay<=100)
+		{
+			P374=0xf0;
+		}else if(timeDelay>100&&timeDelay<200)
 		{
 			P374=0x0f;
 		}else
 		{
-			P374=0xf0;
+			timeDelay=0;
 		}
 	}
-	else
+	else if(gParam.c55LedMode==1)
 	{
+		
 		if(timeDelay>=200)
 		{
 			timeDelay=0;
@@ -80,25 +100,51 @@ void EXInterruptLed(void)
 		}
 	}
 }
+void ShowCountTime(void)
+{
+	uint32_t xdata countTime1=P8254_0;
+	uint32_t xdata countTime2=P8254_1;
 
-#define KEY_VALUE (P1&0x02)
+}
+#define KEY_VALUE (P1&0x03)
 void DiffFangBo(void)
 {
+	static  xdata lastValue = 0;
+	uint8_t key = KEY_VALUE;
+	if(lastValue==key)
+	{	
+		return;
+	}
+	
 	if(KEY_VALUE==0)
 	{
-		Init_8254(COUNT_0,SQUARE_WAVE_MODE,10,BINARY_COUNT);
+		Init_82C54(COUNT_0,SQUARE_WAVE_MODE,10,BINARY_COUNT);
 	}
 	else if(KEY_VALUE==1)
 	{
-		Init_8254(COUNT_0,SQUARE_WAVE_MODE,100,BINARY_COUNT);
+		Init_82C54(COUNT_0,SQUARE_WAVE_MODE,100,BINARY_COUNT);
 	}
 	else if(KEY_VALUE==2)
 	{
-		Init_8254(COUNT_0,SQUARE_WAVE_MODE,1000,BINARY_COUNT);
+		Init_82C54(COUNT_0,SQUARE_WAVE_MODE,1000,BINARY_COUNT);
 	}
 	else if(KEY_VALUE==3)
 	{
-		Init_8254(COUNT_0,SQUARE_WAVE_MODE,10000,BINARY_COUNT);
+		Init_82C54(COUNT_0,SQUARE_WAVE_MODE,10000,BINARY_COUNT);
 	}
-	
+	lastValue = key;
+}
+
+void MyExperiment82C54(void)
+{
+	#if C54_EXPERIMENT == C54_EXPERIMENT_1
+		 EXInterruptLed();
+	#elif	C54_EXPERIMENT == C54_EXPERIMENT_2
+		 ShowCountTime();
+	#elif	C54_EXPERIMENT == C54_EXPERIMENT_3
+			DiffFangBo();
+	#endif
+
+
+
 }

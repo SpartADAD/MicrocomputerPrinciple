@@ -7,6 +7,8 @@
 #include "interrupt.h"
 #include "delay.h"
 #include "82C55.h"
+#include "82C54.h"
+
 /*运行程序标志位*/
 static uint8_t runFlag=0;
 /*** @brief   运行程序标志位置1函数
@@ -98,6 +100,7 @@ void EX0Handler(void) interrupt 0
 {
 	gParam.c55LedMode++;
 	gParam.c55LedMode%=2;
+	Init_82C54(COUNT_0, INTERRUPT_MODE,5,BINARY_COUNT);
 //	gParam.flag++;
 //	gParam.flag%=2;
 //	P1=0xff;

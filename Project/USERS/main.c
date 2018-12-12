@@ -11,6 +11,8 @@
 #include "main.h"
 #include "HD7279.h"
 #include "82c55.h"
+#include "82c54.h"
+
 gParam_t gParam={0};
 void HardWareInit(void)
 {
@@ -37,7 +39,9 @@ void HardWareInit(void)
 	DelayMs(25);
 	/*HD7279初始化*/
 	//HD7279SendByte(CMD_RESET);
-	MyC55_Init();
+//	MyC55_Init();
+
+	My82C54Init();
 }
 void main(void)
 {
@@ -48,9 +52,7 @@ void main(void)
 			/*5ms运行周期*/
 			if(GetRunFlag())
 			{
-				//KeyReadBy82C55();
-				SendOrReceive();
-//				MotorRotateByTIM();
+				 MyExperiment82C54();
 			}
 		#endif
 	}
