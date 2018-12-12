@@ -2,6 +2,7 @@
 #include "82C54.h"
 #include "main.h"
 #include "STC15F2K60S2.h"
+#include "HD7279.h"
 
 uint8_t xdata P8254_CTL _at_ 0xF903;
 uint8_t xdata P8254_0 _at_ 0xF900;
@@ -111,6 +112,8 @@ void DiffFangBo(void)
 {
 	static  xdata lastValue = 0;
 	uint8_t key = KEY_VALUE;
+	uint16_t xdata countTime1=P8254_0;
+	
 	if(lastValue==key)
 	{	
 		return;
@@ -119,18 +122,22 @@ void DiffFangBo(void)
 	if(KEY_VALUE==0)
 	{
 		Init_82C54(COUNT_0,SQUARE_WAVE_MODE,10,BINARY_COUNT);
+		HD7279ShowInt(200000);
 	}
 	else if(KEY_VALUE==1)
 	{
 		Init_82C54(COUNT_0,SQUARE_WAVE_MODE,100,BINARY_COUNT);
+		HD7279ShowInt(20000);
 	}
 	else if(KEY_VALUE==2)
 	{
 		Init_82C54(COUNT_0,SQUARE_WAVE_MODE,1000,BINARY_COUNT);
+		HD7279ShowInt(2000);
 	}
 	else if(KEY_VALUE==3)
 	{
 		Init_82C54(COUNT_0,SQUARE_WAVE_MODE,10000,BINARY_COUNT);
+		HD7279ShowInt(200);
 	}
 	lastValue = key;
 }
