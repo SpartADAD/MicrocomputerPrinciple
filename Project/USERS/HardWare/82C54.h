@@ -3,12 +3,12 @@
 #define __82C54_H
 
 #include "main.h"
-
+/*通过预编译宏进行编译下载操作*/
 #define C54_EXPERIMENT_1     1
 #define C54_EXPERIMENT_2     2
 #define C54_EXPERIMENT_3     3
 
-#define C54_EXPERIMENT   C54_EXPERIMENT_3
+#define C54_EXPERIMENT   C54_EXPERIMENT_1
 
 
 

@@ -10,22 +10,35 @@ uint8_t xdata P8254_1 _at_ 0xF901;
 uint8_t xdata P8254_2 _at_ 0xF902;
 
 uint8_t  P374       _at_ 0xFa00; 
+/** 
+	* @brief  分别对几个实验根据预编译宏进行初始化  
+	* @param  void
+  * @retval none
+  */
 void My82C54Init(void)
 {
+	/*设置分频*/
 	CLK_DIV=0x40;
+	/*实验1初始化*/
 	#if C54_EXPERIMENT == C54_EXPERIMENT_1
-			Init_82C54(COUNT_0, INTERRUPT_MODE,5,BINARY_COUNT);
+			Init_82C54(COUNT_0, FREQUENCY_DIVISION_MODE,5,BINARY_COUNT);
+	/*实验2初始化*/
 	#elif	C54_EXPERIMENT == C54_EXPERIMENT_2
 			/**/
 			Init_82C54(COUNT_1, SQUARE_WAVE_MODE,2000,BINARY_COUNT);
 			Init_82C54(COUNT_2, SQUARE_WAVE_MODE,2000,BINARY_COUNT);
+	/*实验3初始化*/
 	#elif	C54_EXPERIMENT == C54_EXPERIMENT_3
 			
 	#endif
 
 
 }
-
+/** 
+	* @brief  C54初始化  
+	* @param  count_x 选择某一个计数器 	counterMode 选择计数模式 countTime 计数时间 codeMode技术方式 BCD或者二进制
+  * @retval none
+  */
 void Init_82C54(uint8_t count_x, uint8_t counterMode, uint16_t countTime,uint8_t codeMode)
 {
 	uint8_t lowValue=0;
@@ -67,7 +80,11 @@ void Init_82C54(uint8_t count_x, uint8_t counterMode, uint16_t countTime,uint8_t
 		break;
 	}
 }
-
+/** 
+	* @brief  实验1进行led流水灯 和跑马灯切换
+	* @param  void
+  * @retval none
+  */
 void EXInterruptLed(void)
 {
 	static uint16_t timeDelay=0;
@@ -101,13 +118,25 @@ void EXInterruptLed(void)
 		}
 	}
 }
+/** 
+	* @brief  得到当前两个计数器的值
+	* @param  void
+  * @retval none
+  */
 void ShowCountTime(void)
 {
 	uint32_t xdata countTime1=P8254_0;
 	uint32_t xdata countTime2=P8254_1;
 
 }
+/*定义开关输入宏定义*/
 #define KEY_VALUE (P1&0x03)
+/** 
+	* @brief  实验3，判断上一次和这一次读出来开关的值，若相同的话，则直接返回，若不同的话对82C54
+进行重新初始化，同时记住这一次的开关值
+	* @param  void
+  * @retval none
+  */
 void DiffFangBo(void)
 {
 	static  xdata lastValue = 0;
@@ -141,7 +170,11 @@ void DiffFangBo(void)
 	}
 	lastValue = key;
 }
-
+/** 
+	* @brief  通过预编译宏进行下载
+	* @param  void
+  * @retval none
+  */
 void MyExperiment82C54(void)
 {
 	#if C54_EXPERIMENT == C54_EXPERIMENT_1

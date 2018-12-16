@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   82C54                                                             12/12/2018 23:46:49 PAGE 1   
+C51 COMPILER V9.59.0.0   82C54                                                             12/14/2018 16:01:22 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE 82C54
@@ -24,14 +24,14 @@ line level    source
   14          {
   15   1        CLK_DIV=0x40;
   16   1        #if C54_EXPERIMENT == C54_EXPERIMENT_1
-                    Init_82C54(COUNT_0, INTERRUPT_MODE,5,BINARY_COUNT);
-                #elif C54_EXPERIMENT == C54_EXPERIMENT_2
+  17   1            Init_82C54(COUNT_0, FREQUENCY_DIVISION_MODE,5,BINARY_COUNT);
+  18   1        #elif C54_EXPERIMENT == C54_EXPERIMENT_2
                     /**/
                     Init_82C54(COUNT_1, SQUARE_WAVE_MODE,2000,BINARY_COUNT);
                     Init_82C54(COUNT_2, SQUARE_WAVE_MODE,2000,BINARY_COUNT);
                 #elif C54_EXPERIMENT == C54_EXPERIMENT_3
-  23   1            
-  24   1        #endif
+                    
+                #endif
   25   1      
   26   1      
   27   1      }
@@ -62,7 +62,7 @@ line level    source
   52   2            P8254_0 = highValue;
   53   2            break;
   54   2          
-C51 COMPILER V9.59.0.0   82C54                                                             12/12/2018 23:46:49 PAGE 2   
+C51 COMPILER V9.59.0.0   82C54                                                             12/14/2018 16:01:22 PAGE 2   
 
   55   2          case COUNT_1 :        //对应计数器1
   56   2            P8254_1= lowValue;
@@ -126,7 +126,7 @@ line level    source
  114   1        uint8_t key = KEY_VALUE;
  115   1        uint16_t xdata countTime1=P8254_0;
  116   1        
-C51 COMPILER V9.59.0.0   82C54                                                             12/12/2018 23:46:49 PAGE 3   
+C51 COMPILER V9.59.0.0   82C54                                                             12/14/2018 16:01:22 PAGE 3   
 
  117   1        if(lastValue==key)
  118   1        { 
@@ -159,12 +159,12 @@ line level    source
  145          void MyExperiment82C54(void)
  146          {
  147   1        #if C54_EXPERIMENT == C54_EXPERIMENT_1
-                   EXInterruptLed();
-                #elif C54_EXPERIMENT == C54_EXPERIMENT_2
+ 148   1           EXInterruptLed();
+ 149   1        #elif C54_EXPERIMENT == C54_EXPERIMENT_2
                    ShowCountTime();
                 #elif C54_EXPERIMENT == C54_EXPERIMENT_3
- 152   1            DiffFangBo();
- 153   1        #endif
+                    DiffFangBo();
+                #endif
  154   1      
  155   1      
  156   1      
@@ -172,7 +172,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    419    ----
+   CODE SIZE        =    432    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      5      12
    PDATA SIZE       =   ----    ----
