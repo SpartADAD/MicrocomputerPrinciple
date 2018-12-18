@@ -1,4 +1,4 @@
-/*************************82C55.h********************************/
+/*************************82C54.h********************************/
 #ifndef __82C54_H
 #define __82C54_H
 
@@ -32,6 +32,8 @@ void Init_82C54(uint8_t count_x, uint8_t counterMode, uint16_t countTime,uint8_t
 void EXInterruptLed(void);
 void MyExperiment82C54(void);
 void My82C54Init(void);
-void ShowCountTime(void);
 void DiffFangBo(void);
+
+extern uint8_t  P374; 
+
 #endif

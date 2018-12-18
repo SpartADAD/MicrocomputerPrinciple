@@ -431,6 +431,11 @@
               <FileType>1</FileType>
               <FilePath>.\USERS\HardWare\82C55.c</FilePath>
             </File>
+            <File>
+              <FileName>ADDA.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USERS\HardWare\ADDA.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -92,7 +92,7 @@ void EXHandlerInit(uint8_t EXNumber,uint8_t workMode)
 	}
 	EA = 1;
 }
-/*** @brief    外部中断0中断函数 gParam.flag 用来控制流水灯样式
+/*** @brief    外部中断0中断函数 gParam.c55LedMode 用来控制灯显示模式
   *  @param    void       
   *  @retval   None
   */
@@ -100,7 +100,6 @@ void EX0Handler(void) interrupt 0
 {
 	gParam.c55LedMode++;
 	gParam.c55LedMode%=2;
-	Init_82C54(COUNT_0, INTERRUPT_MODE,5,BINARY_COUNT);
 //	gParam.flag++;
 //	gParam.flag%=2;
 //	P1=0xff;

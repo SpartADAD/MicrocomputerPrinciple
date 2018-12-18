@@ -1,4 +1,4 @@
-/****************************82C55.c***********************/
+/****************************82C54.c***********************/
 #include "82C54.h"
 #include "main.h"
 #include "STC15F2K60S2.h"
@@ -21,22 +21,23 @@ void My82C54Init(void)
 	CLK_DIV=0x40;
 	/*实验1初始化*/
 	#if C54_EXPERIMENT == C54_EXPERIMENT_1
+	/*初始化计数器0为分频模式，装载值5（函数内部减去1），为二进制计数*/
 			Init_82C54(COUNT_0, FREQUENCY_DIVISION_MODE,5,BINARY_COUNT);
 	/*实验2初始化*/
 	#elif	C54_EXPERIMENT == C54_EXPERIMENT_2
-			/**/
+	/*初始化计数器1，2为方波发生模式两者级联，装载值2000，为二进制计数*/
 			Init_82C54(COUNT_1, SQUARE_WAVE_MODE,2000,BINARY_COUNT);
 			Init_82C54(COUNT_2, SQUARE_WAVE_MODE,2000,BINARY_COUNT);
 	/*实验3初始化*/
 	#elif	C54_EXPERIMENT == C54_EXPERIMENT_3
-			
+			/*等开关状态变化才进行初始化*/
 	#endif
 
 
 }
 /** 
 	* @brief  C54初始化  
-	* @param  count_x 选择某一个计数器 	counterMode 选择计数模式 countTime 计数时间 codeMode技术方式 BCD或者二进制
+	* @param  count_x 选择某一个计数器 	counterMode 选择计数模式 countTime 计数时间 codeMode计数方式 BCD或者二进制
   * @retval none
   */
 void Init_82C54(uint8_t count_x, uint8_t counterMode, uint16_t countTime,uint8_t codeMode)
@@ -81,7 +82,7 @@ void Init_82C54(uint8_t count_x, uint8_t counterMode, uint16_t countTime,uint8_t
 	}
 }
 /** 
-	* @brief  实验1进行led流水灯 和跑马灯切换
+	* @brief  实验1进行led流水灯 和跑马灯切换 rightShift控制流水灯 timeDelay控制延时时间
 	* @param  void
   * @retval none
   */
@@ -118,22 +119,11 @@ void EXInterruptLed(void)
 		}
 	}
 }
-/** 
-	* @brief  得到当前两个计数器的值
-	* @param  void
-  * @retval none
-  */
-void ShowCountTime(void)
-{
-	uint32_t xdata countTime1=P8254_0;
-	uint32_t xdata countTime2=P8254_1;
-
-}
 /*定义开关输入宏定义*/
 #define KEY_VALUE (P1&0x03)
 /** 
 	* @brief  实验3，判断上一次和这一次读出来开关的值，若相同的话，则直接返回，若不同的话对82C54
-进行重新初始化，同时记住这一次的开关值
+进行重新初始化，同时记住这一次的开关值,通过数码管直接显示当前的频率
 	* @param  void
   * @retval none
   */
@@ -180,7 +170,7 @@ void MyExperiment82C54(void)
 	#if C54_EXPERIMENT == C54_EXPERIMENT_1
 		 EXInterruptLed();
 	#elif	C54_EXPERIMENT == C54_EXPERIMENT_2
-		 ShowCountTime();
+	
 	#elif	C54_EXPERIMENT == C54_EXPERIMENT_3
 			DiffFangBo();
 	#endif
