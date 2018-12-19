@@ -143,7 +143,7 @@ void HD7279ShowInt(long showValue)
 		/*如果是“-”便不管*/
 		if(myString[i]=='-')
 		{
-			myString[i]=0x01;
+			tubeString[(DIGITTAL_TUBE_LENGTH - dataLength) + i]=0x01;
 		}
 		else
 		{
@@ -161,6 +161,9 @@ void HD7279ShowInt(long showValue)
 
 
 }
+
+
+
 /*通过数据提取*/
 void HD7279ShowFloat(double showValue)
 {
@@ -169,7 +172,7 @@ void HD7279ShowFloat(double showValue)
 	uint8_t xdata myCode[DIGITTAL_TUBE_LENGTH]={0};
 	/*通过数码管显示字符数组*/
 	uint8_t xdata tubeString[DIGITTAL_TUBE_LENGTH]={0};
-	/*判断是否在显示范围内，将其转换为字符数串*/
+	/*确定小数点位置*/
 	uint8_t xdata pointIndex = 0;
 	/*整数部分*/
 	uint32_t xdata showValueInt = (uint32_t)fabs(showValue);

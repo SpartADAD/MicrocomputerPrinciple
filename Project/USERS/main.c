@@ -12,7 +12,7 @@
 #include "HD7279.h"
 #include "82c55.h"
 #include "82c54.h"
-
+#include "ADDA.h"
 gParam_t gParam={0};
 void HardWareInit(void)
 {
@@ -32,8 +32,7 @@ void HardWareInit(void)
 			Timer_Interrupt(TIM1);
 	#endif
 	/*外部中断使能*/
-	EXHandlerInit(EX_INTERRUPT0,EX_INTERRUPT_BY_EDGE);
-	
+	EXHandlerInit(EX_INTERRUPT0,EX_INTERRUPT_BY_EDGE);	
 	//USART_Init(USART_MODE_1,1,9600,0);
 	/*上电延时等数码管能用*/
 	DelayMs(25);
@@ -52,7 +51,17 @@ void main(void)
 			/*5ms运行周期*/
 			if(GetRunFlag())
 			{
-				 MyExperiment82C54();
+				#if ADDA_EXP ==ADC_EXP
+					AdcInit();
+					DelayMs(50);
+					LedShow();
+				  ShowVoltage();
+				#endif
+					//HD7279ShowInt(-50);
+//					HD7279ShowInt(gParam.adcValue);
+//				  AdcHD7279Show();
+				  //P374=0xf0;
+					
 			}
 		#endif
 	}

@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   USART                                                             12/18/2018 22:58:55 PAGE 1   
+C51 COMPILER V9.59.0.0   USART                                                             12/19/2018 23:41:51 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE USART
@@ -62,7 +62,7 @@ line level    source
   52   2              TIM1_Init(EIGHT_BIT_AUTO_RELOUD_COUNT,timer1Reload);
   53   2              PCON |= (baudRateDouble<<7);
   54   2              SCON|=(nightBitEnble<<5);
-C51 COMPILER V9.59.0.0   USART                                                             12/18/2018 22:58:55 PAGE 2   
+C51 COMPILER V9.59.0.0   USART                                                             12/19/2018 23:41:51 PAGE 2   
 
   55   2              /*指定定时器1为波特率发生器！！！*/
   56   2              AUXR&=0xfe;

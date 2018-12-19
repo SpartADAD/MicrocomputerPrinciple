@@ -8,7 +8,7 @@
 #include "delay.h"
 #include "82C55.h"
 #include "82C54.h"
-
+#include "ADDA.h"
 /*运行程序标志位*/
 static uint8_t runFlag=0;
 /*** @brief   运行程序标志位置1函数
@@ -41,6 +41,9 @@ uint8_t GetRunFlag(void)
 static  uint32_t xdata timeCnt=0;
 void TIM0_Handler() interrupt 1 
 {
+	#if ADDA_EXP == DAC_EXP
+	DacOUT();
+	#endif
 	
 	#if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
 		timeCnt++;
@@ -70,7 +73,6 @@ void TIM1_Handler() interrupt 3
 			SetRunFlag();
 		}
 	#else
-
 	#endif
 }
 /*** @brief    外部中断初始化函数
@@ -100,6 +102,7 @@ void EX0Handler(void) interrupt 0
 {
 	gParam.c55LedMode++;
 	gParam.c55LedMode%=2;
+	gParam.adcValue = GetAdcValue();
 //	gParam.flag++;
 //	gParam.flag%=2;
 //	P1=0xff;

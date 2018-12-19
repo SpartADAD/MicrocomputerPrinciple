@@ -36,7 +36,7 @@ typedef struct{
 		uint8_t flag;
 		uint8_t receiveDataByUsart;
 		uint8_t c55LedMode;
-
+		uint8_t adcValue;
 
 }gParam_t;
 	

@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   82C54                                                             12/18/2018 22:58:56 PAGE 1   
+C51 COMPILER V9.59.0.0   82C54                                                             12/19/2018 23:41:51 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE 82C54
@@ -62,7 +62,7 @@ line level    source
   51   1        initCode = ((count_x << 6) | (counterMode << 1)) | 0X30 | codeMode;
   52   1        //先写低位，再写高位，选择二进制计数
   53   1        P8254_CTL = initCode;   
-C51 COMPILER V9.59.0.0   82C54                                                             12/18/2018 22:58:56 PAGE 2   
+C51 COMPILER V9.59.0.0   82C54                                                             12/19/2018 23:41:51 PAGE 2   
 
   54   1        //当为工作方式即方式0时，计数值需要减1
   55   1        if(counterMode == INTERRUPT_MODE)     
@@ -126,7 +126,7 @@ line level    source
  112   3            timeDelay=0;
  113   3            rightShift=(rightShift<<1);
  114   3            if(rightShift==0)
-C51 COMPILER V9.59.0.0   82C54                                                             12/18/2018 22:58:56 PAGE 3   
+C51 COMPILER V9.59.0.0   82C54                                                             12/19/2018 23:41:51 PAGE 3   
 
  115   3            {
  116   4              rightShift=0x01;
@@ -190,7 +190,7 @@ line level    source
                 
                 #elif C54_EXPERIMENT == C54_EXPERIMENT_3
                     DiffFangBo();
-C51 COMPILER V9.59.0.0   82C54                                                             12/18/2018 22:58:56 PAGE 4   
+C51 COMPILER V9.59.0.0   82C54                                                             12/19/2018 23:41:51 PAGE 4   
 
                 #endif
  177   1      
