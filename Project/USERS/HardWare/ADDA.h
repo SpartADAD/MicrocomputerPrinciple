@@ -3,8 +3,8 @@
 #define __ADDA_H
 
 #include "main.h"
-
-#define ADDA_EXP  DAC_EXP
+/*通过预编译宏选择实ADC和DAC实验下载*/
+#define ADDA_EXP  ADC_EXP
 #define ADC_EXP   1
 #define DAC_EXP   2
 

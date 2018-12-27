@@ -41,6 +41,7 @@ uint8_t GetRunFlag(void)
 static  uint32_t xdata timeCnt=0;
 void TIM0_Handler() interrupt 1 
 {
+	/*DAC输出*/
 	#if ADDA_EXP == DAC_EXP
 	DacOUT();
 	#endif

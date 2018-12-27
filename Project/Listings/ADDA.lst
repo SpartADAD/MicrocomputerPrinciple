@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   ADDA                                                              12/20/2018 00:16:43 PAGE 1   
+C51 COMPILER V9.59.0.0   ADDA                                                              12/27/2018 20:52:41 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE ADDA
@@ -20,59 +20,83 @@ line level    source
              -,0xef, \
   10                                    0xdf,0xcf,0xbf,0xaf,0x9f,0x8f,0x7f,0x6f,0x5f,0x4f,0x3f,0x2f,0x1f,0x0f};
   11          
-  12          
-  13          void LedShow(void)
-  14          {
-  15   1        uint8_t adcValue  = gParam.adcValue;
-  16   1        
-  17   1        P374 =~adcValue;
-  18   1      }
-  19          
-  20          void AdcHD7279Show(void)
-  21          {
-  22   1        uint8_t adcValue  = ADC04;
-  23   1        
-  24   1        HD7279ShowInt(adcValue);
-  25   1      }
-  26          
-  27          void ShowVoltage(void)
-  28          {
-  29   1        float voltage = 5.f*(255.f-gParam.adcValue)/255.f;
-  30   1        HD7279ShowFloat(voltage);
-  31   1      }
-  32          
-  33          void AdcInit(void)
-  34          {
-  35   1        ADC04 = 0x00;
-  36   1      }
-  37            
-  38          uint8_t GetAdcValue(void)
-  39          {
-  40   1        uint8_t adcValue=ADC04;
-  41   1        return adcValue;
-  42   1      
+  12          /**
+  13            * @brief  用led显示当前ADC转换结果二进制码
+  14            * @param  void
+  15            * @retval void
+  16            */
+  17          void LedShow(void)
+  18          {
+  19   1        uint8_t adcValue  = gParam.adcValue;
+  20   1        
+  21   1        P374 =~adcValue;
+  22   1      }
+  23          /**
+  24            * @brief  将ADC转换结果8位码转换显示出来
+  25            * @param  void
+  26            * @retval void
+  27            */
+  28          void AdcHD7279Show(void)
+  29          {
+  30   1        uint8_t adcValue  = ADC04;
+  31   1        
+  32   1        HD7279ShowInt(adcValue);
+  33   1      }
+  34          /**
+  35            * @brief  显示ADC转换结果的电压为小数
+  36            * @param  void
+  37            * @retval void
+  38            */
+  39          void ShowVoltage(void)
+  40          {
+  41   1        float voltage = 5.f*(255.f-gParam.adcValue)/255.f;
+  42   1        HD7279ShowFloat(voltage);
   43   1      }
-  44          
-  45          void DacOUT(void)
-  46          {
-  47   1        static uint32_t xdata timeCnt=0;
-  48   1        uint16_t xdata period = 80;
-  49   1        static uint32_t out=0;
-  50   1        timeCnt++;
-  51   1        if(timeCnt<=period/2)
-  52   1        {
-  53   2           out+= (uint8_t)(255.f/(period/2));
-C51 COMPILER V9.59.0.0   ADDA                                                              12/20/2018 00:16:43 PAGE 2   
+  44          /**
+  45            * @brief  ADC初始化
+  46            * @param  void
+  47            * @retval void
+  48            */
+  49          void AdcInit(void)
+  50          {
+  51   1        ADC04 = 0x00;
+  52   1      }
+  53          /**
+C51 COMPILER V9.59.0.0   ADDA                                                              12/27/2018 20:52:41 PAGE 2   
 
-  54   2        }else if(timeCnt>period/2&&timeCnt<=period)
-  55   1        {
-  56   2           out-= (uint8_t)(255.f/(period/2));
-  57   2        }else if(timeCnt>period)
-  58   1        {
-  59   2           timeCnt=0;
-  60   2        }
-  61   1        DAC32=out&0xff;
-  62   1      }
+  54            * @brief  得到ADC转换结果
+  55            * @param  void
+  56            * @retval void
+  57            */  
+  58          uint8_t GetAdcValue(void)
+  59          {
+  60   1        uint8_t adcValue=ADC04;
+  61   1        return adcValue;
+  62   1      
+  63   1      }
+  64          /**
+  65            * @brief  DAC输出 50HZ的方波
+  66            * @param  void
+  67            * @retval void
+  68            */
+  69          void DacOUT(void)
+  70          {
+  71   1        static uint32_t xdata timeCnt=0;
+  72   1        uint16_t xdata period = 80;
+  73   1        static uint32_t out=0;
+  74   1        timeCnt++;
+  75   1        if(timeCnt<=period/2)
+  76   1        {
+  77   2           out+= (uint8_t)(255.f/(period/2));
+  78   2        }else if(timeCnt>period/2&&timeCnt<=period)
+  79   1        {
+  80   2           out-= (uint8_t)(255.f/(period/2));
+  81   2        }else if(timeCnt>period)
+  82   1        {
+  83   2           timeCnt=0;
+  84   2        }
+  85   1        DAC32=out&0xff;
+  86   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
