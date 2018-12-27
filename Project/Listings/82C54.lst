@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   82C54                                                             12/14/2018 16:01:22 PAGE 1   
+C51 COMPILER V9.59.0.0   82C54                                                             12/27/2018 21:24:49 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE 82C54
@@ -20,155 +20,192 @@ line level    source
   10          uint8_t xdata P8254_2 _at_ 0xF902;
   11          
   12          uint8_t  P374       _at_ 0xFa00; 
-  13          void My82C54Init(void)
-  14          {
-  15   1        CLK_DIV=0x40;
-  16   1        #if C54_EXPERIMENT == C54_EXPERIMENT_1
-  17   1            Init_82C54(COUNT_0, FREQUENCY_DIVISION_MODE,5,BINARY_COUNT);
-  18   1        #elif C54_EXPERIMENT == C54_EXPERIMENT_2
+  13          /** 
+  14            * @brief  分别对几个实验根据预编译宏进行初始化  
+  15            * @param  void
+  16            * @retval none
+  17            */
+  18          void My82C54Init(void)
+  19          {
+  20   1        /*设置分频*/
+  21   1        CLK_DIV=0x40;
+  22   1        /*实验1初始化*/
+  23   1        #if C54_EXPERIMENT == C54_EXPERIMENT_1
+  24   1            Init_82C54(COUNT_0, FREQUENCY_DIVISION_MODE,5,BINARY_COUNT);
+  25   1        /*实验2初始化*/
+  26   1        #elif C54_EXPERIMENT == C54_EXPERIMENT_2
                     /**/
                     Init_82C54(COUNT_1, SQUARE_WAVE_MODE,2000,BINARY_COUNT);
                     Init_82C54(COUNT_2, SQUARE_WAVE_MODE,2000,BINARY_COUNT);
+                /*实验3初始化*/
                 #elif C54_EXPERIMENT == C54_EXPERIMENT_3
                     
                 #endif
-  25   1      
-  26   1      
-  27   1      }
-  28          
-  29          void Init_82C54(uint8_t count_x, uint8_t counterMode, uint16_t countTime,uint8_t codeMode)
-  30          {
-  31   1        uint8_t lowValue=0;
-  32   1        uint8_t highValue=0;
-  33   1        uint8_t  initCode=0;
-  34   1        
-  35   1        count_x&=0x03;
-  36   1        counterMode&=0x07;
-  37   1        initCode = ((count_x << 6) | (counterMode << 1)) | 0X30 | codeMode;
-  38   1        //先写低位，再写高位，选择二进制计数
-  39   1        P8254_CTL = initCode;   
-  40   1        //当为工作方式即方式0时，计数值需要减1
-  41   1        if(counterMode == INTERRUPT_MODE)     
-  42   1        {
-  43   2          countTime -= 1;
-  44   2        }
-  45   1        
-  46   1        lowValue = (countTime & 0XFF);    //取低字节数
-  47   1        highValue = (countTime >> 8) & 0XFF;    //取高字节数
-  48   1        switch(count_x)
-  49   1        {
-  50   2          case COUNT_0 :        //对应计数器0
-  51   2            P8254_0 = lowValue;
-  52   2            P8254_0 = highValue;
-  53   2            break;
-  54   2          
-C51 COMPILER V9.59.0.0   82C54                                                             12/14/2018 16:01:22 PAGE 2   
+  34   1      
+  35   1      
+  36   1      }
+  37          /** 
+  38            * @brief  C54初始化  
+  39            * @param  count_x 选择某一个计数器  counterMode 选择计数模式 countTime 计数时间 codeMod
+             -e技术方式 BCD或者二进制
+  40            * @retval none
+  41            */
+  42          void Init_82C54(uint8_t count_x, uint8_t counterMode, uint16_t countTime,uint8_t codeMode)
+  43          {
+  44   1        uint8_t lowValue=0;
+  45   1        uint8_t highValue=0;
+  46   1        uint8_t  initCode=0;
+  47   1        
+  48   1        count_x&=0x03;
+  49   1        counterMode&=0x07;
+  50   1        initCode = ((count_x << 6) | (counterMode << 1)) | 0X30 | codeMode;
+  51   1        //先写低位，再写高位，选择二进制计数
+  52   1        P8254_CTL = initCode;   
+  53   1        //当为工作方式即方式0时，计数值需要减1
+C51 COMPILER V9.59.0.0   82C54                                                             12/27/2018 21:24:49 PAGE 2   
 
-  55   2          case COUNT_1 :        //对应计数器1
-  56   2            P8254_1= lowValue;
-  57   2            P8254_1 = highValue;
-  58   2            break;
-  59   2          
-  60   2          case COUNT_2 :        //对应计数器2
-  61   2            P8254_2= lowValue;
-  62   2            P8254_2 = highValue;
-  63   2            break;
-  64   2          
-  65   2          default:
-  66   2            
-  67   2          break;
-  68   2        }
-  69   1      }
-  70          
-  71          void EXInterruptLed(void)
-  72          {
-  73   1        static uint16_t timeDelay=0;
-  74   1        static uint8_t rightShift=0x01;
-  75   1        timeDelay++;
-  76   1        if(gParam.c55LedMode==0)
-  77   1        {
-  78   2          if(timeDelay<=100)
-  79   2          {
-  80   3            P374=0xf0;
-  81   3          }else if(timeDelay>100&&timeDelay<200)
-  82   2          {
-  83   3            P374=0x0f;
-  84   3          }else
-  85   2          {
-  86   3            timeDelay=0;
-  87   3          }
-  88   2        }
-  89   1        else if(gParam.c55LedMode==1)
-  90   1        {
-  91   2          
-  92   2          if(timeDelay>=200)
-  93   2          {
-  94   3            timeDelay=0;
-  95   3            rightShift=(rightShift<<1);
-  96   3            if(rightShift==0)
-  97   3            {
-  98   4              rightShift=0x01;
-  99   4            }
- 100   3            P374=~rightShift;
- 101   3          }
- 102   2        }
- 103   1      }
- 104          void ShowCountTime(void)
- 105          {
- 106   1        uint32_t xdata countTime1=P8254_0;
- 107   1        uint32_t xdata countTime2=P8254_1;
- 108   1      
- 109   1      }
- 110          #define KEY_VALUE (P1&0x03)
- 111          void DiffFangBo(void)
- 112          {
- 113   1        static  xdata lastValue = 0;
- 114   1        uint8_t key = KEY_VALUE;
- 115   1        uint16_t xdata countTime1=P8254_0;
- 116   1        
-C51 COMPILER V9.59.0.0   82C54                                                             12/14/2018 16:01:22 PAGE 3   
+  54   1        if(counterMode == INTERRUPT_MODE)     
+  55   1        {
+  56   2          countTime -= 1;
+  57   2        }
+  58   1        
+  59   1        lowValue = (countTime & 0XFF);    //取低字节数
+  60   1        highValue = (countTime >> 8) & 0XFF;    //取高字节数
+  61   1        switch(count_x)
+  62   1        {
+  63   2          case COUNT_0 :        //对应计数器0
+  64   2            P8254_0 = lowValue;
+  65   2            P8254_0 = highValue;
+  66   2            break;
+  67   2          
+  68   2          case COUNT_1 :        //对应计数器1
+  69   2            P8254_1= lowValue;
+  70   2            P8254_1 = highValue;
+  71   2            break;
+  72   2          
+  73   2          case COUNT_2 :        //对应计数器2
+  74   2            P8254_2= lowValue;
+  75   2            P8254_2 = highValue;
+  76   2            break;
+  77   2          
+  78   2          default:
+  79   2            
+  80   2          break;
+  81   2        }
+  82   1      }
+  83          /** 
+  84            * @brief  实验1进行led流水灯 和跑马灯切换
+  85            * @param  void
+  86            * @retval none
+  87            */
+  88          void EXInterruptLed(void)
+  89          {
+  90   1        static uint16_t timeDelay=0;
+  91   1        static uint8_t rightShift=0x01;
+  92   1        timeDelay++;
+  93   1        if(gParam.c55LedMode==0)
+  94   1        {
+  95   2          if(timeDelay<=100)
+  96   2          {
+  97   3            P374=0xf0;
+  98   3          }else if(timeDelay>100&&timeDelay<200)
+  99   2          {
+ 100   3            P374=0x0f;
+ 101   3          }else
+ 102   2          {
+ 103   3            timeDelay=0;
+ 104   3          }
+ 105   2        }
+ 106   1        else if(gParam.c55LedMode==1)
+ 107   1        {
+ 108   2          
+ 109   2          if(timeDelay>=200)
+ 110   2          {
+ 111   3            timeDelay=0;
+ 112   3            rightShift=(rightShift<<1);
+ 113   3            if(rightShift==0)
+ 114   3            {
+ 115   4              rightShift=0x01;
+C51 COMPILER V9.59.0.0   82C54                                                             12/27/2018 21:24:49 PAGE 3   
 
- 117   1        if(lastValue==key)
- 118   1        { 
- 119   2          return;
- 120   2        }
- 121   1        
- 122   1        if(KEY_VALUE==0)
- 123   1        {
- 124   2          Init_82C54(COUNT_0,SQUARE_WAVE_MODE,10,BINARY_COUNT);
- 125   2          HD7279ShowInt(200000);
- 126   2        }
- 127   1        else if(KEY_VALUE==1)
- 128   1        {
- 129   2          Init_82C54(COUNT_0,SQUARE_WAVE_MODE,100,BINARY_COUNT);
- 130   2          HD7279ShowInt(20000);
- 131   2        }
- 132   1        else if(KEY_VALUE==2)
- 133   1        {
- 134   2          Init_82C54(COUNT_0,SQUARE_WAVE_MODE,1000,BINARY_COUNT);
- 135   2          HD7279ShowInt(2000);
- 136   2        }
- 137   1        else if(KEY_VALUE==3)
- 138   1        {
- 139   2          Init_82C54(COUNT_0,SQUARE_WAVE_MODE,10000,BINARY_COUNT);
- 140   2          HD7279ShowInt(200);
- 141   2        }
- 142   1        lastValue = key;
- 143   1      }
- 144          
- 145          void MyExperiment82C54(void)
- 146          {
- 147   1        #if C54_EXPERIMENT == C54_EXPERIMENT_1
- 148   1           EXInterruptLed();
- 149   1        #elif C54_EXPERIMENT == C54_EXPERIMENT_2
+ 116   4            }
+ 117   3            P374=~rightShift;
+ 118   3          }
+ 119   2        }
+ 120   1      }
+ 121          /** 
+ 122            * @brief  得到当前两个计数器的值
+ 123            * @param  void
+ 124            * @retval none
+ 125            */
+ 126          void ShowCountTime(void)
+ 127          {
+ 128   1        uint32_t xdata countTime1=P8254_0;
+ 129   1        uint32_t xdata countTime2=P8254_1;
+ 130   1      
+ 131   1      }
+ 132          /*定义开关输入宏定义*/
+ 133          #define KEY_VALUE (P1&0x03)
+ 134          /** 
+ 135            * @brief  实验3，判断上一次和这一次读出来开关的值，若相同的话，则直接返回�
+             -��若不同的话对82C54
+ 136          进行重新初始化，同时记住这一次的开关值
+ 137            * @param  void
+ 138            * @retval none
+ 139            */
+ 140          void DiffFangBo(void)
+ 141          {
+ 142   1        static  xdata lastValue = 0;
+ 143   1        uint8_t key = KEY_VALUE;
+ 144   1        uint16_t xdata countTime1=P8254_0;
+ 145   1        
+ 146   1        if(lastValue==key)
+ 147   1        { 
+ 148   2          return;
+ 149   2        }
+ 150   1        
+ 151   1        if(KEY_VALUE==0)
+ 152   1        {
+ 153   2          Init_82C54(COUNT_0,SQUARE_WAVE_MODE,10,BINARY_COUNT);
+ 154   2          HD7279ShowInt(200000);
+ 155   2        }
+ 156   1        else if(KEY_VALUE==1)
+ 157   1        {
+ 158   2          Init_82C54(COUNT_0,SQUARE_WAVE_MODE,100,BINARY_COUNT);
+ 159   2          HD7279ShowInt(20000);
+ 160   2        }
+ 161   1        else if(KEY_VALUE==2)
+ 162   1        {
+ 163   2          Init_82C54(COUNT_0,SQUARE_WAVE_MODE,1000,BINARY_COUNT);
+ 164   2          HD7279ShowInt(2000);
+ 165   2        }
+ 166   1        else if(KEY_VALUE==3)
+ 167   1        {
+ 168   2          Init_82C54(COUNT_0,SQUARE_WAVE_MODE,10000,BINARY_COUNT);
+ 169   2          HD7279ShowInt(200);
+ 170   2        }
+ 171   1        lastValue = key;
+ 172   1      }
+ 173          /** 
+ 174            * @brief  通过预编译宏进行下载
+ 175            * @param  void
+ 176            * @retval none
+C51 COMPILER V9.59.0.0   82C54                                                             12/27/2018 21:24:49 PAGE 4   
+
+ 177            */
+ 178          void MyExperiment82C54(void)
+ 179          {
+ 180   1        #if C54_EXPERIMENT == C54_EXPERIMENT_1
+ 181   1           EXInterruptLed();
+ 182   1        #elif C54_EXPERIMENT == C54_EXPERIMENT_2
                    ShowCountTime();
                 #elif C54_EXPERIMENT == C54_EXPERIMENT_3
                     DiffFangBo();
                 #endif
- 154   1      
- 155   1      
- 156   1      
- 157   1      }
+ 187   1      
+ 188   1      
+ 189   1      
+ 190   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

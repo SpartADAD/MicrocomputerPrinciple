@@ -100,7 +100,6 @@ void EX0Handler(void) interrupt 0
 {
 	gParam.c55LedMode++;
 	gParam.c55LedMode%=2;
-	Init_82C54(COUNT_0, INTERRUPT_MODE,5,BINARY_COUNT);
 //	gParam.flag++;
 //	gParam.flag%=2;
 //	P1=0xff;
