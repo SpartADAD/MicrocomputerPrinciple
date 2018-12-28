@@ -114,8 +114,8 @@ void FinalTest(void)
 		}
 		
 	}
-	HD7279ShowInt(daoJiShiShow);
 	P374 = ~ledShowCode;
+	HD7279ShowInt(daoJiShiShow);
 
 
 
