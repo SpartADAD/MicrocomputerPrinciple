@@ -51,12 +51,10 @@ void main(void)
 			/*5ms运行周期*/
 			if(GetRunFlag())
 			{
-					FinalTest();
+//					FinalTest();
 //					HD7279ShowInt(gParam.readKey);
-//					HD7279ShowInt(gParam.adcValue);
-//				  AdcHD7279Show();
-				  //P374=0xf0;
-					
+					HD7279ShowInt(gParam.daoJiShiShow);
+
 			}
 		#endif
 	}
@@ -69,6 +67,7 @@ void FinalTest(void)
 	static uint8_t ledShowCode = 0x01;
 	static uint32_t runTime = 0;
 	static uint8_t daoJiShiShow = 10;
+	gParam.daoJiShiShow = daoJiShiShow;
 	if(gParam.finalUpdate)
 	{
 		gParam.finalUpdate = 0;
@@ -115,7 +114,7 @@ void FinalTest(void)
 		
 	}
 	P374 = ~ledShowCode;
-	HD7279ShowInt(daoJiShiShow);
+//	HD7279ShowInt(daoJiShiShow);
 
 
 

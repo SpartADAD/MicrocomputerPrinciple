@@ -40,6 +40,7 @@ typedef struct{
 		uint8_t readKey;
 		uint8_t finalMode;
 		uint8_t finalUpdate;
+		uint8_t daoJiShiShow;
 }gParam_t;
 	
 	

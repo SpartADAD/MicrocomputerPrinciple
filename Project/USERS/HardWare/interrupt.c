@@ -53,6 +53,8 @@ void TIM0_Handler() interrupt 1
 		{
 			timeCnt=0;
 			SetRunFlag();
+			/*由于显示函数内部延时的原因将程序放入中断当中*/
+			FinalTest();
 		}
 	#else
 		
