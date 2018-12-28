@@ -73,6 +73,7 @@ void FinalTest(void)
 	{
 		gParam.finalUpdate = 0;
 		daoJiShi = 0;
+		runTime = 0;
 		daoJiShiShow =10;
 	}
 	

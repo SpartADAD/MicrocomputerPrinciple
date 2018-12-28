@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              12/28/2018 19:13:59 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              12/28/2018 19:34:52 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   52   2            if(GetRunFlag())
   53   2            {
   54   3                FinalTest();
-C51 COMPILER V9.59.0.0   MAIN                                                              12/28/2018 19:13:59 PAGE 2   
+C51 COMPILER V9.59.0.0   MAIN                                                              12/28/2018 19:34:52 PAGE 2   
 
   55   3      //          HD7279ShowInt(gParam.readKey);
   56   3      //          HD7279ShowInt(gParam.adcValue);
@@ -85,63 +85,64 @@ line level    source
   73   1        {
   74   2          gParam.finalUpdate = 0;
   75   2          daoJiShi = 0;
-  76   2          daoJiShiShow =10;
-  77   2        }
-  78   1        
-  79   1        if(daoJiShi<=2001)
-  80   1        {
-  81   2          daoJiShi++;
-  82   2          runTime++;
-  83   2          switch(gParam.finalMode)
-  84   2          {
-  85   3            case LEFT_TO_RIGHT:
-  86   3              if(runTime>=200)
-  87   3              {
-  88   4                ledShowCode = ledShowCode<<1;
-  89   4                runTime=0;
-  90   4                daoJiShiShow--;
-  91   4              }
-  92   3              if(ledShowCode>0x80||ledShowCode==0x00)
-  93   3              {
-  94   4                ledShowCode=0x01;
-  95   4              }
-  96   3            break;
-  97   3            
-  98   3            case RIGHT_TO_LEFT:
-  99   3              if(runTime>=200)
- 100   3              {
- 101   4                ledShowCode = ledShowCode>>1;
- 102   4                runTime=0;          
- 103   4                daoJiShiShow--;
- 104   4              }
- 105   3              if(ledShowCode>0x80||ledShowCode==0x00)
- 106   3              {
- 107   4                ledShowCode=0x80;
- 108   4              }
- 109   3            break;
- 110   3            
- 111   3            default:
- 112   3            break;
- 113   3          }
- 114   2          
- 115   2        }
- 116   1        HD7279ShowInt(daoJiShiShow);
-C51 COMPILER V9.59.0.0   MAIN                                                              12/28/2018 19:13:59 PAGE 3   
+  76   2          runTime = 0;
+  77   2          daoJiShiShow =10;
+  78   2        }
+  79   1        
+  80   1        if(daoJiShi<=2001)
+  81   1        {
+  82   2          daoJiShi++;
+  83   2          runTime++;
+  84   2          switch(gParam.finalMode)
+  85   2          {
+  86   3            case LEFT_TO_RIGHT:
+  87   3              if(runTime>=200)
+  88   3              {
+  89   4                ledShowCode = ledShowCode<<1;
+  90   4                runTime=0;
+  91   4                daoJiShiShow--;
+  92   4              }
+  93   3              if(ledShowCode>0x80||ledShowCode==0x00)
+  94   3              {
+  95   4                ledShowCode=0x01;
+  96   4              }
+  97   3            break;
+  98   3            
+  99   3            case RIGHT_TO_LEFT:
+ 100   3              if(runTime>=200)
+ 101   3              {
+ 102   4                ledShowCode = ledShowCode>>1;
+ 103   4                runTime=0;          
+ 104   4                daoJiShiShow--;
+ 105   4              }
+ 106   3              if(ledShowCode>0x80||ledShowCode==0x00)
+ 107   3              {
+ 108   4                ledShowCode=0x80;
+ 109   4              }
+ 110   3            break;
+ 111   3            
+ 112   3            default:
+ 113   3            break;
+ 114   3          }
+ 115   2          
+ 116   2        }
+C51 COMPILER V9.59.0.0   MAIN                                                              12/28/2018 19:34:52 PAGE 3   
 
- 117   1        P374 = ~ledShowCode;
- 118   1      
+ 117   1        HD7279ShowInt(daoJiShiShow);
+ 118   1        P374 = ~ledShowCode;
  119   1      
  120   1      
- 121   1      }
- 122          
+ 121   1      
+ 122   1      }
  123          
  124          
  125          
  126          
+ 127          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    252    ----
+   CODE SIZE        =    256    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     13    ----
    PDATA SIZE       =   ----    ----

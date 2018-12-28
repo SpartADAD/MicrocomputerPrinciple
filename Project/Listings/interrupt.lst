@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/28/2018 19:06:02 PAGE 1   
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/28/2018 19:29:24 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE INTERRUPT
@@ -62,7 +62,7 @@ line level    source
   51   1          timeCnt++;
   52   1          if(timeCnt>=PERIOD_RUN)
   53   1          {
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/28/2018 19:06:02 PAGE 2   
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/28/2018 19:29:24 PAGE 2   
 
   54   2            timeCnt=0;
   55   2            SetRunFlag();
@@ -126,7 +126,7 @@ line level    source
  112   2          break;
  113   2          
  114   2          case KEY13:
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/28/2018 19:06:02 PAGE 3   
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/28/2018 19:29:24 PAGE 3   
 
  115   2            gParam.finalMode = RIGHT_TO_LEFT;
  116   2          break;
