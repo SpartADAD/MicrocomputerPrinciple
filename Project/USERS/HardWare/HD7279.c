@@ -242,3 +242,8 @@ void HD7279ShowFloat(double showValue)
 	}
 
 }
+uint8_t KeyRead(void)
+{
+ 	HD7279SendByte(0x15);
+	return(HD7279ReceiveByte());
+}

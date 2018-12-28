@@ -60,4 +60,5 @@ unsigned char HD7279ReceiveByte(void);
 void HD7279Write(unsigned char cmd , unsigned char dataSend);
 void HD7279ShowInt(long showValue);
 void HD7279ShowFloat(double showValue);
+uint8_t KeyRead(void);
 #endif

@@ -37,7 +37,9 @@ typedef struct{
 		uint8_t receiveDataByUsart;
 		uint8_t c55LedMode;
 		uint8_t adcValue;
-
+		uint8_t readKey;
+		uint8_t finalMode;
+		uint8_t finalUpdate;
 }gParam_t;
 	
 	
@@ -51,7 +53,7 @@ typedef enum {RESET = 0, SET = 1} FlagStatus, ITStatus;
 typedef enum {disable = 0, enable}FunctionalState_t;
 
 
-
+void FinalTest(void);
 
 
 #endif

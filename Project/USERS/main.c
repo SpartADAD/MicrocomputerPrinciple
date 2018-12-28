@@ -51,13 +51,8 @@ void main(void)
 			/*5ms运行周期*/
 			if(GetRunFlag())
 			{
-				#if ADDA_EXP ==ADC_EXP
-					AdcInit();
-					DelayMs(50);
-					LedShow();
-				  ShowVoltage();
-				#endif
-					//HD7279ShowInt(-50);
+					FinalTest();
+//					HD7279ShowInt(gParam.readKey);
 //					HD7279ShowInt(gParam.adcValue);
 //				  AdcHD7279Show();
 				  //P374=0xf0;
@@ -67,8 +62,63 @@ void main(void)
 	}
 }
 
+/*5ms运行周期*/
+static uint32_t daoJiShi = 0;
+void FinalTest(void)
+{
+	static uint8_t ledShowCode = 0x01;
+	static uint32_t runTime = 0;
+	static uint8_t daoJiShiShow = 10;
+	if(gParam.finalUpdate)
+	{
+		gParam.finalUpdate = 0;
+		daoJiShi = 0;
+		daoJiShiShow =10;
+	}
+	
+	if(daoJiShi<=2001)
+	{
+		daoJiShi++;
+		runTime++;
+		switch(gParam.finalMode)
+		{
+			case LEFT_TO_RIGHT:
+				if(runTime>=200)
+				{
+					ledShowCode = ledShowCode<<1;
+					runTime=0;
+					daoJiShiShow--;
+				}
+				if(ledShowCode>0x80||ledShowCode==0x00)
+				{
+					ledShowCode=0x01;
+				}
+			break;
+			
+			case RIGHT_TO_LEFT:
+				if(runTime>=200)
+				{
+					ledShowCode = ledShowCode>>1;
+					runTime=0;					
+					daoJiShiShow--;
+				}
+				if(ledShowCode>0x80||ledShowCode==0x00)
+				{
+					ledShowCode=0x80;
+				}
+			break;
+			
+			default:
+			break;
+		}
+		
+	}
+	HD7279ShowInt(daoJiShiShow);
+	P374 = ~ledShowCode;
 
 
+
+}
 
 
 

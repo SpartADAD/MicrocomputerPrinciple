@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/27/2018 20:52:41 PAGE 1   
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/28/2018 19:06:02 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE INTERRUPT
@@ -19,67 +19,68 @@ line level    source
    9          #include "82C55.h"
   10          #include "82C54.h"
   11          #include "ADDA.h"
-  12          /*运行程序标志位*/
-  13          static uint8_t runFlag=0;
-  14          /*** @brief   运行程序标志位置1函数
-  15            *  @param   void           
-  16            *  @retval  None 
-  17            */
-  18          void SetRunFlag(void)
-  19          {
-  20   1        runFlag=1;
-  21   1      }
-  22          /*** @brief    得到当前运行标志位，若为1，便置0并且在主函数判断，使得主函数�
+  12          #include "HD7279.h"
+  13          /*运行程序标志位*/
+  14          static uint8_t runFlag=0;
+  15          /*** @brief   运行程序标志位置1函数
+  16            *  @param   void           
+  17            *  @retval  None 
+  18            */
+  19          void SetRunFlag(void)
+  20          {
+  21   1        runFlag=1;
+  22   1      }
+  23          /*** @brief    得到当前运行标志位，若为1，便置0并且在主函数判断，使得主函数�
              -�行一次
-  23            *  @param    void           
-  24            *  @retval   为1主程序能够运行一次  为0主程序不运行
-  25            */
-  26          uint8_t GetRunFlag(void)
-  27          {
-  28   1        if(runFlag)
-  29   1        {
-  30   2          runFlag =0;
-  31   2          return 1; 
-  32   2        }
-  33   1        return 0;
-  34   1      }
-  35          /*** @brief   定时器0中断 timeCnt计数，可能进一次中断的时间太短，通过软件增
-  36                        加计时时间
-  37                        通过预编译#if判断5ms运行周期由谁提供
-  38            *  @param   void           
-  39            *  @retval  None
-  40            */
-  41          static  uint32_t xdata timeCnt=0;
-  42          void TIM0_Handler() interrupt 1 
-  43          {
-  44   1        /*DAC输出*/
-  45   1        #if ADDA_EXP == DAC_EXP
+  24            *  @param    void           
+  25            *  @retval   为1主程序能够运行一次  为0主程序不运行
+  26            */
+  27          uint8_t GetRunFlag(void)
+  28          {
+  29   1        if(runFlag)
+  30   1        {
+  31   2          runFlag =0;
+  32   2          return 1; 
+  33   2        }
+  34   1        return 0;
+  35   1      }
+  36          /*** @brief   定时器0中断 timeCnt计数，可能进一次中断的时间太短，通过软件增
+  37                        加计时时间
+  38                        通过预编译#if判断5ms运行周期由谁提供
+  39            *  @param   void           
+  40            *  @retval  None
+  41            */
+  42          static  uint32_t xdata timeCnt=0;
+  43          void TIM0_Handler() interrupt 1 
+  44          {
+  45   1        /*DAC输出*/
+  46   1        #if ADDA_EXP == DAC_EXP
                 DacOUT();
                 #endif
-  48   1        
-  49   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
-  50   1          timeCnt++;
-  51   1          if(timeCnt>=PERIOD_RUN)
-  52   1          {
-  53   2            timeCnt=0;
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/27/2018 20:52:41 PAGE 2   
+  49   1        
+  50   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM0
+  51   1          timeCnt++;
+  52   1          if(timeCnt>=PERIOD_RUN)
+  53   1          {
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/28/2018 19:06:02 PAGE 2   
 
-  54   2            SetRunFlag();
-  55   2          }
-  56   1        #else
+  54   2            timeCnt=0;
+  55   2            SetRunFlag();
+  56   2          }
+  57   1        #else
                   
                 #endif
-  59   1      }
-  60          
-  61          /*** @brief   定时器1中断 timeCnt计数，可能进一次中断的时间太短，通过软件增
-  62                        加计时时间
-  63                        通过预编译#if判断5ms运行周期由谁提供
-  64            *  @param   void           
-  65            *  @retval  None  
-  66            */
-  67          void TIM1_Handler() interrupt 3
-  68          {
-  69   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
+  60   1      }
+  61          
+  62          /*** @brief   定时器1中断 timeCnt计数，可能进一次中断的时间太短，通过软件增
+  63                        加计时时间
+  64                        通过预编译#if判断5ms运行周期由谁提供
+  65            *  @param   void           
+  66            *  @retval  None  
+  67            */
+  68          void TIM1_Handler() interrupt 3
+  69          {
+  70   1        #if RUN_PERIOD_BY_TIM == FIVE_MS_RUN_BY_TIM1
                   timeCnt++;
                   if(timeCnt>=PERIOD_RUN)
                   {
@@ -87,80 +88,94 @@ line level    source
                     SetRunFlag();
                   }
                 #else
-  77   1        #endif
-  78   1      }
-  79          /*** @brief    外部中断初始化函数
-  80            *  @param    EXNumber 初始化外部中断序号 0/1   
-  81            *  @param    workMode 外部中断工作方式  EX_INTERRUPT_BY_LOW_LEVEL 低电平触发 EX_INTERRUPT_B
+  78   1        #endif
+  79   1      }
+  80          /*** @brief    外部中断初始化函数
+  81            *  @param    EXNumber 初始化外部中断序号 0/1   
+  82            *  @param    workMode 外部中断工作方式  EX_INTERRUPT_BY_LOW_LEVEL 低电平触发 EX_INTERRUPT_B
              -Y_EDGE边沿触发          
-  82            *  @retval   None
-  83            */
-  84          void EXHandlerInit(uint8_t EXNumber,uint8_t workMode)
-  85          {
-  86   1        if(EXNumber==EX_INTERRUPT0)
-  87   1        {
-  88   2          EX0=1;
-  89   2          IT0=workMode; 
-  90   2        }
-  91   1        else if(EXNumber==EX_INTERRUPT1)
-  92   1        {
-  93   2          EX1=1;
-  94   2          IT1=workMode; 
-  95   2        }
-  96   1        EA = 1;
-  97   1      }
-  98          /*** @brief    外部中断0中断函数 gParam.c55LedMode 用来控制灯显示模式
-  99            *  @param    void       
- 100            *  @retval   None
- 101            */
- 102          void EX0Handler(void) interrupt 0
- 103          {
- 104   1        gParam.c55LedMode++;
- 105   1        gParam.c55LedMode%=2;
- 106   1        gParam.adcValue = GetAdcValue();
- 107   1      //  gParam.flag++;
- 108   1      //  gParam.flag%=2;
- 109   1      //  P1=0xff;
- 110   1      }
- 111          /*** @brief    外部中断1中断函数 
- 112            *  @param    void       
- 113            *  @retval   None
- 114            */
-C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/27/2018 20:52:41 PAGE 3   
+  83            *  @retval   None
+  84            */
+  85          void EXHandlerInit(uint8_t EXNumber,uint8_t workMode)
+  86          {
+  87   1        if(EXNumber==EX_INTERRUPT0)
+  88   1        {
+  89   2          EX0=1;
+  90   2          IT0=workMode; 
+  91   2        }
+  92   1        else if(EXNumber==EX_INTERRUPT1)
+  93   1        {
+  94   2          EX1=1;
+  95   2          IT1=workMode; 
+  96   2        }
+  97   1        EA = 1;
+  98   1      }
+  99          /*** @brief    外部中断0中断函数 gParam.c55LedMode 用来控制灯显示模式
+ 100            *  @param    void       
+ 101            *  @retval   None
+ 102            */
+ 103          uint8_t lastKeyValue=0;
+ 104          void EX0Handler(void) interrupt 0
+ 105          {
+ 106   1        gParam.finalUpdate = 1;
+ 107   1        gParam.readKey=KeyRead();
+ 108   1        switch(gParam.readKey)
+ 109   1        {
+ 110   2          case KEY12:
+ 111   2            gParam.finalMode = LEFT_TO_RIGHT;
+ 112   2          break;
+ 113   2          
+ 114   2          case KEY13:
+C51 COMPILER V9.59.0.0   INTERRUPT                                                         12/28/2018 19:06:02 PAGE 3   
 
- 115          void EX1Handler(void) interrupt 2
- 116          {
- 117   1      
- 118   1      
- 119   1      
- 120   1      
- 121   1      } 
- 122          /*** @brief    串口中断函数
- 123            *  @param    void       
- 124            *  @retval   None
- 125            */
- 126          void USART_Handler(void)  interrupt 4 
- 127          {
- 128   1        if(RI)
- 129   1        {
- 130   2          RI=0;
- 131   2          gParam.receiveDataByUsart = (uint8_t)SBUF;
- 132   2        }
- 133   1      }
- 134          /*** @brief    中断优先级配置
- 135            *  @param    void       
- 136            *  @retval   None
- 137            */
- 138          void Interrupt_Priority(uint8_t priority)
- 139          {
- 140   1          IP |= priority;
- 141   1      }
+ 115   2            gParam.finalMode = RIGHT_TO_LEFT;
+ 116   2          break;
+ 117   2          
+ 118   2          default:
+ 119   2          break;
+ 120   2        }
+ 121   1        
+ 122   1      //  gParam.flag++;
+ 123   1      //  gParam.flag%=2;
+ 124   1      //  P1=0xff;
+ 125   1      }
+ 126          /*** @brief    外部中断1中断函数 
+ 127            *  @param    void       
+ 128            *  @retval   None
+ 129            */
+ 130          void EX1Handler(void) interrupt 2
+ 131          {
+ 132   1      
+ 133   1      
+ 134   1      
+ 135   1      
+ 136   1      } 
+ 137          /*** @brief    串口中断函数
+ 138            *  @param    void       
+ 139            *  @retval   None
+ 140            */
+ 141          void USART_Handler(void)  interrupt 4 
+ 142          {
+ 143   1        if(RI)
+ 144   1        {
+ 145   2          RI=0;
+ 146   2          gParam.receiveDataByUsart = (uint8_t)SBUF;
+ 147   2        }
+ 148   1      }
+ 149          /*** @brief    中断优先级配置
+ 150            *  @param    void       
+ 151            *  @retval   None
+ 152            */
+ 153          void Interrupt_Priority(uint8_t priority)
+ 154          {
+ 155   1          IP |= priority;
+ 156   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    205    ----
+   CODE SIZE        =    222    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      3    ----
+   XDATA SIZE       =      4    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

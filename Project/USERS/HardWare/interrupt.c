@@ -9,6 +9,7 @@
 #include "82C55.h"
 #include "82C54.h"
 #include "ADDA.h"
+#include "HD7279.h"
 /*运行程序标志位*/
 static uint8_t runFlag=0;
 /*** @brief   运行程序标志位置1函数
@@ -99,11 +100,25 @@ void EXHandlerInit(uint8_t EXNumber,uint8_t workMode)
   *  @param    void       
   *  @retval   None
   */
+uint8_t lastKeyValue=0;
 void EX0Handler(void) interrupt 0
 {
-	gParam.c55LedMode++;
-	gParam.c55LedMode%=2;
-	gParam.adcValue = GetAdcValue();
+	gParam.finalUpdate = 1;
+	gParam.readKey=KeyRead();
+	switch(gParam.readKey)
+	{
+		case KEY12:
+			gParam.finalMode = LEFT_TO_RIGHT;
+		break;
+		
+		case KEY13:
+			gParam.finalMode = RIGHT_TO_LEFT;
+		break;
+		
+		default:
+		break;
+	}
+	
 //	gParam.flag++;
 //	gParam.flag%=2;
 //	P1=0xff;

@@ -17,4 +17,7 @@ uint8_t GetRunFlag(void);
 void EXHandlerInit(uint8_t EXNumber,uint8_t workMode);
 void Interrupt_Priority(uint8_t priority);
 
+#define LEFT_TO_RIGHT 0
+#define RIGHT_TO_LEFT 1
+
 #endif
